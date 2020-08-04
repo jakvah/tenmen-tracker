@@ -8,11 +8,19 @@
 	<head>
 		<title>Jakob Vahlin</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no" />
 		<link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}"/> <!--assets/css/main.css" -->
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 		<noscript><link rel="stylesheet" href="{{ url_for('static',filename='css/noscript.css') }}" /></noscript>
 	</head>
 	<body class="is-preload">
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- Bootstrap uses slim build of jquery, which does not have ajax. Using ajax from google -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -25,53 +33,18 @@
 							<h1>Jakob Vahlin</h1>
 							<p>A self declared genius!</p>
 						</header>
-						<!--
-						<hr />
-						<h2>Extra Stuff!</h2>
-						<form method="post" action="#">
-							<div class="fields">
-								<div class="field">
-									<input type="text" name="name" id="name" placeholder="Name" />
-								</div>
-								<div class="field">
-									<input type="email" name="email" id="email" placeholder="Email" />
-								</div>
-								<div class="field">
-									<select name="department" id="department">
-										<option value="">Department</option>
-										<option value="sales">Sales</option>
-										<option value="tech">Tech Support</option>
-										<option value="null">/dev/null</option>
-									</select>
-								</div>
-								<div class="field">
-									<textarea name="message" id="message" placeholder="Message" rows="4"></textarea>
-								</div>
-								<div class="field">
-									<input type="checkbox" id="human" name="human" /><label for="human">I'm a human</label>
-								</div>
-								<div class="field">
-									<label>But are you a robot?</label>
-									<input type="radio" id="robot_yes" name="robot" /><label for="robot_yes">Yes</label>
-									<input type="radio" id="robot_no" name="robot" /><label for="robot_no">No</label>
-								</div>
-							</div>
-							<ul class="actions special">
-								<li><a href="#" class="button">Get Started</a></li>
-							</ul>
-						</form>
-						<hr />
-						-->
+						
 						<footer>
 							<ul class="icons">
 								<li><a href="https://github.com/jakvah" class="icon brands fa-github">GitHub</a></li>
 								<li><a href="https://no.linkedin.com/in/jakob-vahlin-9b4431154" class="icon brands fa-linkedin">LinkedIn</a></li>
                                 <li><a href="mailto:jakobvahlin@gmail.com" class="icon fa-envelope">Email me</a></li>
-                                <li><a href="#" class="icon fa-folder">My work</a></li>
+                                <li><a href="#modal_work" data-toggle="modal" class="icon fa-folder">My work</a></li>
 							</ul>
 						</footer>
 					</section>
-
+				
+					
 				<!-- Footer -->
 					<footer id="footer">
 						<ul class="copyright">
@@ -80,6 +53,69 @@
 					</footer>
 
 			</div>
+			<!-- Modal -->
+			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="modal_work">
+				<div class="modal-dialog modal-lg">
+				  <div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Some of my work</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					  </div>
+					  <div class="modal-body">
+						  <div class="container-fluid">
+							<div class="row normal-text" style="padding-bottom: 2em;">
+								Below are some reports of projects I've done related to various courses at NTNU. Some (most) of the reports are in Norwegian.
+							</div>
+							<div class="row normal-text">
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
+									<div class="card">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/d8header.png') }}" alt="Card image cap">
+										<div class="card-body">
+										  <h5 class="card-title">FSK Demodulator</h5>
+										  <p class="card-text">Designing and implementing a FSK Demodulator digitally on an Arduino microcontroller</p>
+										  <a href="#" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
+										</div>
+									  </div>
+								</div>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
+									<div class="card">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/d7header.png') }}" alt="Card image cap">
+										<div class="card-body">
+										  <h5 class="card-title">Designing an oscillator </h5>
+										  <p class="card-text">Designing and implementing an analog sinusoidal oscillator using an operational amplifier</p>
+										  <a href="#" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
+										</div>
+									  </div>									
+								</div>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
+									<div class="card">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/d6header.png') }}" alt="Card image cap">
+										<div class="card-body">
+										  <h5 class="card-title">Anti aliasing filter</h5>
+										  <p class="card-text">Designing and implemeting an analog anti-aliasing filter using an operational amplifier</p>
+										  <a href="#" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
+										</div>
+									  </div>									
+								</div>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
+									<div class="card">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/d5header.png') }}" alt="Card image cap">
+										<div class="card-body">
+										  <h5 class="card-title">Buffer circuit</h5>
+										  <p class="card-text">Designing and implementing a buffer circuit using a transistor based amplifier</p>
+										  <a href="#" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
+										</div>
+									  </div>									
+								</div>
+							</div>
+						  </div>
+					
+					  </div>
+				  </div>
+				</div>
+			  </div>
 
 		<!-- Scripts -->
 			<script>
@@ -90,4 +126,5 @@
 			</script>
 
 	</body>
+
 </html>
