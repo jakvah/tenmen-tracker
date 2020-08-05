@@ -31,7 +31,7 @@
 
 							<span class="avatar"><img src="{{ url_for('static',filename='images/me.jpg') }}" style="width: 122px; height: 122px;;" alt="" /></span>
 							<h1>Jakob Vahlin</h1>
-							<p>A self declared genius!</p>
+							<p>Engineering student @ NTNU</p>
 						</header>
 						
 						<footer>
@@ -68,10 +68,10 @@
 							<div class="row normal-text" style="padding-bottom: 2em;">
 								Below are some reports of projects I've done related to various courses at NTNU. Some (most) of the reports are in Norwegian.
 							</div>
-							<div class="row normal-text">
+							<div class="row normal-text" style="padding-bottom: 2px;">
 								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
-									<div class="card">
-										<img class="card-img-top" src="{{ url_for('static',filename='images/d8header.png') }}" alt="Card image cap">
+									<div class="card" style="margin-bottom: 2px;">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/d8header.png') }}" style="height: 105px;" alt="Card image cap">
 										<div class="card-body">
 										  <h5 class="card-title">FSK Demodulator</h5>
 										  <p class="card-text">Designing and implementing a FSK Demodulator digitally on an Arduino microcontroller</p>
@@ -80,8 +80,8 @@
 									  </div>
 								</div>
 								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
-									<div class="card">
-										<img class="card-img-top" src="{{ url_for('static',filename='images/d7header.png') }}" alt="Card image cap">
+									<div class="card" style="margin-bottom: 2px;">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/d7header.png') }}" style="height: 105px;" alt="Card image cap">
 										<div class="card-body">
 										  <h5 class="card-title">Designing an oscillator </h5>
 										  <p class="card-text">Designing and implementing an analog sinusoidal oscillator using an operational amplifier</p>
@@ -90,29 +90,70 @@
 									  </div>									
 								</div>
 								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
-									<div class="card">
-										<img class="card-img-top" src="{{ url_for('static',filename='images/d6header.png') }}" alt="Card image cap">
+									<div class="card" style="margin-bottom: 2px;">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/d6header.png') }}" style="height: 105px;" alt="Card image cap">
 										<div class="card-body">
 										  <h5 class="card-title">Anti aliasing filter</h5>
-										  <p class="card-text">Designing and implemeting an analog anti-aliasing filter using an operational amplifier</p>
+										  <p class="card-text">Designing and implemeting an analog anti-aliasing filter w/ an operational amplifier</p>
 										  <a href="{{ url_for('static',filename='pdfs/d6.pdf') }}" target="_blank" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
 										</div>
 									  </div>									
 								</div>
 								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
-									<div class="card">
+									<div class="card" style="margin-bottom: 2px;">
 										<img class="card-img-top" src="{{ url_for('static',filename='images/d5header.png') }}" alt="Card image cap">
 										<div class="card-body">
 										  <h5 class="card-title">Buffer circuit</h5>
-										  <p class="card-text">Designing and implementing a buffer circuit using a transistor based amplifier</p>
+										  <p class="card-text">Designing and implementing a buffer circuit using a transistor based amplifier <br></p>
 										  <a href="{{ url_for('static',filename='pdfs/d5.pdf') }}" target="_blank" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
 										</div>
 									  </div>									
 								</div>
-
-
-								
 							</div>
+							<div class="row normal-text">
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
+									<div class="card" style="margin-bottom: 2px;">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/icheader.png') }}" alt="Card image cap">
+										<div class="card-body">
+										  <h5 class="card-title">Digital Camera (English)</h5>
+										  <p class="card-text">Designing a simple four pixel black and white camera using AIM Spice and Verilog to simulate the analog circuit and digital control unit.</p>
+										  <a href="{{ url_for('static',filename='pdfs/ic.pdf') }}" target="_blank" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
+										</div>
+									  </div>									
+								</div>
+							
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
+									<div class="card" style="margin-bottom: 2px;">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/fysikkheader.png') }}" style="height: 143.2px;" alt="Card image cap">
+										<div class="card-body">
+										  <h5 class="card-title">Friction coefficient estimation </h5>
+										  <p class="card-text">Estimating the coefficient of friction by analyzing the movement of a sphere with a high speed camera and numerical calculations. </p>
+										  <a href="{{ url_for('static',filename='pdfs/fysikk.pdf') }}" target="_blank" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
+										</div>
+									  </div>									
+								</div>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
+									<div class="card" style="margin-bottom: 2px;">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/sensorheader.png') }}" style="height: 143.2px;" alt="Card image cap">
+										<div class="card-body">
+										  <h5 class="card-title">Acoustic localization system </h5>
+										  <p class="card-text">Digitally estimating the angle of an incomming sound signal using an array of microphones sampled with a self designed measurement system. </p>
+										  <a href="{{ url_for('static',filename='pdfs/sensor.pdf') }}" target="_blank" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
+										</div>
+									  </div>									
+								</div>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 normal-text">
+									<div class="card" style="margin-bottom: 2px;">
+										<img class="card-img-top" src="{{ url_for('static',filename='images/edcheader.png') }}" style="height: 143.2px;" alt="Card image cap">
+										<div class="card-body">
+										  <h5 class="card-title">ML based estimation of sinusoidal signal</h5>
+										  <p class="card-text">Digitally estimating the phase and frequency of a complex sinusoidal signal embedded in white gaussian noise.</p>
+										  <a href="{{ url_for('static',filename='pdfs/edc.pdf') }}" target="_blank" class="btn btn-primary">Read<i class="icon fa-file-pdf"></i></a>
+										</div>
+									  </div>									
+								</div>
+							</div>
+
 						  </div>
 					
 					  </div>
