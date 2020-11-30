@@ -1,9 +1,10 @@
 "Match class"
 
 class Match:
-    def __init__(self,teams):
-        self.team_1 = teams[0]
-        self.team_2 = teams[1]
+    def __init__(self,match_id,*,team1=None,team2=None):
+        self.match_id = match_id
+        self.team_1 = team1
+        self.team_2 = team2
 
         
         
