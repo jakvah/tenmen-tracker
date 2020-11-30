@@ -4,12 +4,10 @@ from Match import Match
 from Player import Player
 from Team import Team
 
-def create_url(math_id):
-    return "http://popflash.site/match/" + str(math_id)
-
-# Take match url from popflash site and return a match instance
-def get_match_data(math_url):
-    page_html = get_html(math_url)
+# Take match id from popflash site and return a match instance
+def get_match_data(match_id):
+    match_url = create_url(match_id)
+    page_html = get_html(match_url)
     soup = bs(page_html,"html.parser")
     
     team_1_score = soup.find("div", {"class": "score-1"}).text.strip()
@@ -17,16 +15,19 @@ def get_match_data(math_url):
 
     tables = soup.findAll("table")
 
-
     team_2_table_rows = tables[4].findAll("tr")
     team_1_table_rows = tables[0].findAll("tr")
     team2 = rows_to_team(team_2_table_rows)
     team1 = rows_to_team(team_1_table_rows)
 
-    print("team2:",team2)
-    print("team1:",team1)
-    print("team2 points: ",team_2_score)
-    print("team1 points: ",team_1_score)
+    match = Match(match_id)
+
+    
+
+
+def create_url(match_id):
+    return "http://popflash.site/match/" + str(match_id)
+    
 def rows_to_team(team_rows):
     team = Team()
     for i in range(1,len(team_rows)):
