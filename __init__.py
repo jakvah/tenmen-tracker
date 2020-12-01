@@ -5,7 +5,6 @@ app = Flask(__name__)
 def hello():
     return render_template("index.html")
 
-
 @app.route("/pdf_viewer/<filename>")
 def show_pdf(filename):    
     try:
@@ -18,5 +17,13 @@ def show_pdf(filename):
     except Exception as e:
         return str(e)
     
+@app.route("/tenman")
+def tenman_index():
+    try:
+        return render_template("tenman/tenman_landing.html")
+    except Exception as e:
+        return "failed:" + str(e)
+
+        
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
