@@ -3,12 +3,13 @@ Module for interacting with the database
 """
 import MySQLdb
 import os.path
+from database_exceptions import Error, TablesDoesNotExistError
 
 DATABASE_LOGIN_DETAILS = {
 	"host":"localhost",
 	"user":"root",
-	"password":"jakob",
-	"database":"points"
+	"password":"mysqlroot123",
+	"database":"tenmandb"
 }
 
 def get_database_connection():
@@ -19,8 +20,19 @@ def get_database_connection():
         print("Could not establish connection to the database. Is the server running?")
         return None
 
-def table_exists(dbcon,tablename):
-    	dbcur = dbcon.cursor()
+def add_match_id(dbconn,match_id):
+    if not table_exists(dbconn,"matches1"):
+        raise TablesDoesNotExistError
+    else:
+        dbcur = dbconn.cursor()
+        query = "INSERT INTO " + "matches" + """(match_id) VALUES (%s)"""
+        dbcur.execute(query,[match_id])
+        db_conn.commit()
+        dbcur.close()
+
+
+def table_exists(dbconn,tablename):
+    	dbcur = dbconn.cursor()
     	dbcur.execute("""
         SELECT COUNT(*)
         FROM information_schema.tables
@@ -32,6 +44,23 @@ def table_exists(dbcon,tablename):
 
     	dbcur.close()
     	return False
+
+def get_table_length(dbconn, tablename):
+	cur = dbconn.cursor()
+	sql = "SELECT * FROM " + tablename
+	cur.execute(sql)
+	dataset = cur.fetchall()
+	l = int(len(dataset))
+	return l
+
+def getTableData(dbconn, tablename):
+    cur = dbconn.cursor()
+    sql = "SELECT * FROM " + tablename
+    cur.execute(sql)
+    dataset = cur.fetchall()
+    cur.close()
+
+    return dataset
 
 def create_table(db_conn,table_name):
     if not table_exists(db_conn,table_name):
@@ -51,4 +80,6 @@ def create_table(db_conn,table_name):
 
 if __name__ == "__main__":
     db_conn = get_database_connection()
-    print(db_conn)
+    add_match_id(db_conn,123445)
+    d = getTableData(db_conn,"matches")
+    print(d)
