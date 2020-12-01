@@ -21,7 +21,7 @@ def get_database_connection():
         return None
 
 def add_match_id(dbconn,match_id):
-    if not table_exists(dbconn,"matches1"):
+    if not table_exists(dbconn,"matches"):
         raise TablesDoesNotExistError
     else:
         dbcur = dbconn.cursor()
@@ -29,7 +29,6 @@ def add_match_id(dbconn,match_id):
         dbcur.execute(query,[match_id])
         db_conn.commit()
         dbcur.close()
-
 
 def table_exists(dbconn,tablename):
     	dbcur = dbconn.cursor()
@@ -53,7 +52,7 @@ def get_table_length(dbconn, tablename):
 	l = int(len(dataset))
 	return l
 
-def getTableData(dbconn, tablename):
+def get_table_data(dbconn, tablename):
     cur = dbconn.cursor()
     sql = "SELECT * FROM " + tablename
     cur.execute(sql)
@@ -78,8 +77,17 @@ def create_table(db_conn,table_name):
     else:
         print("Table",table_name,"already exist")
 
+def exists_in_table(dbconn,tablename,search_item):
+    data = get_table_data(dbconn,tablename)
+    for i in range(len(data)):
+        if search_item == d[i][0]:
+            return True
+
 if __name__ == "__main__":
     db_conn = get_database_connection()
-    add_match_id(db_conn,123445)
-    d = getTableData(db_conn,"matches")
-    print(d)
+    for i in range(3):
+        add_match_id(db_conn,i)
+    
+    d = get_table_data(db_conn,"matches")
+    if exists_in_table(db_conn,"matches",1):
+        print("fant")
