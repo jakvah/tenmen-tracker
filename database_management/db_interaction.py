@@ -7,11 +7,15 @@ sys.path.append("..")
 
 import MySQLdb
 import os.path
-from database_exceptions import *
-from match_extraction.Player import Player
-from match_extraction.Match import Match
-from match_extraction.Team import Team
-from match_extraction.Outcome import *
+if __name__ == "__main__":
+
+    from database_exceptions import *
+    from match_extraction.Player import Player
+    from match_extraction.Match import Match
+    from match_extraction.Team import Team
+    from match_extraction.Outcome import *
+else:
+    from database_management.database_exceptions import *
 
 
 DATABASE_LOGIN_DETAILS = {
@@ -53,12 +57,11 @@ def get_table_data(dbconn, tablename):
 def exists_in_table(dbconn,tablename,search_item):
     data = get_table_data(dbconn,tablename)
     for i in range(len(data)):
-        print(data[i][0])
         if search_item == data[i][0]:
             return True
 
 def add_match_id(dbconn,match_id):
-    if exists_in_table(db_conn,"matches",match_id):
+    if exists_in_table(dbconn,"matches",match_id):
         raise ElementExistsInTableError
     if not table_exists(dbconn,"matches"):
         raise TablesDoesNotExistError
@@ -86,15 +89,18 @@ def add_player(dbconn,player_id,player_nick):
 
 # Takes match object and updates player data from the match
 def add_match_data(dbconn,match):
-    add_match_id(dbconn,match.get_match_id())
-    
-    if match.outcome is not Tie:
+    try:
+        add_match_id(dbconn,match.get_match_id())
+        
+        # Add determine outcome
         winning_team = match.get_winner()
         loosing_team = match.get_looser()
         for player in winning_team:
             update_player_data(dbconn,player,won=True)
         for player in loosing_team:
             update_player_data(dbconn,player,won=False)
+    except ElementExistsInTableError:
+        print("Match already exists, will not add copy")
 
 # Takes instance of Player class and updates stats for Player.pop_id. 
 def update_player_data(dbconn,player,won):
@@ -110,16 +116,16 @@ def update_player_data(dbconn,player,won):
     
     # Assign new values
     new_nick = player.nick_name
-    new_kills = player.kills + dataset[0][2]
-    new_deaths = player.deaths + dataset[0][3]
-    new_assists = player.assists + dataset[0][4]
-    new_f_assists = player.flash_assists + dataset[0][5]
-    new_adr = (player.adr + dataset[0][6])/2
-    new_hltv_rating = (player.hltv_rating + dataset[0][7])/2
-    new_hs_per = (player.hs_percentage + dataset[0][8])/2
-    new_ck = player.clutch_kills + dataset[0][9]
-    new_bombs_planted = player.bombs_planted + dataset[0][10]
-    new_bombs_defused = player.bombs_defused + dataset[0][11]
+    new_kills = int(player.kills) + int(dataset[0][2])
+    new_deaths = int(player.deaths) + int(dataset[0][3])
+    new_assists = int(player.assists) + int(dataset[0][4])
+    new_f_assists = int(player.flash_assists) + int(dataset[0][5])
+    new_adr = float(player.adr) + float(dataset[0][6]/2)
+    new_hltv_rating = (float(player.hltv_rating) + float(dataset[0][7]))/2
+    new_hs_per = (float(player.hs_percentage) + float(dataset[0][8]))/2
+    new_ck = int(player.clutch_kills) + int(dataset[0][9])
+    new_bombs_planted = int(player.bombs_planted) + int(dataset[0][10])
+    new_bombs_defused = int(player.bombs_defused) + int(dataset[0][11])
     try:
         new_kd_ratio = new_kills / new_deaths
     except ZeroDivisionError:

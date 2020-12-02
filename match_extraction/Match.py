@@ -23,9 +23,11 @@ class Match:
             return Tie()
     
     def get_winner(self):
-        return self.match_outcome.get_winner()
+        return self.outcome.get_winner()
     def get_looser(self):
-        return self.match_outcome.get_looser()
+        return self.outcome.get_looser()
     def get_match_id(self):
         return self.match_id
+    def get_outcome(self):
+        return self.outcome
         
