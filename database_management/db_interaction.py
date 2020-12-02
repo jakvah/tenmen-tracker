@@ -3,7 +3,7 @@ Module for interacting with the database
 """
 import MySQLdb
 import os.path
-from database_exceptions import Error, TablesDoesNotExistError
+from database_exceptions import Error, TablesDoesNotExistError,ElementExistsInTableError
 
 DATABASE_LOGIN_DETAILS = {
 	"host":"localhost",
@@ -11,7 +11,6 @@ DATABASE_LOGIN_DETAILS = {
 	"password":"mysqlroot123",
 	"database":"tenmandb"
 }
-
 def get_database_connection():
     try:
         db_conn = MySQLdb.connect(DATABASE_LOGIN_DETAILS["host"],DATABASE_LOGIN_DETAILS["user"],DATABASE_LOGIN_DETAILS["password"],DATABASE_LOGIN_DETAILS["database"])
@@ -21,8 +20,11 @@ def get_database_connection():
         return None
 
 def add_match_id(dbconn,match_id):
+    if exists_in_table(db_conn,"matches",match_id):
+        raise ElementExistsInTableError
     if not table_exists(dbconn,"matches"):
         raise TablesDoesNotExistError
+
     else:
         dbcur = dbconn.cursor()
         query = "INSERT INTO " + "matches" + """(match_id) VALUES (%s)"""
@@ -80,7 +82,7 @@ def create_table(db_conn,table_name):
 def exists_in_table(dbconn,tablename,search_item):
     data = get_table_data(dbconn,tablename)
     for i in range(len(data)):
-        if search_item == d[i][0]:
+        if search_item == data[i][0]:
             return True
 
 if __name__ == "__main__":
