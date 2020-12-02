@@ -9,6 +9,10 @@ import MySQLdb
 import os.path
 from database_exceptions import *
 from match_extraction.Player import Player
+from match_extraction.Match import Match
+from match_extraction.Team import Team
+from match_extraction.Outcome import *
+
 
 DATABASE_LOGIN_DETAILS = {
 	"host":"localhost",
@@ -80,10 +84,25 @@ def add_player(dbconn,player_id,player_nick):
     except Exception as e:
         raise AddingPlayerError
 
+# Takes match object and updates player data from the match
+def add_match_data(dbconn,match):
+    add_match_id(dbconn,match.get_match_id())
+    
+    if match.outcome is not Tie:
+        winning_team = match.get_winner()
+        loosing_team = match.get_looser()
+        for player in winning_team:
+            update_player_data(dbconn,player,won=True)
+        for player in loosing_team:
+            update_player_data(dbconn,player,won=False)
+
 # Takes instance of Player class and updates stats for Player.pop_id. 
 def update_player_data(dbconn,player,won):
     db_cur = dbconn.cursor()
     player_id = player.popflash_id
+    if not exists_in_table(dbconn,"players",int(player_id)):
+        add_player(dbconn,player_id,player.nick_name)
+
     query = "SELECT * FROM players WHERE pop_id = " + str(player_id)
     db_cur.execute(query)
     dataset = db_cur.fetchall()

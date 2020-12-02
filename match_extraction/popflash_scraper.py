@@ -1,8 +1,15 @@
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup as bs
-from Match import Match
-from Player import Player
-from Team import Team
+
+if __name__ == "__main__":
+    from Match import Match
+    from Player import Player
+    from Team import Team
+else:
+    from match_extraction.Match import Match
+    from match_extraction.Outcome import Tie, Determined
+    from match_extraction.Team import Team
+    from match_extraction.Player import Player
 
 # Take match id from popflash site and return a match instance
 def get_match_data(match_id):
@@ -19,14 +26,16 @@ def get_match_data(match_id):
     team_1_table_rows = tables[0].findAll("tr")
     team2 = rows_to_team(team_2_table_rows)
     team1 = rows_to_team(team_1_table_rows)
-
-    match = Match(match_id)
-
     
+    team1.set_score(team_1_score)
+    team2.set_score(team_2_score)
 
+    match = Match(match_id,team1=team1,team2=team2)
+
+    return match
 
 def create_url(match_id):
-    return "http://popflash.site/match/" + str(match_id)
+    return "https://popflash.site/match/" + str(match_id)
     
 def rows_to_team(team_rows):
     team = Team()
@@ -71,7 +80,6 @@ def url_exists(url):
 
 if __name__ == "__main__":
     math_id = str(input("mathid:"))
-    url=create_url(math_id)
-    get_match_data(url)
+    get_match_data(math_id)
 
         
