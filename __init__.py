@@ -1,4 +1,4 @@
-from flask import Flask,render_template,Markup
+from flask import Flask,render_template,Markup,request,redirect
 app = Flask(__name__)
 
 @app.route("/")
@@ -24,6 +24,19 @@ def tenman_index():
     except Exception as e:
         return "failed:" + str(e)
 
-        
+@app.route("/tenman/add_match", methods=["GET","POST"]) 
+def add_pop_match():
+    try:
+        if request.method == "GET":
+            return "Dissallowed, GET"
+        elif request.method == "POST":
+            pop_id = request.form["pop_id"]
+            # Add match ID to match ID table
+            # Get match object from ID using get_match_data
+            return redirect("/tenman")
+            
+    except Exception as e:
+        return str(e)
+
 if __name__ == "__main__":
     app.run(debug=True)

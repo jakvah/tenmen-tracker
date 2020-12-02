@@ -7,10 +7,9 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <!--Fa Fa Icons-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous"> 
- 
-    <title>Navbar</title>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <title>Tenman Tracker</title>
+    <link rel="icon" href="{{ url_for('static',filename='images/tenman.png') }}">
   </head>
   <body>
     <!-- Optional JavaScript -->
@@ -40,7 +39,10 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-    <a class="navbar-brand" href="/">Tenman Tracker</a>
+    <a class="navbar-brand" href="/"><!-- Logo Image -->
+      <img src="{{ url_for('static',filename='images/tenman.png') }}" width="45" alt="" class="d-inline-block align-middle mr-2">
+      <!-- Logo Text -->
+      <span class="font-weight-bold">Tenman Tracker</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -57,19 +59,18 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Recorded Matches</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="https://github.com/jakvah"><i class="icon brands fa-github">Edit on Github</i></a>
-        </li>
        
         <li class="nav-item">
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">API</a>
         </li>
       
       </ul>
-      <form class="form-inline my-2 my-lg-0">
+      <!--<form class="form-inline my-2 my-lg-0">-->
         <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
-        <button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#modal_work" type="submit">Add Match</button>
-      </form>
+       <button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#modal_work" type="submit">Add Match</button>
+       <a class="nav-link" href="https://github.com/jakvah/tenmen-tracker"><i class="fa fa-github fa-lg"></i></a>
+       
+      <!-- </form>-->
     </div>
   </div>
   </nav>
@@ -81,25 +82,25 @@
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add PopFlash match</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidd en="true">&times;</span>
         </button>
         </div>
         <div class="modal-body">
-          <form>
+          <form action="/tenman/add_match" method="POST">
             <div class="form-group">
               <label for="exampleInputEmail1">Match ID</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter PopFlash Match ID">
+              <input name="pop_id" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter PopFlash Match ID">
               <small id="emailHelp" class="form-text text-muted"></small>
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              <input name="pwd" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
             </div>
             <div class="form-check">
               <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">I'm not a robot</label>
+              <label class="form-check-label" for="exampleCheck1" required>I'm not a robot</label>
             </div>
-            <button type="submit" class="btn btn-primary">Add match</button>
+            <button type="submit" class="btn btn-success">Add match</button>
           </form>
       
         </div>
