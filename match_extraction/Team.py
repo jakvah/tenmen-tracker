@@ -2,7 +2,7 @@
 from Player import Player
 
 class Team:
-    def __init__(self,*,p1=None,p2=None,p3=None,p4=None,p5=None,size=5):
+    def __init__(self,*,p1=None,p2=None,p3=None,p4=None,p5=None,size=5,score=0):
         self.iterator_value = 1
         self.size = size
 
@@ -11,6 +11,8 @@ class Team:
         self.player_3 = p3
         self.player_4 = p4
         self.player_5 = p5
+
+        self.score = score
     
     def __iter__(self):
         return self
@@ -44,6 +46,11 @@ class Team:
             self.player_4 = new_player
         elif self.player_5 is None and not self.is_in_team(new_player):
             self.player_5 = new_player
+    
+    def set_score(self,score):
+        self.score = score
+    def get_score(self):
+        return self.score
 
     def __str__(self):
         return_string = "Team consists of players: \n"
