@@ -124,7 +124,7 @@ def update_player_data(dbconn,player,won):
     new_bombs_planted = int(player.bombs_planted) + int(dataset[0][10])
     new_bombs_defused = int(player.bombs_defused) + int(dataset[0][11])
     try:
-        new_kd_ratio = new_kills / new_deaths
+        new_kd_ratio = float(new_kills) / float(new_deaths)
     except ZeroDivisionError:
         new_kd_ratio = 0
     
