@@ -4,7 +4,7 @@ from Player import Player
 """
 
 class Team:
-    def __init__(self,*,p1=None,p2=None,p3=None,p4=None,p5=None,size=5,score=0):
+    def __init__(self,p1=None,p2=None,p3=None,p4=None,p5=None,size=5,score=0):
         self.iterator_value = 1
         self.size = size
 

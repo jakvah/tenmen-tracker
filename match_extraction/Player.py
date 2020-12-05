@@ -1,7 +1,7 @@
 "Player class"
 
 class Player:
-    def __init__(self,pop_id,*,nick="",kills=0,deaths=0,assists=0,f_assists=0,adr=0,hltv_rating=0,hs_percentage=0,ck=0,bombs_planted=0,bombs_defused=0):
+    def __init__(self,pop_id,nick="",kills=0,deaths=0,assists=0,f_assists=0,adr=0,hltv_rating=0,hs_percentage=0,ck=0,bombs_planted=0,bombs_defused=0):
         self.popflash_id = pop_id
         self.nick_name = nick
 

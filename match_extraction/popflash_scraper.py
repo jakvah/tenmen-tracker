@@ -1,4 +1,9 @@
-from urllib.request import Request, urlopen
+# python 3
+# from urllib.request import Request, urlopen
+
+# Python 2
+import urllib2
+
 from bs4 import BeautifulSoup as bs
 
 if __name__ == "__main__":
@@ -75,11 +80,19 @@ def get_html(url):
         page_html = urlopen(req).read()
     return page_html
 
+def get_html_2_7(url):
+    req = urllib2.Request(url, headers={'User-Agent' : "Magic Browser"}) 
+    con = urllib2.urlopen( req )
+    return con.read()
+
 def url_exists(url):
     return True
 
 if __name__ == "__main__":
-    math_id = str(input("mathid:"))
-    get_match_data(math_id)
+    match_id = str(input("matchid:"))
+    url = create_url(match_id)
+    h = get_html_2_7(url)
+    print(h)
+    
 
         
