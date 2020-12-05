@@ -7,6 +7,7 @@ sys.path.append("..")
 
 import MySQLdb
 import os.path
+"""
 if __name__ == "__main__":
 
     from database_exceptions import *
@@ -14,8 +15,10 @@ if __name__ == "__main__":
     from match_extraction.Match import Match
     from match_extraction.Team import Team
     from match_extraction.Outcome import *
+
 else:
     from database_management.database_exceptions import *
+    """
 
 
 DATABASE_LOGIN_DETAILS = {
@@ -148,16 +151,6 @@ def update_player_data(dbconn,player,won):
 
 
 if __name__ == "__main__":
-    p = Player(1123196,nick="Jossen",kills=10,deaths=1,assists=0,f_assists=2,adr=49,hltv_rating=1.34,hs_percentage=0.34,ck=0,bombs_planted=2,bombs_defused=3)
-    print(p)
-
     db_conn = get_database_connection()
-    try:
-        add_player(db_conn,"638279","jakvah")
-    except ElementExistsInTableError:
-        print("Players exists")
-    try:
-        add_player(db_conn,1123196,"Jossen")
-    except ElementExistsInTableError:
-        print("Players exists")
-    update_player_data(db_conn,p,True)
+    if exists_in_table(db_conn,"matches",1105357):
+        print("Found it!")

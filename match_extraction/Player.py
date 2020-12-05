@@ -76,7 +76,10 @@ class Player:
         return self.kd_ratio
 
     def __str__(self):
-        return "ID: " + str(self.popflash_id) + ", Nick: " + str(self.nick_name)
+        try:
+            return "ID: " + str(self.popflash_id) + ", Nick: " + str(self.nick_name)
+        except UnicodeEncodeError: 
+            return "ID: " + str(self.popflash_id) + ", Nick: " + str(self.nick_name[1:])
 
 
     

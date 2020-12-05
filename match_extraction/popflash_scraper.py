@@ -19,7 +19,7 @@ else:
 # Take match id from popflash site and return a match instance
 def get_match_data(match_id):
     match_url = create_url(match_id)
-    page_html = get_html(match_url)
+    page_html = get_html_2_7(match_url)
     soup = bs(page_html,"html.parser")
     
     team_1_score = soup.find("div", {"class": "score-1"}).text.strip()
@@ -49,7 +49,12 @@ def rows_to_team(team_rows):
         popflash_id = get_popflash_id(columns)
         
         player = Player(popflash_id)
-        player.set_nick(columns[0].text.strip())
+        try:
+            s = str(columns[0].text.strip()[0])
+            player.set_nick(columns[0].text.strip())
+        except UnicodeEncodeError:
+            player.set_nick(columns[0].text.strip()[1:])
+        
         player.set_kills(columns[1].text.strip())
         player.set_assists(columns[2].text.strip())
         player.set_deaths(columns[3].text.strip())
