@@ -87,6 +87,24 @@ def get_html_2_7(url):
 def url_exists(url):
     return True
 
+def get_steam_url(pop_id):
+    user_url = "https://popflash.site/user/" + str(pop_id)
+    page_html = get_html_2_7(user_url)
+    soup = bs(page_html,"html.parser")
+    content_box_div = soup.find("div", {"class": "content-box profile"})
+    steam_header = content_box_div.findAll("h3")   
+    steam_url_tag = str(steam_header[0].findAll("a")[0])
+    steam_url = steam_url_tag.split('"')[1]
+    return steam_url
+
+def get_user_image(pop_id):
+    steam_url = get_steam_url(pop_id)
+    steam_html = get_html_2_7(steam_url)
+    soup = bs(steam_html,"html.parser")
+    image_div = soup.find("div",{"class":"playerAvatarAutoSizeInner"})
+    image_src = str(image_div.findAll("img")).split('"')[1]
+    return image_src
+
 if __name__ == "__main__":
     math_id = str(input("mathid:"))
     get_match_data(math_id)
