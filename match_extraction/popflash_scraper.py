@@ -22,8 +22,8 @@ def get_match_data(match_id):
     page_html = get_html_2_7(match_url)
     soup = bs(page_html,"html.parser")
     
-    team_1_score = soup.find("div", {"class": "score-1"}).text.strip()
-    team_2_score = soup.find("div", {"class": "score-2"}).text.strip()
+    team_1_score = int(soup.find("div", {"class": "score-1"}).text.strip())
+    team_2_score = int(soup.find("div", {"class": "score-2"}).text.strip())
 
     tables = soup.findAll("table")
 

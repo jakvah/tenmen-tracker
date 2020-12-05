@@ -8,6 +8,9 @@ def main():
     pop_match = ps.get_match_data(pop_id)
     print(pop_match.team_1)
     print(pop_match.team_2)
+    print("Team1 score:",(pop_match.team_1.get_score()))
+    print("Team2 score:",(pop_match.team_2.get_score()))
+    
     """
     print("Adding match to database")
     conn = db_interaction.get_database_connection()
