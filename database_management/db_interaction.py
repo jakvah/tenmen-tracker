@@ -149,7 +149,52 @@ def update_player_data(dbconn,player,won):
         
     db_cur.close()
 
+def get_top_players(dbconn,num_players,tablename="players"):
+    top_player_ids = []
+    
+    table_data = get_table_data(dbconn,tablename)
+    for n in range(num_players):
+        best_hltv_rating = 0
+        best_pop_id = None
+        for i in range(len(table_data)):
+            pop_id = table_data[i][0]
+            if pop_id in top_player_ids:
+                continue
+            else:
+                hltv_rating = table_data[i][7]
+                if hltv_rating > best_hltv_rating:
+                    best_hltv_rating = hltv_rating
+                    best_pop_id = pop_id
+        top_player_ids.append(best_pop_id)
+    top_players = []
+    for i in top_player_ids:
+        p = get_player_data(i)
+        top_players.append(p)
+    return top_players
+        
+def get_player_data(player_id,tablename = "players"):
+    db_con = get_database_connection()
+    table_data = get_table_data(db_con,tablename)
+    for i in range(len(table_data)):
+        pop_id = table_data[i][0]
+        if pop_id == player_id:
+            nick = table_data[i][1]
+            player = Player(player_id,nick=nick)
 
+            player.set_kills(table_data[i][2])
+            player.set_deaths(table_data[i][3])
+            player.set_assists(table_data[i][4])
+            player.set_flash_assists(table_data[i][5])
+            player.set_adr(table_data[i][6])
+            player.set_hltv_rating(table_data[i][7])
+            player.set_hs_percentage(table_data[i][8])
+            player.set_clutch_kills(table_data[i][9])
+            player.set_bombs_planted(table_data[i][10])
+            player.set_bombs_defused(table_data[i][11])
+            player.set_wins(table_data[i][13])
+            player.set_losses(table_data[i][14])
+            
+    return player
 if __name__ == "__main__":
     db_conn = get_database_connection()
     if exists_in_table(db_conn,"matches",1105357):
