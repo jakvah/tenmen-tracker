@@ -1,4 +1,4 @@
-from flask import Flask,render_template,Markup,request,redirect
+from flask import Flask,render_template,Markup,request,redirect,flash
 
 app = Flask(__name__)
 
@@ -52,8 +52,11 @@ def add_pop_match():
                 pop_match = ps.get_match_data(pop_id)
                             
                 conn = dbi.get_database_connection()
-                dbi.add_match_data(conn,pop_match)               
-                return "done"
+                dbi.add_match_data(conn,pop_match)
+
+                flash_str = "Added match " + str(pop_id) + " and updated player data."
+                flash(flash_str)                   
+                return redirect("/tenman")
             
                 
             except Exception as e:
