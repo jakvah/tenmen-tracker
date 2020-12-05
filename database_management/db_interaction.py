@@ -101,10 +101,12 @@ def add_match_data(dbconn,match):
 
 # Takes instance of Player class and updates stats for Player.pop_id. 
 def update_player_data(dbconn,player,won):
+    first_time = False
     db_cur = dbconn.cursor()
     player_id = player.popflash_id
     if not exists_in_table(dbconn,"players",int(player_id)):
         add_player(dbconn,player_id,player.nick_name)
+        first_time = True
 
     query = "SELECT * FROM players WHERE pop_id = " + str(player_id)
     db_cur.execute(query)
@@ -117,9 +119,16 @@ def update_player_data(dbconn,player,won):
     new_deaths = int(player.deaths) + int(dataset[0][3])
     new_assists = int(player.assists) + int(dataset[0][4])
     new_f_assists = int(player.flash_assists) + int(dataset[0][5])
-    new_adr = float(player.adr) + float(dataset[0][6]/2)
-    new_hltv_rating = (float(player.hltv_rating) + float(dataset[0][7]))/2
-    new_hs_per = (float(player.hs_percentage) + float(dataset[0][8]))/2
+
+    if not first_time:
+        new_adr = (float(player.adr) + float(dataset[0][6])) / 2
+        new_hltv_rating = (float(player.hltv_rating) + float(dataset[0][7])) / 2
+        new_hs_per = (float(player.hs_percentage) + float(dataset[0][8])) / 2
+    else:
+        new_adr = float(player.adr)
+        new_hltv_rating = float(player.hltv_rating)
+        new_hs_per = float(player.hs_percentage)
+
     new_ck = int(player.clutch_kills) + int(dataset[0][9])
     new_bombs_planted = int(player.bombs_planted) + int(dataset[0][10])
     new_bombs_defused = int(player.bombs_defused) + int(dataset[0][11])
