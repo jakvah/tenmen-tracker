@@ -1,4 +1,5 @@
 from flask import Flask,render_template,Markup,request,redirect
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -30,10 +31,36 @@ def add_pop_match():
         if request.method == "GET":
             return "Dissallowed, GET"
         elif request.method == "POST":
-            pop_id = request.form["pop_id"]
-            # Add match ID to match ID table
-            # Get match object from ID using get_match_data
-            return redirect("/tenman")
+            
+            try:
+                from database_management import db_interaction as dbi
+            except Exception as e:
+                return "db_interaction Import failed: " +  str(e)
+            """
+            try:
+                from database_management import database_exceptions
+            except Exception as e:
+                return "db_exceptions Import failed: " +  str(e)
+            """
+            try:
+                from match_extraction import popflash_scraper as ps
+            except Exception as e:
+                return "ps Import failed: " +  str(e)           
+            
+            try:
+                pop_id = request.form["pop_id"]
+                pop_match = ps.get_match_data(pop_id)
+                            
+                conn = dbi.get_database_connection()
+                dbi.add_match_data(conn,pop_match)               
+                return "done"
+            
+                
+            except Exception as e:
+                return str(e)
+
+
+            
             
     except Exception as e:
         return str(e)
