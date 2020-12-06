@@ -47,7 +47,7 @@ def tenman_index():
         """
         try:
             conn = dbi.get_database_connection()
-            top_players = dbi.get_top_players(conn)
+            top_players = dbi.get_top_players(conn,threshold=5)
             num_matches = dbi.get_number_of_matches(conn)
             num_players = dbi.get_number_of_players(conn)
 

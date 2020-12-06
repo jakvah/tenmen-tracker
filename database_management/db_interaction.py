@@ -153,7 +153,7 @@ def update_player_data(dbconn,player,won):
         
     db_cur.close()
 
-def get_top_players(dbconn,tablename="players"):
+def get_top_players(dbconn,threshold,tablename="players"):
     top_player_ids = []
 
     table_data = get_table_data(dbconn,tablename)
@@ -164,18 +164,25 @@ def get_top_players(dbconn,tablename="players"):
         best_pop_id = None
         for i in range(len(table_data)):
             pop_id = table_data[i][0]
+            wins = table_data[i][13]
+            loss = table_data[i][14]
             if pop_id in top_player_ids:
                 continue
+            
+            
             else:
-                hltv_rating = table_data[i][7]
+                hltv_rating = table_data[i][12]
                 if hltv_rating > best_hltv_rating:
                     best_hltv_rating = hltv_rating
                     best_pop_id = pop_id
+                    
         top_player_ids.append(best_pop_id)
+
     top_players = []
     for i in top_player_ids:
         p = get_player_data(i)
-        top_players.append(p)
+        if p.get_wins() + p.get_losses() >= threshold:
+            top_players.append(p)
     return top_players
         
 def get_player_data(player_id,tablename = "players"):
@@ -193,7 +200,7 @@ def get_player_data(player_id,tablename = "players"):
             player.set_deaths(table_data[i][3])
             player.set_assists(table_data[i][4])
             player.set_flash_assists(table_data[i][5])
-            player.set_adr(table_data[i][6])
+            player.set_adr(int(table_data[i][6]))
             player.set_hltv_rating(round(table_data[i][7],2))
             player.set_hs_percentage(float(table_data[i][8]))
             player.set_clutch_kills(table_data[i][9])
