@@ -1,15 +1,35 @@
 <!DOCTYPE html>
 <html>
+<!-- Remove this head tag in depolyment-->
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <title>Tenman Tracker</title>
+  <link rel="icon" href="{{ url_for('static',filename='images/tenman.png') }}">
+</head>
+<body>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- Bootstrap uses slim build of jquery, which does not have ajax. Using ajax from google -->
+  <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</head>
+
 
 {% extends "tenman/navbar.html" %}
 {% block body %}
 
-
+<!-- Alert for adding match-->
 <div class="container">
   <h3>Tenman 4 ever boys!</h3>
-
-
-
 {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class=flashes>
@@ -19,12 +39,129 @@
             <span aria-hidden="true">&times;</span>
           </button>
           <strong>Success!</strong> {{ message }}
-        </div>
-          
+        </div>          
     {% endfor %}
     </ul>
   {% endif %}
 {% endwith %}
 </div>
+
+<!-- Top player(s)-->
+
+<div class="container d-flex justify-content-center">
+  <div class="row">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+    <div class="card" style="width: 16rem; margin:7px;">
+    <img src="{{top2_list[0]}}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title"><span class="badge badge-info">2nd</span>{{top2_list[2]}}</h5>
+      <p class="card-text">
+        <li class="list-group-item"><i class="fa fa-chart-line fa-lg" style="padding-right:3px;"></i><strong>{{top2_list[3]}} HLTV-Rating</strong></li>
+        <li class="list-group-item"><i class="fa fa-bullseye fa-lg" style="padding-right:3px;"></i><strong>{{top2_list[4]}} Kills</strong></li>
+        <li class="list-group-item"><i class="fa fa-skull fa-lg" style="padding-right:3px;"></i><strong>{{top2_list[5]}} Deaths</strong></li>
+        <li class="list-group-item"><i class="fa fa-percentage fa-lg" style="padding-right:3px;"></i><strong>{{top2_list[6]}} K/D Ratio</strong></li>
+        <li class="list-group-item"><i class="fa fa-radiation-alt fa-lg" style="padding-right:3px;"></i><strong>{{top2_list[7]}} ADR</strong></li>
+      </p>
+      <a href="#" class="btn btn-primary "><i class="fa fa-user" style="padding-right:3px;"></i>See player profile</a>
+    </div>
+  </div>
+  </div>
+  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+    <div class="card" style="width: 16rem; margin:7px;">
+    <img src="{{top1_list[0]}}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title"><span class="badge badge-info">1st</span>{{top1_list[2]}}<i class="fa fa-trophy"></i></h5>
+      <p class="card-text">        
+        <li class="list-group-item"><i class="fa fa-chart-line fa-lg" style="padding-right:3px;"></i><strong>{{top1_list[3]}} HLTV-Rating</strong></li>
+        <li class="list-group-item"><i class="fa fa-bullseye fa-lg" style="padding-right:3px;"></i><strong>{{top1_list[4]}} Kills</strong></li>
+        <li class="list-group-item"><i class="fa fa-skull fa-lg" style="padding-right:3px;"></i><strong>{{top1_list[5]}} Deaths</strong></li>
+        <li class="list-group-item"><i class="fa fa-percentage fa-lg" style="padding-right:3px;"></i><strong>{{top1_list[6]}} K/D Ratio</strong></li>
+        <li class="list-group-item"><i class="fa fa-radiation-alt fa-lg" style="padding-right:3px;"></i><strong>{{top1_list[7]}} ADR</strong></li>
+      </p>
+      <a href="#" class="btn btn-primary"><i class="fa fa-user" style="padding-right:3px;"></i>See player profile</a>
+    </div>
+  </div>
+  </div>
+
+  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+    <div class="card" style="width: 16rem; margin:7px;">
+    <img src="{{top3_list[0]}}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title"><span class="badge badge-info">3rd</span>{{top3_list[2]}}</h5>
+      <p class="card-text">
+        <li class="list-group-item"><i class="fa fa-chart-line fa-lg" style="padding-right:3px;"></i><strong>{{top3_list[3]}} HLTV-Rating</strong></li>
+        <li class="list-group-item"><i class="fa fa-bullseye fa-lg" style="padding-right:3px;"></i><strong>{{top3_list[4]}} Kills</strong></li>
+        <li class="list-group-item"><i class="fa fa-skull fa-lg" style="padding-right:3px;"></i><strong>{{top3_list[5]}} Deaths</strong></li>
+        <li class="list-group-item"><i class="fa fa-percentage fa-lg" style="padding-right:3px;"></i><strong>{{top3_list[6]}} K/D Ratio</strong></li>
+        <li class="list-group-item"><i class="fa fa-radiation-alt fa-lg" style="padding-right:3px;"></i><strong>{{top3_list[7]}} ADR</strong></li>
+      </p>
+      <a href="#" class="btn btn-primary"><i class="fa fa-user" style="padding-right:3px;"></i>See player profile</a>
+    </div>
+  </div>
+  </div>
+
+  </div>
+</div>
+
+<div class="container d-flex justify-content-center">
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">IGN</th>
+        <th scope="col">K</th>
+        <th scope="col">A</th>
+        <th scope="col">D</th>
+        <th scope="col">ADR</th>
+        <th scope="col">HLTV</th>
+        <th scope="col">K/D</th>
+        <th scope="col">W</th>
+        <th scope="col">L</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">4</th>
+        <td><img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/56/56d195c48a87175f0a6241d6bef15f3bf4662793_full.jpg" alt="" height="20" width="20" style="margin-right: 3px;;"/>Hundor</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <th scope="row">5</th>
+        <td><img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/56/56d195c48a87175f0a6241d6bef15f3bf4662793_full.jpg" alt="" height="20" width="20" style="margin-right: 3px;;"/>Hundor</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <th scope="row">6</th>
+        <td><img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/56/56d195c48a87175f0a6241d6bef15f3bf4662793_full.jpg" alt="" height="20" width="20" style="margin-right: 3px;;"/>Proper bonkers innit?</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
   {% endblock %}
   </html>
