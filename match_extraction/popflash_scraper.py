@@ -61,6 +61,9 @@ def rows_to_team(team_rows):
         player.set_bombs_planted(columns[9].text.strip())
         player.set_bombs_defused(columns[10].text.strip())
         
+        img_url = get_user_image(popflash_id)
+        player.set_img_url(img_url)        
+        
         team.add_player(player)
 
     return team
