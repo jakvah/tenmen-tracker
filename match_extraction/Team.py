@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 "Team class"
 """
 from Player import Player
@@ -36,7 +38,7 @@ class Team:
         self.iterator_value += 1
 
         return player_to_return
-    next = __next__  # python2.x compatibility.       
+    next = __next__  # python2.x compatibility.      
 
     def add_player(self,new_player):
         if self.player_1 is None and not self.is_in_team(new_player):

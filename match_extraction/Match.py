@@ -1,11 +1,7 @@
 "Match class"
 
+from Outcome import Tie, Determined
 
-if __name__ == "__main__":
-    from Outcome import Tie, Determined
-else:
-    from match_extraction.Outcome import Tie, Determined
-    
 class Match:
     def __init__(self,match_id,team1=None,team2=None):
         self.match_id = match_id

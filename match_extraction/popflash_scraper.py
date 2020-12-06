@@ -1,21 +1,16 @@
-# python 3
-# from urllib.request import Request, urlopen
+# Python 3
+#from urllib.request import Request, urlopen
 
 # Python 2
 import urllib2
-
 from bs4 import BeautifulSoup as bs
-"""
-if __name__ == "__main__":
-    from Match import Match
-    from Player import Player
-    from Team import Team
-else:
-    from match_extraction.Match import Match
-    from match_extraction.Outcome import Tie, Determined
-    from match_extraction.Team import Team
-    from match_extraction.Player import Player
-"""
+
+from Match import Match
+from Player import Player
+from Team import Team
+from Outcome import Tie, Determined
+
+
 # Take match id from popflash site and return a match instance
 def get_match_data(match_id):
     match_url = create_url(match_id)
@@ -66,6 +61,9 @@ def rows_to_team(team_rows):
         player.set_bombs_planted(columns[9].text.strip())
         player.set_bombs_defused(columns[10].text.strip())
         
+        img_url = get_user_image(popflash_id)
+        player.set_img_url(img_url)        
+        
         team.add_player(player)
 
     return team
@@ -89,7 +87,6 @@ def get_html_2_7(url):
     req = urllib2.Request(url, headers={'User-Agent' : "Magic Browser"}) 
     con = urllib2.urlopen( req )
     return con.read()
-
 def url_exists(url):
     return True
 
@@ -111,9 +108,8 @@ def get_user_image(pop_id):
     image_src = str(image_div.findAll("img")).split('"')[1]
     return image_src
 
-
 if __name__ == "__main__":
-    print(get_user_image(1123196))
-    
+    math_id = str(input("mathid:"))
+    get_match_data(math_id)
 
         

@@ -1,7 +1,7 @@
 "Player class"
 
 class Player:
-    def __init__(self,pop_id,nick="",kills=0,deaths=0,assists=0,f_assists=0,adr=0,hltv_rating=0,hs_percentage=0,ck=0,bombs_planted=0,bombs_defused=0):
+    def __init__(self,pop_id,nick="",kills=0,deaths=0,assists=0,f_assists=0,adr=0,hltv_rating=0,hs_percentage=0,ck=0,bombs_planted=0,bombs_defused=0,wins=0,losses=0,img_url=""):
         self.popflash_id = pop_id
         self.nick_name = nick
 
@@ -16,14 +16,17 @@ class Player:
         self.bombs_planted = bombs_planted
         self.bombs_defused = bombs_planted
         
+        self.wins = wins
+        self.losses = losses
+        self.img_url = img_url
+        
         try:
             self.kd_ratio = self.kills / self.deaths
         except ZeroDivisionError:
             self.kd_ratio = 0
+    
     def __eq__(self,other):
-        return self.popflash_id == other.popflash_id
-
-        
+        return self.popflash_id == other.popflash_id        
 
     # Setters
     def set_nick(self,nick):
@@ -48,8 +51,18 @@ class Player:
         self.bombs_planted = bp
     def set_bombs_defused(self,bd):
         self.bombs_defused = bd
+    def set_wins(self,wins):
+        self.wins = wins
+    def set_losses(self,losses):
+        self.losses = losses
+    def set_kd_ratio(self,kd_ratio):
+        self.kd_ratio = kd_ratio
+    def set_img_url(self,img_url):
+        self.img_url = img_url
 
     # Getters
+    def get_pop_id(self):
+        return self.popflash_id
     def get_nick(self):
         return self.nick_name
     def get_kills(self):
@@ -65,7 +78,7 @@ class Player:
     def get_hltv_rating(self):
         return self.hltv_rating
     def get_hs_percentage(self):
-        return self.get_hs_percentage
+        return self.hs_percentage
     def get_clutch_kills(self):
         return self.clutch_kills
     def get_bombs_planted(self):
@@ -74,6 +87,12 @@ class Player:
         return self.bombs_defused
     def get_kd_ratio(self):
         return self.kd_ratio
+    def get_wins(self):
+        return self.wins    
+    def get_losses(self):
+        return self.losses
+    def get_img_url(self):
+        return self.img_url
 
     def __str__(self):
         try:
