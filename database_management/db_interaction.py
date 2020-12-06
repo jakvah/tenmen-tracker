@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+# -*- coding: utf-8 -*- 
 
 """
 Module for interacting with the database
@@ -75,8 +75,8 @@ def add_player(dbconn,player_id,player_nick):
     try:
         db_cur = dbconn.cursor()
         query = "INSERT INTO players " + \
-            """(pop_id,nick,kills,deaths,assists,f_assists,adr,hltv_rating,hs_per,clutck_kills,bombs_planted,bombs_defused,kd_ratio,wins,losses) \
-                VALUES (%s,%s,0,0,0,0,0,0,0,0,0,0,0,0,0)"""
+            """(pop_id,nick,kills,deaths,assists,f_assists,adr,hltv_rating,hs_per,clutck_kills,bombs_planted,bombs_defused,kd_ratio,wins,losses,img_url) \
+                VALUES (%s,%s,0,0,0,0,0,0,0,0,0,0,0,0,0,"")"""
         db_cur.execute(query,[player_id,player_nick])
         dbconn.commit()
     except Exception as e:
@@ -143,27 +143,79 @@ def update_player_data(dbconn,player,won):
     else:
         new_wins = dataset[0][13]
         new_losses = dataset[0][14] +1
+    new_img_url = player.get_img_url()
 
-    new_vals = [new_nick,new_kills,new_deaths,new_assists,new_f_assists,new_adr,new_hltv_rating,new_hs_per,new_ck,new_bombs_planted,new_bombs_defused,new_kd_ratio,new_wins,new_losses] + [player_id]
+    new_vals = [new_nick,new_kills,new_deaths,new_assists,new_f_assists,new_adr,new_hltv_rating,new_hs_per,new_ck,new_bombs_planted,new_bombs_defused,new_kd_ratio,new_wins,new_losses,new_img_url] + [player_id]
 
-    query = "UPDATE players SET nick = %s, kills = %s,deaths =%s,assists = %s,f_assists=%s,adr=%s,hltv_rating=%s,hs_per=%s,clutck_kills=%s,bombs_planted=%s,bombs_defused=%s,kd_ratio=%s,wins=%s,losses=%s WHERE pop_id = %s"
+    query = "UPDATE players SET nick = %s, kills = %s,deaths =%s,assists = %s,f_assists=%s,adr=%s,hltv_rating=%s,hs_per=%s,clutck_kills=%s,bombs_planted=%s,bombs_defused=%s,kd_ratio=%s,wins=%s,losses=%s,img_url=%s WHERE pop_id = %s"
     db_cur.execute(query,new_vals)
     dbconn.commit()
         
     db_cur.close()
 
+def get_top_players(dbconn,tablename="players"):
+    top_player_ids = []
+
+    table_data = get_table_data(dbconn,tablename)
+    num_players = len(table_data)
+
+    for n in range(num_players):
+        best_hltv_rating = 0
+        best_pop_id = None
+        for i in range(len(table_data)):
+            pop_id = table_data[i][0]
+            if pop_id in top_player_ids:
+                continue
+            else:
+                hltv_rating = table_data[i][7]
+                if hltv_rating > best_hltv_rating:
+                    best_hltv_rating = hltv_rating
+                    best_pop_id = pop_id
+        top_player_ids.append(best_pop_id)
+    top_players = []
+    for i in top_player_ids:
+        p = get_player_data(i)
+        top_players.append(p)
+    return top_players
+        
+def get_player_data(player_id,tablename = "players"):
+    from ..match_extraction.Player import Player 
+    db_con = get_database_connection()
+    table_data = get_table_data(db_con,tablename)    
+    
+    for i in range(len(table_data)):
+        pop_id = table_data[i][0]
+        if pop_id == player_id:
+            nick = table_data[i][1].encode("utf-8")
+            player = Player(player_id,nick=nick)
+
+            player.set_kills(table_data[i][2])
+            player.set_deaths(table_data[i][3])
+            player.set_assists(table_data[i][4])
+            player.set_flash_assists(table_data[i][5])
+            player.set_adr(table_data[i][6])
+            player.set_hltv_rating(round(table_data[i][7],2))
+            player.set_hs_percentage(float(table_data[i][8]))
+            player.set_clutch_kills(table_data[i][9])
+            player.set_bombs_planted(table_data[i][10])
+            player.set_bombs_defused(table_data[i][11])
+            player.set_wins(table_data[i][13])
+            player.set_losses(table_data[i][14])
+            player.set_img_url(table_data[i][15])
+    
+    return player
+
+def get_number_of_matches(dbconn,tablename="matches"):
+    data = get_table_data(dbconn,tablename)
+    return len(data)
+def get_number_of_players(dbconn,tablename="players"):
+    data = get_table_data(dbconn,tablename)
+    return len(data)
 
 if __name__ == "__main__":
-    p = Player(1123196,nick="Jossen",kills=10,deaths=1,assists=0,f_assists=2,adr=49,hltv_rating=1.34,hs_percentage=0.34,ck=0,bombs_planted=2,bombs_defused=3)
-    print(p)
-
-    db_conn = get_database_connection()
-    try:
-        add_player(db_conn,"638279","jakvah")
-    except ElementExistsInTableError:
-        print("Players exists")
-    try:
-        add_player(db_conn,1123196,"Jossen")
-    except ElementExistsInTableError:
-        print("Players exists")
-    update_player_data(db_conn,p,True)
+    # Testing the module
+    from match_extraction.Player import Player
+    dbconn = get_database_connection()
+    l = get_top_players(dbconn,3)
+    for i in l:
+        print(i)
