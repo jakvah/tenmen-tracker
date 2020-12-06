@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 from flask import Flask,render_template,Markup,request,redirect,flash
 
 app = Flask(__name__)
@@ -21,7 +22,39 @@ def show_pdf(filename):
 @app.route("/tenman")
 def tenman_index():
     try:
-        return render_template("tenman/tenman_landing.html")
+        try:
+            from database_management import db_interaction as dbi
+            #from match_extraction.Player import Player
+        except Exception as e:
+            return "db_interaction Import failed: " +  str(e)
+        try:
+                from match_extraction import popflash_scraper as ps
+        except Exception as e:
+                return "ps Import failed: " +  str(e)
+        """         
+        try:        
+            pop_id = 1105357 
+            pop_match = ps.get_match_data(pop_id)
+        except Exception as e:
+            return "failed in pop_match" + str(e)                    
+        
+        try:    
+            conn = dbi.get_database_connection()
+            dbi.add_match_data(conn,pop_match)
+        
+        except Exception as e:
+            return "failed in ad match " + str(e)
+        """
+        try:
+            conn = dbi.get_database_connection()
+            top_players = dbi.get_top_players(conn)
+            num_matches = dbi.get_number_of_matches(conn)
+            num_players = dbi.get_number_of_players(conn)
+
+            return render_template("tenman/tenman_landing.html",top_players=top_players,num_matches=num_matches,num_players=num_players)
+        except Exception as e:
+            return "failed in get top players " +  str(e)
+
     except Exception as e:
         return "failed:" + str(e)
 
@@ -61,8 +94,6 @@ def add_pop_match():
                 
             except Exception as e:
                 return str(e)
-
-
             
             
     except Exception as e:
