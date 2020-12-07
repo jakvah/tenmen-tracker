@@ -86,13 +86,18 @@ class Player:
     def get_bombs_defused(self):
         return self.bombs_defused
     def get_kd_ratio(self):
-        return self.kd_ratio
+        try:
+            return round(float(self.kills) / float(self.deaths),2)
+        except ZeroDivisionError:
+            return 0
     def get_wins(self):
         return self.wins    
     def get_losses(self):
         return self.losses
     def get_img_url(self):
         return self.img_url
+    def get_total_matches(self):
+        return self.wins + self.losses
 
     def __str__(self):
         try:
