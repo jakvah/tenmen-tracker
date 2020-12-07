@@ -58,6 +58,20 @@ def tenman_index():
     except Exception as e:
         return "failed:" + str(e)
 
+@app.route("/tenman/user/<pop_id>")
+def user_page(pop_id):
+    try:
+        from database_management import db_interaction as dbi
+            #from match_extraction.Player import Player
+    except Exception as e:
+        return "db_interaction Import failed: " +  str(e)
+
+    try:
+        p = dbi.get_player_data(int(pop_id))
+    
+        return render_template("/tenman/user_profile.html",player=p)
+    except Exception as e:
+        return "Failed big: " + str(e)
 @app.route("/tenman/add_match", methods=["GET","POST"]) 
 def add_pop_match():
     try:
