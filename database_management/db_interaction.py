@@ -193,24 +193,25 @@ def get_player_data(player_id,tablename = "players"):
     for i in range(len(table_data)):
         pop_id = table_data[i][0]
         if pop_id == player_id:
-            nick = table_data[i][1].encode("utf-8")
-            player = Player(player_id,nick=nick)
+            nick = table_data[i][1]
+            p = Player(player_id,nick=nick)
 
-            player.set_kills(table_data[i][2])
-            player.set_deaths(table_data[i][3])
-            player.set_assists(table_data[i][4])
-            player.set_flash_assists(table_data[i][5])
-            player.set_adr(int(table_data[i][6]))
-            player.set_hltv_rating(round(table_data[i][7],2))
-            player.set_hs_percentage(float(table_data[i][8]))
-            player.set_clutch_kills(table_data[i][9])
-            player.set_bombs_planted(table_data[i][10])
-            player.set_bombs_defused(table_data[i][11])
-            player.set_wins(table_data[i][13])
-            player.set_losses(table_data[i][14])
-            player.set_img_url(table_data[i][15])
+            p.set_kills(table_data[i][2])
+            p.set_deaths(table_data[i][3])
+            p.set_assists(table_data[i][4])
+            p.set_flash_assists(table_data[i][5])
+            p.set_adr(int(table_data[i][6]))
+            p.set_hltv_rating(round(table_data[i][7],2))
+            p.set_hs_percentage(float(table_data[i][8]))
+            p.set_clutch_kills(table_data[i][9])
+            p.set_bombs_planted(table_data[i][10])
+            p.set_bombs_defused(table_data[i][11])
+            p.set_kd_ratio(table_data[i][12])
+            p.set_wins(table_data[i][13])
+            p.set_losses(table_data[i][14])
+            p.set_img_url(table_data[i][15])
     
-    return player
+    return p
 
 def get_number_of_matches(dbconn,tablename="matches"):
     data = get_table_data(dbconn,tablename)
