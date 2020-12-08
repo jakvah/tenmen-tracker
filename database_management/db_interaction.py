@@ -121,9 +121,10 @@ def update_player_data(dbconn,player,won):
     new_f_assists = int(player.flash_assists) + int(dataset[0][5])
 
     if not first_time:
-        new_adr = (float(player.adr) + float(dataset[0][6])) / 2
-        new_hltv_rating = (float(player.hltv_rating) + float(dataset[0][7])) / 2
-        new_hs_per = (float(player.hs_percentage) + float(dataset[0][8])) / 2
+        new_match_total = dataset[0][13] + dataset[0][14] + 1
+        new_adr = update_average(float(dataset[0][6]),float(player.get_adr()),new_match_total)
+        new_hltv_rating = update_average(float(dataset[0][7]),float(player.get_hltv_rating()),new_match_total)
+        new_hs_per = update_average(float(dataset[0][8]),float(player.get_hs_percentage()),new_match_total)
     else:
         new_adr = float(player.adr)
         new_hltv_rating = float(player.hltv_rating)
@@ -153,6 +154,11 @@ def update_player_data(dbconn,player,won):
         
     db_cur.close()
 
+def update_average(old_average,new_value,new_total):
+
+    u_1 = float(old_average) * (float(1) / (float(new_total)/float(new_total-1)))
+    new_average = u_1 + float(new_value) / float(new_total)
+    return new_average
 def get_top_players(dbconn,threshold,tablename="players"):
     top_player_ids = []
 
@@ -221,9 +227,9 @@ def get_number_of_players(dbconn,tablename="players"):
     return len(data)
 
 if __name__ == "__main__":
-    # Testing the module
-    from match_extraction.Player import Player
-    dbconn = get_database_connection()
-    l = get_top_players(dbconn,3)
-    for i in l:
-        print(i)
+    x1 = 1234
+    x2 = 45345
+    x3 = 12356345
+    old_average = float(x1 + x2) / 2
+    new_avg = update_average(old_average,x3,3)
+    print(new_avg)
