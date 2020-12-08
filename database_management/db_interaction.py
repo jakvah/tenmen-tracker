@@ -21,7 +21,7 @@ DATABASE_LOGIN_DETAILS = {
 }
 def get_database_connection():
     try:
-        db_conn = MySQLdb.connect(DATABASE_LOGIN_DETAILS["host"],DATABASE_LOGIN_DETAILS["user"],DATABASE_LOGIN_DETAILS["password"],DATABASE_LOGIN_DETAILS["database"])
+        db_conn = MySQLdb.connect(DATABASE_LOGIN_DETAILS["host"],DATABASE_LOGIN_DETAILS["user"],DATABASE_LOGIN_DETAILS["password"],DATABASE_LOGIN_DETAILS["database"],use_unicode=True, charset="utf8")
         return db_conn
     except Exception as e:
         print("Could not establish connection to the database. Is the server running?")
@@ -105,7 +105,7 @@ def update_player_data(dbconn,player,won):
     db_cur = dbconn.cursor()
     player_id = player.popflash_id
     if not exists_in_table(dbconn,"players",int(player_id)):
-        add_player(dbconn,player_id,player.nick_name)
+        add_player(dbconn,player_id,player.get_nick())
         first_time = True
 
     query = "SELECT * FROM players WHERE pop_id = " + str(player_id)
@@ -114,7 +114,7 @@ def update_player_data(dbconn,player,won):
 
     
     # Assign new values
-    new_nick = player.nick_name
+    new_nick = player.get_nick()
     new_kills = int(player.kills) + int(dataset[0][2])
     new_deaths = int(player.deaths) + int(dataset[0][3])
     new_assists = int(player.assists) + int(dataset[0][4])
