@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-from flask import Flask,render_template,Markup,request,redirect,flash
+from flask import Flask,render_template,Markup,request,redirect,flash,jsonify
 
 app = Flask(__name__)
 
@@ -18,14 +18,40 @@ def show_pdf(filename):
         return render_template("pdf_viewer.html",link = location)
     except Exception as e:
         return str(e)
-    
+
+@app.route("/tenman/nothing")
+def nothing():
+    navbar_status = ["","",""]
+    return render_template("tenman/no_players.html",navbar_status=navbar_status)
+
+@app.route("/tenman/players")
+def players():
+    from database_management import db_interaction as dbi
+    conn = dbi.get_database_connection()
+    num_players = dbi.get_number_of_players(conn)
+    navbar_status = ["","active",""]
+    return render_template("tenman/players.html",num_players=num_players,navbar_status=navbar_status)
+
+@app.route("/livesearch",methods=["POST","GET"])
+def livesearch():
+    try:
+        from database_management import db_interaction as dbi
+
+        searchbox = request.form.get("text")
+        connection = dbi.get_database_connection()
+        result = dbi.search_table(connection,"players","nick",searchbox,"pop_id","nick","hltv_rating","img_url","wins","losses")
+
+        return jsonify(result)
+    except Exception as e:
+        return jsonify(str(e))
+
 @app.route("/tenman")
 def tenman_index():
-    
+    PLAYER_THRESHOLD = 5
+    navbar_status = ["active","",""]
     try:
         try:
             from database_management import db_interaction as dbi
-            #from match_extraction.Player import Player
         except Exception as e:
             return "db_interaction Import failed: " +  str(e)
         try:
@@ -34,33 +60,25 @@ def tenman_index():
             return "ps Import failed: " +  str(e)
         
         if dbi.get_number_of_players(dbi.get_database_connection()) == 0:
-            return render_template("tenman/navbar.html")
+            return render_template("tenman/no_players.html",num_matches=0,num_players=0)
         try:
             conn = dbi.get_database_connection()
-            top_players = dbi.get_top_players(conn,threshold=1)
-            num_matches = dbi.get_number_of_matches(conn)
-            num_players = dbi.get_number_of_players(conn)
-            player_nicks = []
-            """
-            for i in range(len(top_players)):
-                try:
-                    p = top_players[i]
-                    nick = (p.get_nick())
-                    #nick_uni = unicode(nick,"utf-8")
-                    player_nicks.append(nick)
-                except Exception as e:
-                    return "Norsk alfa suger: " + str(e) + " :" + str(p) #+type(nick_uni)            """
 
-
-            return render_template("tenman/tenman_landing.html",top_players=top_players,num_matches=num_matches,num_players=num_players)
+            top_players = dbi.get_top_players(conn,threshold=PLAYER_THRESHOLD)
         except Exception as e:
             return "failed in get top players " +  str(e)
+            
+        num_matches = dbi.get_number_of_matches(conn)
+        num_players = dbi.get_number_of_players(conn)
+
+        return render_template("tenman/tenman_landing.html",navbar_status=navbar_status,top_players=top_players,num_matches=num_matches,num_players=num_players,threshold=PLAYER_THRESHOLD)
 
     except Exception as e:
         return "failed:" + str(e)
 
 @app.route("/tenman/user/<pop_id>")
 def user_page(pop_id):
+    navbar_status = ["","active",""]
     try:
         from database_management import db_interaction as dbi
             #from match_extraction.Player import Player
@@ -70,9 +88,10 @@ def user_page(pop_id):
     try:
         p = dbi.get_player_data(int(pop_id))
     
-        return render_template("/tenman/user_profile.html",player=p)
+        return render_template("/tenman/user_profile.html",player=p,navbar_status=navbar_status)
     except Exception as e:
         return "Failed big: " + str(e)
+        
 @app.route("/tenman/add_match", methods=["GET","POST"]) 
 def add_pop_match():
     try:

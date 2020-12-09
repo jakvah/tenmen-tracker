@@ -39,6 +39,26 @@ def table_exists(dbconn,tablename):
 
     	dbcur.close()
     	return False
+        
+def search_table(dbconn,table,target,target_value,*select):
+    cursor = dbconn.cursor()
+
+    # Create query for cursor
+    query = "SELECT "
+    
+    for index, value in enumerate(select):
+        if index == (len(select)-1):
+            query += str(value)
+        else:
+            query += str(value) + ","
+    
+    query += " FROM " + str(table) + " WHERE " + str(target) \
+        + " LIKE '" + str(target_value) + "%' order by " + str(target)
+    
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    return result
 
 def get_table_data(dbconn, tablename):
     cur = dbconn.cursor()
@@ -177,7 +197,7 @@ def get_top_players(dbconn,threshold,tablename="players"):
             
             
             else:
-                hltv_rating = table_data[i][12]
+                hltv_rating = table_data[i][7]
                 if hltv_rating > best_hltv_rating:
                     best_hltv_rating = hltv_rating
                     best_pop_id = pop_id
