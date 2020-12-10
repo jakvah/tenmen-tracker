@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <title>Tenman Tracker</title>
+    
     <link rel="icon" href="{{ url_for('static',filename='images/tenman.png') }}">
   </head>
   <body>
@@ -37,6 +37,7 @@
 </script>
 
 <body>
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
     <a class="navbar-brand" href="/tenman"><!-- Logo Image -->
@@ -49,19 +50,18 @@
   
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="/tenman">Home <span class="sr-only">(current)</span></a>
+        <li class="nav-item {{navbar_status[0]}}">
+          <a class="nav-link" href="/tenman">Home <span class="sr-only"></span></a>
         </li>
         
-        <li class="nav-item">
-          <a class="nav-link" href="#">Players</a>
+        <li class="nav-item {{navbar_status[1]}}">
+          <a class="nav-link" href="/tenman/players">Players <span class="sr-only"></span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Recorded Matches</a>
+        <li class="nav-item {{navbar_status[2]}}">
+          <a class="nav-link" href="/tenman/matches">Recorded Matches <span class="sr-only"></span></a>
         </li>
        
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">API</a>
+        <li class="nav-item ">          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">API</a>
         </li>
       
       </ul>
@@ -90,26 +90,102 @@
           <form action="/tenman/add_match" method="POST">
             <div class="form-group">
               <label for="exampleInputEmail1">Match ID</label>
-              <input name="pop_id" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter PopFlash Match ID">
-              <small id="emailHelp" class="form-text text-muted"></small>
+              <input name="pop_id" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter PopFlash Match ID" required>
+              <small id="emailHelp" class="form-text text-muted">This is the number identifying the popflash match, <i>not</i> the entire match link!</small>
+              
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
               <input name="pwd" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
             </div>
             <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
               <label class="form-check-label" for="exampleCheck1" required>I'm not a robot</label>
             </div>
-            <button type="submit" class="btn btn-success">Add match</button>
+            <button onclick="showDiv()" type="submit" class="btn btn-success">Add match</button>
           </form>
-      
+          <div id="hiddenMeme" style="display:none;" class="container">
+                          <!-- 2 -->
+
+              <div class="loader loader--style2" title="1">
+                <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                  width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                <path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
+                  <animateTransform attributeType="xml"
+                    attributeName="transform"
+                    type="rotate"
+                    from="0 25 25"
+                    to="360 25 25"
+                    dur="0.6s"
+                    repeatCount="indefinite"/>
+                  </path>
+                </svg>
+                
+              </div>
+              <h5 style="padding-top: 1em;display: inline;">Adding match! While waiting, here is meme!</h5>
+
+            <img src="https://media.discordapp.net/attachments/629733041199251495/786296489877307482/10_man.png?width=690&height=675" img-fluid alt="10manMeme">
+          </div>
         </div>
       </div>
     </div>
     </div>
 </body>
+<style type="text/css">
+ .loader{
+  margin: 0 0 2em;
+  height: 100px;
+  width: 20%;
+  text-align: center;
+  padding-top: 1em;
+  /*margin: 0 auto 1em;*/
+  display: inline-block;
+  /*vertical-align: top;*/
+}
 
-</html>
+/*
+  Set the color of the icon
+*/
+svg path,
+svg rect{
+  fill: #FF6700;
+}
+
+</style>
+<script>
+  function showDiv() {
+    var check_box = document.getElementById("exampleCheck1")    
+    var queryString = $('#exampleInputEmail1').serialize();
+
+    if (queryString != "pop_id=" && check_box.checked) {
+    document.getElementById('hiddenMeme').style.display = "block";   
+    }
+    console.log(queryString)    
+    
+    
+}
+</script>
+<script>
+  function validateInput() {
+    var x, text;
+  
+    // Get the value of the input field with id="numb"
+    x = document.getElementById("numb").value;
+  
+    // If x is Not a Number or less than one or greater than 10
+    if (isNaN(x) || x < 1 || x > 10) {
+      text = "Input not valid";
+    } else {
+      text = "Input OK";
+    }
+    document.getElementById("demo").innerHTML = text;
+  }
+  </script>
+
 
 {% block body %} {% endblock %}
+
+<!-- Henter footer -->
+{% extends "tenman/footer.html" %}
+</div>
+</html>
