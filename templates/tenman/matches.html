@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<title>Matches / Tenman Tracker</title>
+{% extends "tenman/navbar.html" %}
+{% block body %}
+<body>
+
+  <div class="container" style="padding-top:5px; padding-bottom:5px;">
+    <h4> Search among {{num_matches}} recorded matches </h4>
+  </div>
+  <div class="container">
+	  <div class="row justify-content-center">
+                        <div class="col-12"> <!--col-md-10 col-lg-8-->
+                            <form class="card card-sm"> <!--style=" height: 5rem;"-->
+                                <div class="card-body row no-gutters align-items-center ">                                    
+                                  <div class="col-auto">
+                                        <i class="fas fa-search h4 text-body"></i>
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col">
+                                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for match ID, map or players participating in match" id="livebox">
+                                      </div>
+                                     
+                                    <!--end of col-->
+                                    <!--<div class="col-auto">
+                                        <button class="btn btn-lg btn-success" type="submit">Søk</button>
+                                    </div>-->
+                                    <!--end of col-->
+                                </div>
+                            </form>
+                            <table class="table" id=datalist>
+                              
+
+                            </table>
+                        </div>
+                        <!--end of col-->
+    </div>
+</div>
+
+<!--End of wrapper -->
+</body>
+
+<script>
+  $(document).ready(function(){
+    $("#livebox").on("input",function(e){
+      text_in_livebox = $("#livebox").val()
+      $.ajax({
+        method:"post",
+        url:"/livesearch_matches",
+        data:{text:text_in_livebox},
+        success:function(res){
+            console.log(res);
+            var data;
+            data +='<thead class="thead-dark"><tr><th scope="col">Match ID</th></tr></thead><tbody>';
+                    $.each(res,function(index,value){
+                       // data += "<tr>"+'<td><a href="/tenman/match/'+value[0].toString()+'"</a>'+"</td></tr>";
+                      data +='<tr><td><a href="/tenman/match/'+value[0].toString()+'"</a>'+value[0].toString() + '</td></tr>'
+                    });
+            data += '</tbody>'
+                    //ata += "</ul>";
+                    $("#datalist").html(data);
+        }
+      })
+    })
+  })
+
+</script>
+
+
+<style>
+  .form-control-borderless {
+    border: none;
+}
+
+.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+</style>
+<style>
+  .active-cyan-2 input.form-control[type=text]:focus:not([readonly]) {
+    border-bottom: 1px solid #4dd0e1;
+    box-shadow: 0 1px 0 0 #4dd0e1;
+  }
+    </style>
+  
+{% endblock %}
+  </html>
