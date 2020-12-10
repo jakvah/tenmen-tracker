@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
-
+  <title>Players / Tenman Tracker</title>
 {% extends "tenman/navbar.html" %}
 {% block body %}
-<body onload="">
-<div class="container" style="padding-top:5px; padding-bottom:5px;">
-  <h4> Search among {{num_players}} recorded players </h4>
-</div>
+<body>
+
+  <div class="container" style="padding-top:5px; padding-bottom:5px;">
+    <h4> Search among {{num_players}} recorded players </h4>
+  </div>
   <div class="container">
-	<div class="row justify-content-center">
+	  <div class="row justify-content-center">
                         <div class="col-12"> <!--col-md-10 col-lg-8-->
                             <form class="card card-sm"> <!--style=" height: 5rem;"-->
                                 <div class="card-body row no-gutters align-items-center ">                                    
@@ -33,9 +34,12 @@
                             </table>
                         </div>
                         <!--end of col-->
-                    </div>
+    </div>
 </div>
+
+<!--End of wrapper -->
 </body>
+
 <script>
   $(document).ready(function(){
     $("#livebox").on("input",function(e){
@@ -64,33 +68,7 @@
 
 </script>
 
-<!--<script>
-    $(document).ready(function(){
-    $("#livebox").on("input",function(e){
-      text_in_livebox = $("#livebox").val()
-      $.ajax({
-        method:"post",
-        url:"/livesearch",
-        data:{text:text_in_livebox},
-        success:function(res){
-            console.log(res);
-            var data;
-            data +='<thead class="thead-dark"><tr><th scope="col">Name</th><th scope="col">HLTV Rating</th><th scope="col">Wins</th><th scope="col">Losses</th></tr></thead><tbody>';
-                    $.each(res,function(index,value){
-                        data += "<tr>"+'<td><a href="/tenman/user/'+value[0]+'"</a>'+'<img src="'+value[3] + '" height="20" width="20" style="margin-right: 3px;;">' + value[1]+"</td>";
-                        data += "<td>"+value[2] + "</td>";
-                        data += "<td>"+value[4] + "</td>";
-                        data += "<td>"+value[5] + "</td></tr>";
-                    });
-            data += '</tbody>'
-                    //ata += "</ul>";
-                    $("#datalist").html(data);
-        }
-      })
-    })
-  })
 
-</script>-->
 <style>
   .form-control-borderless {
     border: none;

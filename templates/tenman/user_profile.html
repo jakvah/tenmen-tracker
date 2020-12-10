@@ -14,7 +14,7 @@
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
-                    <img src="{{player.get_img_url()}}}}" alt="Admin" class="rounded-circle" width="150">
+                    <img src="{{player.get_img_url()}}}}" alt="Could not get Steam image" class="rounded-circle" width="150">
                     <div class="mt-3">
                       <h4>{{player.get_nick()}}</h4>
                       <p class="text-secondary mb-1">{{player.get_total_matches()}} matches played</p>
@@ -211,7 +211,6 @@
                             <td>{{ player.get_wins() }}</td>
                             <td>{{ player.get_losses()}}</td>
                           </tr>
-
                           
                         </tbody>
                       </table>

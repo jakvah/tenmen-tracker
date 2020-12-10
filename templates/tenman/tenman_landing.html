@@ -38,10 +38,10 @@
     <div class="card-body">
       <h5 class="card-title"><span class="badge badge-info" style="margin-right: 5px;">1st</span>{{top_players[0].get_nick()}}<i class="fa fa-trophy" style="padding-left:3px;"></i></h5>
       <p class="card-text">
+        <li class="list-group-item"><i class="fa fa-chart-line fa-lg" style="padding-right:3px;"></i><strong>{{top_players[0].get_hltv_rating()}} HLTV-Rating</strong></li>
         <li class="list-group-item"><i class="fa fa-divide fa-lg" style="padding-right:3px;"></i><strong>{{top_players[0].get_kd_ratio()}} K/D Ratio</strong></li>
         <li class="list-group-item"><i class="fa fa-crosshairs fa-lg" style="padding-right:3px;"></i><strong>{{top_players[0].get_kills()}} Kills</strong></li>
         <li class="list-group-item"><i class="fa fa-skull fa-lg" style="padding-right:3px;"></i><strong>{{top_players[0].get_deaths()}} Deaths</strong></li>
-        <li class="list-group-item"><i class="fa fa-chart-line fa-lg" style="padding-right:3px;"></i><strong>{{top_players[0].get_hltv_rating()}} HLTV-Rating</strong></li>
         <li class="list-group-item"><i class="fa fa-percentage fa-lg" style="padding-right:3px;"></i><strong>{{100*(top_players[0].get_hs_percentage())}} Headshot %</strong></li>
         <li class="list-group-item"><i class="fa fa-radiation-alt fa-lg" style="padding-right:3px;"></i><strong>{{top_players[0].get_adr()}} ADR</strong></li>
         <li class="list-group-item"><i class="fa fa-medal fa-lg" style="padding-right:3px;"></i><strong>{{top_players[0].get_wins()}} Wins</strong></li>
@@ -57,10 +57,10 @@
     <div class="card-body">
       <h5 class="card-title"><span class="badge badge-info" style="margin-right: 5px;">2nd</span>{{top_players[1].get_nick()}}</h5>
       <p class="card-text">        
+        <li class="list-group-item"><i class="fa fa-chart-line fa-lg" style="padding-right:3px;"></i><strong>{{top_players[1].get_hltv_rating()}} HLTV-Rating</strong></li>
         <li class="list-group-item"><i class="fa fa-divide fa-lg" style="padding-right:3px;"></i><strong>{{top_players[1].get_kd_ratio()}} K/D Ratio</strong></li>
         <li class="list-group-item"><i class="fa fa-crosshairs fa-lg" style="padding-right:3px;"></i><strong>{{top_players[1].get_kills()}} Kills</strong></li>
         <li class="list-group-item"><i class="fa fa-skull fa-lg" style="padding-right:3px;"></i><strong>{{top_players[1].get_deaths()}} Deaths</strong></li>
-        <li class="list-group-item"><i class="fa fa-chart-line fa-lg" style="padding-right:3px;"></i><strong>{{top_players[1].get_hltv_rating()}} HLTV-Rating</strong></li>
         <li class="list-group-item"><i class="fa fa-percentage fa-lg" style="padding-right:3px;"></i><strong>{{100*(top_players[1].get_hs_percentage())}} Headshot %</strong></li>
         <li class="list-group-item"><i class="fa fa-radiation-alt fa-lg" style="padding-right:3px;"></i><strong>{{top_players[1].get_adr()}} ADR</strong></li>
         <li class="list-group-item"><i class="fa fa-medal fa-lg" style="padding-right:3px;"></i><strong>{{top_players[1].get_wins()}} Wins</strong></li>
@@ -77,10 +77,10 @@
     <div class="card-body">
       <h5 class="card-title"><span class="badge badge-info" style="margin-right: 5px;">3rd</span>{{top_players[2].get_nick()}}</h5>
       <p class="card-text">        
+        <li class="list-group-item"><i class="fa fa-chart-line fa-lg" style="padding-right:3px;"></i><strong>{{top_players[2].get_hltv_rating()}} HLTV-Rating</strong></li>
         <li class="list-group-item"><i class="fa fa-divide fa-lg" style="padding-right:3px;"></i><strong>{{top_players[2].get_kd_ratio()}} K/D Ratio</strong></li>
         <li class="list-group-item"><i class="fa fa-crosshairs fa-lg" style="padding-right:3px;"></i><strong>{{top_players[2].get_kills()}} Kills</strong></li>
         <li class="list-group-item"><i class="fa fa-skull fa-lg" style="padding-right:3px;"></i><strong>{{top_players[2].get_deaths()}} Deaths</strong></li>
-        <li class="list-group-item"><i class="fa fa-chart-line fa-lg" style="padding-right:3px;"></i><strong>{{top_players[2].get_hltv_rating()}} HLTV-Rating</strong></li>
         <li class="list-group-item"><i class="fa fa-percentage fa-lg" style="padding-right:3px;"></i><strong>{{100*(top_players[2].get_hs_percentage())}} Headshot %</strong></li>
         <li class="list-group-item"><i class="fa fa-radiation-alt fa-lg" style="padding-right:3px;"></i><strong>{{top_players[2].get_adr()}} ADR</strong></li>
         <li class="list-group-item"><i class="fa fa-medal fa-lg" style="padding-right:3px;"></i><strong>{{top_players[2].get_wins()}} Wins</strong></li>
@@ -100,12 +100,12 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">IGN</th>
+        <th scope="col">HLTV</th>
         <th scope="col">K/D</th>
         <th scope="col">K</th>
         <th scope="col">A</th>
         <th scope="col">D</th>
         <th scope="col">ADR</th>
-        <th scope="col">HLTV</th>
         <th scope="col">HS%</th>
         <th scope="col">W</th>
         <th scope="col">L</th>
@@ -113,16 +113,16 @@
       </tr>
     </thead>
     <tbody>
-      {% for i in range((top_players[3:]).__len__()-1) %}
+      {% for i in range((top_players[3:]).__len__()) %}
       <tr>
         <th scope="row">{{ i+4 }}</th>
         <td><img src="{{ top_players[3+i].get_img_url() }}" alt="" height="20" width="20" style="margin-right: 3px;;"/><a href="/tenman/user/{{top_players[3+i].get_pop_id()}}">{{ top_players[3+i].get_nick() }}</a></td>
+        <td>{{ top_players[3+i].get_hltv_rating() }}</td>
         <td>{{ top_players[3+i].get_kd_ratio() }}</td>
         <td>{{ top_players[3+i].get_kills() }}</td>
         <td>{{ top_players[3+i].get_assists() }}</td>
         <td>{{ top_players[3+i].get_deaths() }}</td>
         <td>{{ top_players[3+i].get_adr() }}</td>
-        <td>{{ top_players[3+i].get_hltv_rating() }}</td>
         <td>{{ 100*(top_players[3+i].get_hs_percentage())}}%</td>
         <td>{{top_players[3+i].get_wins()}}</td>
         <td>{{top_players[3+i].get_losses()}}</td>
@@ -146,7 +146,7 @@
       </div>
       <div class="modal-body">
         <p>The data beeing recorded are from the PopFlash matches that have been added to the database. The values displayed on the scoreboard and 
-        on a players profile is the average over all matches. To keep the scoreboard statistically significant, a player must have 5 matches recorded in order
+        on a players profile is the average over all matches. To keep the scoreboard statistically significant, a player must have <strong>{{threshold}}</strong> matches recorded in order
         to appear on the scoreboard. As a consquence, the total number of players might not match the players that appear on the scoreboard.</p>
         <p>The scoreboard is sorted by players K/D Ratios. This decision is based on the fact that this is how real men measure CSGO stats. Those claiming 
           that a players HLTV rating has any significance are falling into the trap of the liberal media (beeing HTLV.org). If you have a problem with this, then bait
@@ -167,4 +167,4 @@
     }
 </style>
   {% endblock %}
-  </html>
+</html>
