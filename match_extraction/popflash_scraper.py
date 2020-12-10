@@ -20,6 +20,14 @@ def get_match_data(match_id):
     team_1_score = int(soup.find("div", {"class": "score-1"}).text.strip())
     team_2_score = int(soup.find("div", {"class": "score-2"}).text.strip())
 
+    match_div = soup.find("div",{"id": "match-container"})
+    
+    map_img_url = str(match_div.findAll("img")).split('"')[1]
+    
+    date_span = str(match_div.findAll("h2")[0])
+    date = date_span.split('"')[1]
+    date_formatted = date.split('+')[0]
+
     tables = soup.findAll("table")
 
     team_2_table_rows = tables[4].findAll("tr")
@@ -31,6 +39,8 @@ def get_match_data(match_id):
     team2.set_score(team_2_score)
 
     match = Match(match_id,team1=team1,team2=team2)
+    match.set_date(date_formatted)
+    match.set_map_img_url(map_img_url)
 
     return match
 
@@ -47,6 +57,7 @@ def rows_to_team(team_rows):
         try:
             s = str(columns[0].text.strip()[0])
             player.set_nick(columns[0].text.strip())
+        # Captain gets cactus symbol in front of name. Remove this
         except UnicodeEncodeError:
             player.set_nick(columns[0].text.strip()[1:])
         
@@ -109,7 +120,16 @@ def get_user_image(pop_id):
     return image_src
 
 if __name__ == "__main__":
-    math_id = str(input("mathid:"))
-    get_match_data(math_id)
+    match_id = int(input("match id:"))
+    match_url = create_url(match_id)
+    page_html = get_html_2_7(match_url)
+    soup = bs(page_html,"html.parser")
+
+    match_div = soup.find("div",{"id": "match-container"})
+    map_img_url = str(match_div.findAll("img")).split('"')[1]
+    date_span = str(match_div.findAll("h2")[0])
+    date = date_span.split('"')[1]
+    date_formatted = date.split('+')[0]
+    print(date_formatted)
 
         
