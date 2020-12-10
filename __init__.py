@@ -45,9 +45,23 @@ def livesearch():
     except Exception as e:
         return jsonify(str(e))
 
+
+@app.route("/livesearch_matches",methods=["POST","GET"])
+def livesearch_match():
+    try:
+        from database_management import db_interaction as dbi
+
+        searchbox = request.form.get("text")
+        connection = dbi.get_database_connection()
+        result = dbi.search_table(connection,"matches","match_id",int(searchbox),"match_id")
+
+        return jsonify(result)
+    except Exception as e:
+        return jsonify(str(e))
+
 @app.route("/tenman")
 def tenman_index():
-    PLAYER_THRESHOLD = 5
+    PLAYER_THRESHOLD = 6
     navbar_status = ["active","",""]
     try:
         try:
@@ -91,7 +105,29 @@ def user_page(pop_id):
         return render_template("/tenman/user_profile.html",player=p,navbar_status=navbar_status)
     except Exception as e:
         return "Failed big: " + str(e)
+
+@app.route("/tenman/matches")
+def matches():
+    try:
+        from database_management import db_interaction as dbi
         
+        navbar_status = ["","","active"]
+        conn = dbi.get_database_connection()
+        num_matches = dbi.get_number_of_matches(conn)
+        
+        return render_template("/tenman/matches.html",navbar_status=navbar_status,num_matches=num_matches)
+    except Exception as e:
+        return str(e)
+
+@app.route("/tenman/match/<match_id>")
+def match_page(match_id):
+    try:
+        navbar_status = ["","","active"]
+        from match_extraction import popflash_scraper as ps
+        match = ps.get_match_data(match_id)
+        return render_template("tenman/match_page.html",match=match,navbar_status=navbar_status)
+    except Exception as e:
+        return str(e)
 @app.route("/tenman/add_match", methods=["GET","POST"]) 
 def add_pop_match():
     try:
