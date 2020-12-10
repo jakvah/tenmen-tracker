@@ -110,17 +110,23 @@ def add_match_data(dbconn,match):
         add_match_id(dbconn,match.get_match_id())
         
         # Add determine outcome
-        winning_team = match.get_winner()
-        loosing_team = match.get_looser()
-        for player in winning_team:
-            update_player_data(dbconn,player,won=True)
-        for player in loosing_team:
-            update_player_data(dbconn,player,won=False)
+        if match.is_tie():
+            for player in match.team_1:
+                update_player_data(dbconn,player,won=False,tie=True)
+            for player in match.team_2:
+                update_player_data(dbconn,player,won=False,tie=True)
+        else:
+            winning_team = match.get_winner()
+            loosing_team = match.get_looser()
+            for player in winning_team:
+                update_player_data(dbconn,player,won=True)
+            for player in loosing_team:
+                update_player_data(dbconn,player,won=False)
     except ElementExistsInTableError:
         raise ElementExistsInTableError
 
 # Takes instance of Player class and updates stats for Player.pop_id. 
-def update_player_data(dbconn,player,won):
+def update_player_data(dbconn,player,won,tie=False):
     first_time = False
     db_cur = dbconn.cursor()
     player_id = player.popflash_id
@@ -157,13 +163,16 @@ def update_player_data(dbconn,player,won):
         new_kd_ratio = float(new_kills) / float(new_deaths)
     except ZeroDivisionError:
         new_kd_ratio = 0
-    
-    if won:
+    if tie:
+        new_wins = dataset[0][13]
+        new_losses = dataset[0][14]
+    elif won:
         new_wins = dataset[0][13] +1
         new_losses = dataset[0][14]
-    else:
+    elif not won:
         new_wins = dataset[0][13]
         new_losses = dataset[0][14] +1
+    
     new_img_url = player.get_img_url()
 
     new_vals = [new_nick,new_kills,new_deaths,new_assists,new_f_assists,new_adr,new_hltv_rating,new_hs_per,new_ck,new_bombs_planted,new_bombs_defused,new_kd_ratio,new_wins,new_losses,new_img_url] + [player_id]
@@ -175,7 +184,6 @@ def update_player_data(dbconn,player,won):
     db_cur.close()
 
 def update_average(old_average,new_value,new_total):
-
     u_1 = float(old_average) * (float(1) / (float(new_total)/float(new_total-1)))
     new_average = u_1 + float(new_value) / float(new_total)
     return new_average
