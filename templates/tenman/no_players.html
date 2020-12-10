@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="UTF-8">
+  <title>Home / Tenman Tracker</title>
+<!-- Remove this head tag in depolyment-->
+
+
+{% extends "tenman/navbar.html" %}
+{% block body %}
+
+<!-- Alert for adding match-->
+<div class="container">
+  <h3 style="padding-top: 5px;">Tenman 4 ever boys!</h3>
+  <h6>Recorded a total of {{num_matches}} matches and {{num_players}} players.<span id="clickableIcon"><i class="fa fa-info-circle fa-sm" style="padding-left:3px;" data-toggle="modal" data-target="#myModal"></i></span></h6>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>Success!</strong> {{ message }}
+        </div>          
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+</div>
+
+<div class="container">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4"><i class="fa fa-database fa-sm"></i>No data</h1>
+          <p class="lead">No matches or player data is stored in the databases. Add a match by pressing the green "Add match" button 
+              in the top right corner!
+          </p>
+        </div>
+      </div>
+</div>
+
+
+<!-- Info about data recording modal-->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">What data is beeing recorded and displayed?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>The data beeing recorded are from the PopFlash matches that have been added to the database. The values displayed on the scoreboard and 
+        on a players profile is the average over all matches. To keep the scoreboard statistically significant, a player must have 5 matches recorded in order
+        to appear on the scoreboard. As a consquence, the total number of players might not match the players that appear on the scoreboard.</p>
+        <p>The scoreboard is sorted by players K/D Ratios. This decision is based on the fact that this is how real men measure CSGO stats. Those claiming 
+          that a players HLTV rating has any significance are falling into the trap of the liberal media (beeing HTLV.org). If you have a problem with this, then bait
+          your team harder. Enough said.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Info about data recordin modal-->
+
+<style>
+  #clickableIcon {
+        cursor: pointer
+
+    }
+</style>
+  {% endblock %}
+  </html>
