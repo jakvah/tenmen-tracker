@@ -69,7 +69,7 @@ class Match:
     def get_highest_adr(self):
         hradr_1 = self.team_1.get_highest_adr()
         hradr_2 = self.team_2.get_highest_adr()
-        if hradr_1.get_adr() >= hradr_2.get_adr():
+        if int(hradr_1.get_adr()) >= int(hradr_2.get_adr()):
             return hradr_1
         else:
             return hradr_2

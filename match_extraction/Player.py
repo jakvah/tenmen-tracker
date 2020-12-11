@@ -75,7 +75,7 @@ class Player:
     def get_flash_assists(self):
         return self.flash_assists
     def get_adr(self):
-        return self.adr
+        return int(self.adr)
     def get_hltv_rating(self):
         return self.hltv_rating
     def get_hs_percentage(self):

@@ -29,7 +29,8 @@ def get_match_data(match_id):
     date_formatted = date.split('+')[0]
 
     br_stuff = match_div.findAll("br")[1]
-    map_name = str(br_stuff)[4:14]
+    map_name_cluster = str(br_stuff)[4:]
+    map_name = map_name_cluster.split("<")[0]
 
     tables = soup.findAll("table")
 
@@ -124,13 +125,14 @@ def get_user_image(pop_id):
     return image_src
 
 if __name__ == "__main__":
-    match_id = int(input("match id:"))
+    match_id = 1092521 
     match_url = create_url(match_id)
     page_html = get_html_2_7(match_url)
     soup = bs(page_html,"html.parser")
 
     match_div = soup.find("div",{"id": "match-container"})
     br_stuff = match_div.findAll("br")[1]
-    map_name = str(br_stuff)[4:14]
+    map_name_cluster = str(br_stuff)[4:]
+    map_name = map_name_cluster.split("<")[0]
     print(map_name)
         
