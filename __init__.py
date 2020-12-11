@@ -181,16 +181,20 @@ def add_pop_match():
                 return "ps Import failed: " +  str(e)           
             
             try:
+                
                 pop_id = request.form["pop_id"]
-                pop_match = ps.get_match_data(pop_id)
-                            
                 conn = dbi.get_database_connection()
-                dbi.add_match_data(conn,pop_match)
+                if dbi.exists_in_table(conn,"matches",int(pop_id)):
+                    flash_str = "Match " + str(pop_id) + " has already been added to the database! Player data has not been updated."
+                    flash(flash_str) 
+                    return redirect("/tenman")        
+                else:
+                    pop_match = ps.get_match_data(pop_id)            
+                    dbi.add_match_data(conn,pop_match)
 
-                flash_str = "Added match " + str(pop_id) + " and updated player data."
-                flash(flash_str)                   
-                return redirect("/tenman")
-            
+                    flash_str = "Successfully added match " + str(pop_id) + " and updated player data."
+                    flash(flash_str)                   
+                    return redirect("/tenman")                
                 
             except Exception as e:
                 return str(e)
