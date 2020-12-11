@@ -1,7 +1,4 @@
-# personal_webpage
+# tenmen-tracker
+Web app for tracking and analyzing data for "10men"(tenmen) CSGO matches played with friends on the scrim service [PopFlash](https://popflash.site/). The app consists of a simple [web scraper](https://en.wikipedia.org/wiki/Web_scraping), a database and a web app where the data can be viewed. The webscraper scrapes the popflash site for a given match ID, and adds the player data to the database, which the web apps accesses in order to display it nicely.
 
-Source code for personal webpage. See [live demo](http://jakobvahlin.com).
-
-It also hosts the custom made [tenman-tracker](https://github.com/jakvah/tenmen-tracker), at the domain [/tenman](http://jakobvahlin.com/tenman)
-
-To deploy website on an Ubuntu host server, follow [these instructions](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
+Live demo [here](http://jakobvahlin.com/tenman)
