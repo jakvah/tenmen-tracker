@@ -179,24 +179,25 @@
                     <table class="table">
                         <thead class="thead-dark">
                           <tr>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="HLTV Rating">HLTV</div></th>
                             <th><div data-toggle="tooltip" data-placement="top" title="Kills/Death Ratio">K/D</div></th>
                             <th><div data-toggle="tooltip" data-placement="top" title="Kills">K</div></th>
-                            <th scope="col">A</th>
-                            <th scope="col">D</th>
-                            <th scope="col">FA</th>
-                            <th scope="col">CK</th>
-                            <th scope="col">BP</th>
-                            <th scope="col">BD</th>
-                            <th scope="col">ADR</th>
-                            <th scope="col">HLTV</th>
-                            <th scope="col">HS%</th>
-                            <th scope="col">W</th>
-                            <th scope="col">L</th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Assists">A</div></th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Deaths">D</div></th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Flash Assists">FA</div></th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Clutch kills">CK</div></th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Bombs planted">BP</div></th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Bombs defused">BD</div></th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Average Damage pr Round">ADR</div></th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Headshot percentage">HS%</div></th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Wins">W</div></th>
+                            <th scope="col"><div data-toggle="tooltip" data-placement="top" title="Losses">L</div></th>
                                                         
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
+                            <td>{{ player.get_hltv_rating() }}</td>
                             <td>{{ player.get_kd_ratio() }}</td>
                             <td>{{ player.get_kills() }}</td>
                             <td>{{ player.get_assists() }}</td>
@@ -206,7 +207,6 @@
                             <td>{{ player.get_bombs_planted() }}</td>
                             <td>{{ player.get_bombs_defused() }}</td>                            
                             <td>{{ player.get_adr() }}</td>
-                            <td>{{ player.get_hltv_rating() }}</td>
                             <td>{{ 100*(player.get_hs_percentage())}}%</td>
                             <td>{{ player.get_wins() }}</td>
                             <td>{{ player.get_losses()}}</td>
@@ -243,7 +243,11 @@
 </div>
 <!-- Info about progess modal-->
 
-
+<script>
+  $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+  });
+</script>
 <style>
     #clickableIcon {
         cursor: pointer

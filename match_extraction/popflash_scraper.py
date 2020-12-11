@@ -28,6 +28,9 @@ def get_match_data(match_id):
     date = date_span.split('"')[1]
     date_formatted = date.split('+')[0]
 
+    br_stuff = match_div.findAll("br")[1]
+    map_name = str(br_stuff)[4:14]
+
     tables = soup.findAll("table")
 
     team_2_table_rows = tables[4].findAll("tr")
@@ -41,6 +44,7 @@ def get_match_data(match_id):
     match = Match(match_id,team1=team1,team2=team2)
     match.set_date(date_formatted)
     match.set_map_img_url(map_img_url)
+    match.set_map(map_name)
 
     return match
 
@@ -126,10 +130,7 @@ if __name__ == "__main__":
     soup = bs(page_html,"html.parser")
 
     match_div = soup.find("div",{"id": "match-container"})
-    map_img_url = str(match_div.findAll("img")).split('"')[1]
-    date_span = str(match_div.findAll("h2")[0])
-    date = date_span.split('"')[1]
-    date_formatted = date.split('+')[0]
-    print(date_formatted)
-
+    br_stuff = match_div.findAll("br")[1]
+    map_name = str(br_stuff)[4:14]
+    print(map_name)
         

@@ -80,6 +80,10 @@ class Player:
         return self.hltv_rating
     def get_hs_percentage(self):
         return self.hs_percentage
+    # Use carefully
+    def get_hs_percentage_100(self):
+        hsp ="0" + str(self.hs_percentage)
+        return 100*float(hsp)
     def get_clutch_kills(self):
         return self.clutch_kills
     def get_bombs_planted(self):

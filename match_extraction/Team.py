@@ -72,6 +72,54 @@ class Team:
                 exists = True
         return exists
 
+
+    # Top players functions
+    def get_highest_rated(self):
+        max_rating = -1
+        max_rated_player = None
+        for p in self:
+            hltv_r = p.get_hltv_rating()
+            if hltv_r > max_rating:
+                max_rating = hltv_r
+                max_rated_player = p
+        return max_rated_player
+    def get_highest_flash_assist(self):
+        max_fa = -1
+        max_fa_player = None
+        for p in self:
+            fa = p.get_flash_assists()
+            if fa > max_fa:
+                max_fa = fa
+                max_fa_player = p
+        return max_fa_player
+    def get_highest_ck(self):
+        max_ck = -1
+        max_ck_player = None
+        for p in self:
+            ck = p.get_clutch_kills()
+            if ck > max_ck:
+                max_ck = ck
+                max_ck_player = p
+        return max_ck_player
+    def get_highest_adr(self):
+        max_adr = -1
+        max_adr_player = None
+        for p in self:
+            adr = p.get_adr()
+            if adr > max_adr:
+                max_adr = adr
+                max_adr_player = p
+        return max_adr_player
+    def get_highest_hs(self):
+        max_hs = -1
+        max_hs_player = None
+        for p in self:
+            hs = p.get_hs_percentage()
+            if hs > max_hs:
+                max_hs = hs
+                max_hs_player = p
+        return max_hs_player          
+        
 if __name__ == "__main__":
     p = Player(123,nick="Jakob")
     p2 = Player(145,nick="notJakob")
