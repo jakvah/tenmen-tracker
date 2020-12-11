@@ -39,7 +39,7 @@ def table_exists(dbconn,tablename):
 
     	dbcur.close()
     	return False
-        
+
 def search_table(dbconn,table,target,target_value,*select):
     cursor = dbconn.cursor()
 
@@ -75,16 +75,16 @@ def exists_in_table(dbconn,tablename,search_item):
         if search_item == data[i][0]:
             return True
 
-def add_match_id(dbconn,match_id):
-    if exists_in_table(dbconn,"matches",int(match_id)):
+def add_match_id(dbconn,match):
+    if exists_in_table(dbconn,"matches",int(match.get_match_id())):
         raise ElementExistsInTableError
     if not table_exists(dbconn,"matches"):
         raise TablesDoesNotExistError
 
     else:
         dbcur = dbconn.cursor()
-        query = "INSERT INTO " + "matches" + """(match_id) VALUES (%s)"""
-        dbcur.execute(query,[match_id])
+        query = "INSERT INTO " + "matches" + """(match_id,map_name,map_img_url,date) VALUES (%s,%s,%s,%s)"""
+        dbcur.execute(query,[match.get_match_id(),match.get_map(),match.get_map_img_url(),match.get_date()])
         dbconn.commit()
         dbcur.close()
 
@@ -107,7 +107,7 @@ def add_match_data(dbconn,match):
     if exists_in_table(dbconn,"matches",int(match.get_match_id())):
         return
     try:
-        add_match_id(dbconn,match.get_match_id())
+        add_match_id(dbconn,match)
         
         # Add determine outcome
         if match.is_tie():
@@ -255,9 +255,7 @@ def get_number_of_players(dbconn,tablename="players"):
     return len(data)
 
 if __name__ == "__main__":
-    x1 = 1234
-    x2 = 45345
-    x3 = 12356345
-    old_average = float(x1 + x2) / 2
-    new_avg = update_average(old_average,x3,3)
-    print(new_avg)
+    c = get_database_connection()
+    data = get_table_data(c,"matches")
+    last_match = data[len(data)-1]
+    print(last_match)

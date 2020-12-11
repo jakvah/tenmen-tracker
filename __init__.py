@@ -81,11 +81,24 @@ def tenman_index():
             top_players = dbi.get_top_players(conn,threshold=PLAYER_THRESHOLD)
         except Exception as e:
             return "failed in get top players " +  str(e)
-            
-        num_matches = dbi.get_number_of_matches(conn)
-        num_players = dbi.get_number_of_players(conn)
 
-        return render_template("tenman/tenman_landing.html",navbar_status=navbar_status,top_players=top_players,num_matches=num_matches,num_players=num_players,threshold=PLAYER_THRESHOLD)
+        try:   
+            num_matches = dbi.get_number_of_matches(conn)
+            num_players = dbi.get_number_of_players(conn)
+        except Exception as e:
+            return "asd" + str(e)
+        
+        try:
+            # Get latest match
+            data = dbi.get_table_data(conn,"matches")
+            last_match = data[len(data)-1]
+            from match_extraction.Match import Match
+            from match_extraction.Team import Team
+            from match_extraction.Player import Player
+            latest_match = Match(int(last_match[0]),team1=Team(),team2=Team(),map_img_url=last_match[2],date=last_match[3],map_name=last_match[1])
+        except Exception as e:
+            return "get latest; " + str(e)        
+        return render_template("tenman/tenman_landing.html",navbar_status=navbar_status,top_players=top_players,num_matches=num_matches,num_players=num_players,latest_match=latest_match,threshold=PLAYER_THRESHOLD)
 
     except Exception as e:
         return "failed:" + str(e)
@@ -139,12 +152,7 @@ def add_pop_match():
                 from database_management import db_interaction as dbi
             except Exception as e:
                 return "db_interaction Import failed: " +  str(e)
-            """
-            try:
-                from database_management import database_exceptions
-            except Exception as e:
-                return "db_exceptions Import failed: " +  str(e)
-            """
+            
             try:
                 from match_extraction import popflash_scraper as ps
             except Exception as e:

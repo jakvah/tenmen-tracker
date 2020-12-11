@@ -12,7 +12,9 @@
 <div class="container">
   <h3 style="padding-top: 5px;">Tenman 4 ever boys!</h3>
   <h6>Recorded a total of {{num_matches}} matches and {{num_players}} players.<span id="clickableIcon"><i class="fa fa-info-circle fa-sm" style="padding-left:3px;" data-toggle="modal" data-target="#myModal"></i></span></h6>
-{% with messages = get_flashed_messages() %}
+  <h6>Latest recorded match: {{ latest_match.get_match_id() }}, {{latest_match.get_date()}} @ {{latest_match.get_map()}}
+  </h6>
+  {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class=flashes>
     {% for message in messages %}
