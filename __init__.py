@@ -134,6 +134,11 @@ def matches():
 
 @app.route("/tenman/match/<match_id>")
 def match_page(match_id):
+    # New
+    navbar_status = ["","","active"]
+    return render_template("tenman/loading_match.html",navbar_status=navbar_status,match_id=match_id)
+    # Old
+    """
     try:
         navbar_status = ["","","active"]
         from match_extraction import popflash_scraper as ps
@@ -141,6 +146,23 @@ def match_page(match_id):
         return render_template("tenman/match_page.html",match=match,navbar_status=navbar_status)
     except Exception as e:
         return str(e)
+    """
+
+@app.route("/tenman/loading_match")
+def loading():
+    navbar_status = ["","","active"]
+    return render_template("tenman/loading_match.html",navbar_status=navbar_status)
+
+@app.route("/get_match_data/<match_id>")
+def get_match_data(match_id):
+    try:
+        navbar_status = ["","","active"]
+        from match_extraction import popflash_scraper as ps
+        match = ps.get_match_data(match_id)
+        return render_template("tenman/match_page.html",match=match,navbar_status=navbar_status)
+    except Exception as e:
+        return str(e)
+
 @app.route("/tenman/add_match", methods=["GET","POST"]) 
 def add_pop_match():
     try:

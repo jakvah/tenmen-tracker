@@ -12,7 +12,7 @@
 <div class="container">
   <h3 style="padding-top: 5px;">Tenman 4 ever boys!</h3>
   <h6>Recorded a total of {{num_matches}} matches and {{num_players}} players.<span id="clickableIcon"><i class="fa fa-info-circle fa-sm" style="padding-left:3px;" data-toggle="modal" data-target="#myModal"></i></span></h6>
-  <h6>Latest recorded match: {{ latest_match.get_match_id() }}, {{latest_match.get_date()}} @ {{latest_match.get_map()}}
+  <h6>Latest recorded match: <a href="/tenman/match/{{latest_match.get_match_id()}}">{{ latest_match.get_match_id() }}, {{latest_match.get_date()}} @ {{latest_match.get_map()}}</a>
   </h6>
   {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -153,6 +153,7 @@
         <p>The scoreboard is sorted by players K/D Ratios. This decision is based on the fact that this is how real men measure CSGO stats. Those claiming 
           that a players HLTV rating has any significance are falling into the trap of the liberal media (beeing HTLV.org). If you have a problem with this, then bait
           your team harder. Enough said.</p>
+          <p>jk, its not. The liberal media always wins...</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
