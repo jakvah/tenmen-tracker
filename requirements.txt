@@ -1,0 +1,10 @@
+# Match extraction dependencies
+urllib2
+bs4
+
+# Database management dependencies
+mysql-connector-python
+
+# Web App dependencies
+# All of the above and the following
+Flask
