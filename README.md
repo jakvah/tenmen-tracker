@@ -7,15 +7,22 @@ A live demo of the website can be found [here](http://jakobvahlin.com/tenman)
 ![Website screenshots](README/readme_img.png)
 
 ## Table of Contents
-
+- [Dependencies](#dependencies)
 - [Hosting your own Web App](#hosting-your-own-web-app)
     - [Quickstart](#quickstart)
 - [The match extraction module](#the-match-exctraction-module)    
 - [The database management module](#the-database-management-module)
+
+## Dependencies
+The requried dependencies for the database management module, the match extraction module and the entire Wep App are specified in the [requirements.txt](requirements.txt) file. If you want to install all the dependencies run
+
+``` ~$ pip install -r requirements.txt```
+
+If you only want to install the dependencies for a specific module, see the requirements.txt file for the dependencies corresponding to the module of choice.
 ## Hosting your own Web App
 
 ### Quickstart
-If you are familiar with Python based web development and already have a MySQL database and Apache2 (or similar) on your server, clone this project into the folder hosting your web app. You will have to alter the login details of the database management module to match your own database. 
+Make sure you have installed the required [dependencies](#dependencies). If you are familiar with Python based web development and already have a MySQL database and Apache2 (or similar) on your server, clone this project into the folder hosting your web app. You will have to alter the login details of the database management module to match your own database. 
 
 
 ### Running on Ubuntu/Linux-based host system
