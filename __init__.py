@@ -147,10 +147,38 @@ def loading():
 @app.route("/get_match_data/<match_id>")
 def get_match_data(match_id):
     try:
+        try:
+            from match_extraction import popflash_scraper as ps
+            from database_management import db_interaction as dbi
+            from match_extraction.Match import Match
+            from match_extraction.Team import Team
+            from match_extraction.Player import Player
+        except Exception as e:
+            return "Failed importing modules: " + str(e)
+
         navbar_status = ["","","active"]
-        from match_extraction import popflash_scraper as ps
         match = ps.get_match_data(match_id)
-        return render_template("tenman/match_page.html",match=match,navbar_status=navbar_status)
+
+        # Get team balance ratings
+        team1 = match.get_team_1()
+        team2 = match.get_team_2()
+
+        team1_total = 0
+        team2_total = 0
+        for player in team1:
+            p1 = dbi.get_player_data(int(player.get_pop_id()))
+            team1_total += p1.get_hltv_rating()
+        for player in team2:
+            p2 = dbi.get_player_data(int(player.get_pop_id()))
+            team2_total += p2.get_hltv_rating()
+        
+        team1_avg_rating = float(team1_total) / 5.0
+        team2_avg_rating = float(team2_total) / 5.0
+
+        team1_percentage = 100*(team1_avg_rating / (team1_avg_rating + team2_avg_rating)) 
+        team2_percentage = 100*(team2_avg_rating / (team1_avg_rating + team2_avg_rating)) 
+
+        return render_template("tenman/match_page.html",match=match,navbar_status=navbar_status,team1_avg_rating=team1_avg_rating,team2_avg_rating=team2_avg_rating,team1_percentage=team1_percentage,team2_percentage=team2_percentage)
     except Exception as e:
         return str(e)
 

@@ -134,7 +134,21 @@
                         </table>
                     </div>             
                 </div>
+                <div class="row">
+                  <div class="col-md-12">
+                  <h6 style="text-align:center;">Team balance<span id="clickableIcon"><i class="fa fa-info-circle fa-sm" style="padding-left:3px;" data-toggle="modal" data-target="#myModal"></i></span></h6>
+                  </div>
+                </div>
 
+                <div class="row">
+                  <div class="col-md-12">
+                  <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{team1_percentage}}%" aria-valuenow="{{team1_percentage}}" aria-valuemin="0" aria-valuemax="100">{{team1_avg_rating}}</div>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{team2_percentage}}%" aria-valuenow="{{team2_percentage}}" aria-valuemin="0" aria-valuemax="100">{{team2_avg_rating}}</div>
+                  </div>
+                  </div>
+                </div>
+                </div>
             </div>
         </div>
 </div>
@@ -252,10 +266,47 @@
     </div>
 </div>
 
+<style>
+  #clickableIcon {
+        cursor: pointer
+
+    }
+</style>
 <script>
   $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();   
   });
 </script>
+
+<!-- Info about team balance modal-->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">How is team balance calculated?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>The team balance indicator is based on the average HLTV Rating for the players in the two teams. To easily 
+          account for new players participating in the match, the metric includes the rating for the current match. Consequently what the metric is indicating
+          is the strenght of the teams <i>>after</i> the current match has been finished. This is a not optimal, since when attempting to model team balance, it is 
+          the team strength going <i>into</i> the game which is the metric of interest. </p>
+          <p>
+            To further add to the weakness of the metric, when viewing an old match (a match beeing played previous to other matches beeing added to the database),
+            the team balance indicator will take the data from the newly added matches into account when calculating the average ratings for eachs team. In other words;
+            you should take this statistic with a pinch of salt.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Info about team balance modal-->
+
 
 </html>
