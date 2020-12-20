@@ -5,22 +5,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS and Font Awesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    
+    <!-- Chart.js javascript-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <!-- Logo Icon -->
     <link rel="icon" href="{{ url_for('static',filename='images/tenman.png') }}">
   </head>
   <body>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- Bootstrap uses slim build of jquery, which does not have ajax. Using ajax from google -->
-    <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  
   </body>
 
+  <!-- Warn user if he/she is using IE -->
 <script type="text/javascript">
     /* Sample function that returns boolean in case the browser is Internet Explorer*/
   function isIE() {
@@ -36,8 +39,9 @@
   }
 </script>
 
-<body>
 
+<!-- Navbar content begins -->
+<body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
     <a class="navbar-brand" href="/tenman"><!-- Logo Image -->
@@ -75,7 +79,7 @@
   </div>
   </nav>
 
-  <!-- Modal -->
+  <!-- Modal for adding match -->
   <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="modal_work">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -131,6 +135,8 @@
     </div>
     </div>
 </body>
+
+<!-- Style for loading icon, add match -->
 <style type="text/css">
  .loader{
   margin: 0 0 2em;
@@ -152,6 +158,8 @@ svg rect{
 }
 
 </style>
+
+<!-- Script for showing content when pressing add match -->
 <script>
   function showDiv() {
     var check_box = document.getElementById("exampleCheck1")    
@@ -165,6 +173,8 @@ svg rect{
     
 }
 </script>
+
+<!-- Script for validating user input-->
 <script>
   function validateInput() {
     var x, text;
@@ -181,11 +191,15 @@ svg rect{
     document.getElementById("demo").innerHTML = text;
   }
   </script>
+<!-- Navbar content ends-->
 
-
+<!-- Main content of page (not navbar or footer)-->
 {% block body %} {% endblock %}
 
-<!-- Henter footer -->
+
+<!-- Main content ends-->
+
+<!-- Footer content here -->
 {% extends "tenman/footer.html" %}
 </div>
 </html>

@@ -2,8 +2,7 @@
 <html>
   <meta charset="UTF-8">
 
-
-<div class="container">
+  <div class="container">
     <h3 style="padding-bottom:10px; padding-top:10px;">Match {{match.get_match_id()}} // {{match.get_date()}} </h3>
         <div class="row gutters-sm">
             <div class="col-md-4">
@@ -134,6 +133,7 @@
                         </table>
                     </div>             
                 </div>
+                <!--Team balance rows (2)-->
                 <div class="row">
                   <div class="col-md-12">
                   <h6 style="text-align:center;">Team balance<span id="clickableIcon"><i class="fa fa-info-circle fa-sm" style="padding-left:3px;" data-toggle="modal" data-target="#myModal"></i></span></h6>
@@ -148,11 +148,29 @@
                   </div>
                   </div>
                 </div>
+                <!--End team balance rows (2)-->  
+                <!--Match vs average performace -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <h6 style="text-align: center; padding-top:5px;">Match vs Average performance<span id="clickableIcon"><i class="fa fa-info-circle fa-sm" style="padding-left:3px;" data-toggle="modal" data-target="#performInfo"></i></span></h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="container">
+                    <canvas id="myChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <!--End match vs average performace -->
+                
+                
                 </div>
             </div>
         </div>
 </div>
 </div>
+
 
 <div class="container" style="margin-top:10px;">
   <div id="accordion">
@@ -265,6 +283,120 @@
      
     </div>
 </div>
+<script>
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: [
+              '{{match.team_1.player_1.get_nick()}}', 
+              '{{match.team_1.player_2.get_nick()}}',
+              '{{match.team_1.player_3.get_nick()}}',
+              '{{match.team_1.player_4.get_nick()}}',
+              '{{match.team_1.player_5.get_nick()}}',
+              '{{match.team_2.player_1.get_nick()}}', 
+              '{{match.team_2.player_2.get_nick()}}',
+              '{{match.team_2.player_3.get_nick()}}',
+              '{{match.team_2.player_4.get_nick()}}',
+              '{{match.team_2.player_5.get_nick()}}'
+              
+              ],
+              datasets: [
+              {
+                  label: 'Current match HLTV Rating',
+                  data: [
+                    {{match.team_1.player_1.get_hltv_rating()}}, 
+                    {{match.team_1.player_2.get_hltv_rating()}},
+                    {{match.team_1.player_3.get_hltv_rating()}}, 
+                    {{match.team_1.player_4.get_hltv_rating()}},
+                    {{match.team_1.player_5.get_hltv_rating()}},
+                    {{match.team_2.player_1.get_hltv_rating()}}, 
+                    {{match.team_2.player_2.get_hltv_rating()}},
+                    {{match.team_2.player_3.get_hltv_rating()}}, 
+                    {{match.team_2.player_4.get_hltv_rating()}},
+                    {{match.team_2.player_5.get_hltv_rating()}},
+                    ],
+                  backgroundColor: [
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(153, 102, 255, 0.2)'
+                  ],
+                  borderColor: [
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(153, 102, 255, 1)'
+                  ],
+                  borderWidth: 1
+              },
+              { 
+                  label: 'Average HLTV Rating',
+                  data: [
+                    {{his_avg_team_1.player_1.get_hltv_rating()}},
+                    {{his_avg_team_1.player_2.get_hltv_rating()}},
+                    {{his_avg_team_1.player_3.get_hltv_rating()}},
+                    {{his_avg_team_1.player_4.get_hltv_rating()}},
+                    {{his_avg_team_1.player_5.get_hltv_rating()}}, 
+                    {{his_avg_team_2.player_1.get_hltv_rating()}},
+                    {{his_avg_team_2.player_2.get_hltv_rating()}},
+                    {{his_avg_team_2.player_3.get_hltv_rating()}},
+                    {{his_avg_team_2.player_4.get_hltv_rating()}},
+                    {{his_avg_team_2.player_5.get_hltv_rating()}}                   
+                    ],
+                  backgroundColor: [
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 159, 64, 1)'
+                      
+                  ],
+                  borderWidth: 1       
+              }
+          
+          ]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
+              }
+          }
+      });
+      </script>
 
 <style>
   #clickableIcon {
@@ -277,6 +409,8 @@
       $('[data-toggle="tooltip"]').tooltip();   
   });
 </script>
+
+
 
 <!-- Info about team balance modal-->
 <!-- Modal -->
@@ -306,7 +440,32 @@
     </div>
   </div>
 </div>
-<!-- Info about team balance modal-->
+<!-- End info about team balance modal-->
+
+<!-- Info about performance modal-->
+<!-- Modal -->
+<div class="modal fade" id="performInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">What is Match vs Average performance?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          The match versus average performance statistic compares a players average HLTV Rating to the HLTV Rating 
+          for the current match. This way, one can easily spot who over- or under performed compared to how they usually play.  
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Info about performance modal-->
 
 
 </html>

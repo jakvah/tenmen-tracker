@@ -165,12 +165,19 @@ def get_match_data(match_id):
 
         team1_total = 0
         team2_total = 0
+
+        his_avg_team_1 = Team()
+        his_avg_team_2 = Team()
+
         for player in team1:
             p1 = dbi.get_player_data(int(player.get_pop_id()))
             team1_total += p1.get_hltv_rating()
+            his_avg_team_1.add_player(p1)
         for player in team2:
             p2 = dbi.get_player_data(int(player.get_pop_id()))
             team2_total += p2.get_hltv_rating()
+            his_avg_team_2.add_player(p2)
+
         
         team1_avg_rating = float(team1_total) / 5.0
         team2_avg_rating = float(team2_total) / 5.0
@@ -178,10 +185,28 @@ def get_match_data(match_id):
         team1_percentage = 100*(team1_avg_rating / (team1_avg_rating + team2_avg_rating)) 
         team2_percentage = 100*(team2_avg_rating / (team1_avg_rating + team2_avg_rating)) 
 
-        return render_template("tenman/match_page.html",match=match,navbar_status=navbar_status,team1_avg_rating=team1_avg_rating,team2_avg_rating=team2_avg_rating,team1_percentage=team1_percentage,team2_percentage=team2_percentage)
+        return render_template("tenman/match_page.html",
+                match=match,
+                navbar_status=navbar_status,
+                team1_avg_rating=team1_avg_rating,
+                team2_avg_rating=team2_avg_rating,
+                team1_percentage=team1_percentage,
+                team2_percentage=team2_percentage,
+                his_avg_team_1 = his_avg_team_1,
+                his_avg_team_2 = his_avg_team_2
+            )
     except Exception as e:
         return str(e)
 
+@app.route("/test")
+def test():
+    try:
+
+
+
+        return render_template("test.html") 
+    except Exception as e:
+        return str(e)
 @app.route("/tenman/add_match", methods=["GET","POST"]) 
 def add_pop_match():
     try:
