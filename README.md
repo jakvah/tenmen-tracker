@@ -67,3 +67,19 @@ For more class methods, see the source code for the various classes
 
 ## The database management module
 
+The database management module is, as the name suggests, responsible for interacting with the database where the match data is stored. It is based on the [MySQL-Connector](https://pypi.org/project/mysql-connector-python/) module. The login info is stored in the ```DATABASE_LOGIN_DETAILS``` dictionary. The password to the MySQL server is stored here, which is probably not the greatest idea. If this is to be implemented .. this should probably be kept more secure.
+
+The functions interacting with the database are defined in the ``database_interaction.py`` file. The names of the various functions should be pretty self explainatory. The all have in common that they require as MySQLdb-connection object as an input argument. This is taken care of by calling the ``get_database()`` function, and passing the returned connection object as an input the whatever funciton you want to use. 
+
+To make error handling easier, a set of custom made exceptions have also been defined in the ``database_exceptions.py`` file. The following sample code suggests how to use the functions from the module.
+
+```python 
+from database_management import db_interaction as dbi
+
+conn = dbi.get_database_connection()
+
+if dbi.table_exists(conn,"my_table"):
+    data = dbi.get_table_data(conn,"my_table")
+else:
+    raise TablesDoesNotExistError
+```
