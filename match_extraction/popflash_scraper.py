@@ -30,7 +30,8 @@ def get_match_data(match_id):
 
     br_stuff = match_div.findAll("br")[1]
     map_name_cluster = str(br_stuff)[4:]
-    map_name = map_name_cluster.split("<")[0]
+    map_name_with_linebreak = map_name_cluster.split("<")[0]
+    map_name = map_name_with_linebreak.split("\n")[1]
 
     tables = soup.findAll("table")
 
@@ -134,5 +135,6 @@ if __name__ == "__main__":
     br_stuff = match_div.findAll("br")[1]
     map_name_cluster = str(br_stuff)[4:]
     map_name = map_name_cluster.split("<")[0]
-    print(map_name)
+    t = map_name.split("\n")
+    print(t[1])
         
