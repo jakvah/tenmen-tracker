@@ -125,6 +125,21 @@ def add_match_data(dbconn,match):
     except ElementExistsInTableError:
         raise ElementExistsInTableError
 
+
+# Adding data parameters for existing matches, where sufficient data has not been stored
+def update_match_data(match):
+    #from ..match_extraction.Match import Match
+    conn = get_database_connection()
+    cur = conn.cursor()
+    query = """UPDATE matches SET map_name=%s, map_img_url=%s, date=%s WHERE match_id=%s"""
+    values = [match.get_map(),match.get_map_img_url(),match.get_date(),match.get_match_id()]
+    cur.execute(query,values)
+
+    conn.commit()
+    conn.close()
+def update_matches():
+    pass
+
 # Takes instance of Player class and updates stats for Player.pop_id. 
 def update_player_data(dbconn,player,won,tie=False):
     first_time = False
@@ -255,7 +270,14 @@ def get_number_of_players(dbconn,tablename="players"):
     return len(data)
 
 if __name__ == "__main__":
+    from ..match_extraction import popflash_scraper as ps    
+    m = ps.get_match_data(1107734)
+    update_match_data(m)
+    print("Done!")
+
+    """    
     c = get_database_connection()
     data = get_table_data(c,"matches")
-    last_match = data[len(data)-1]
-    print(last_match)
+    for row in data:
+        print(row[0])
+    """

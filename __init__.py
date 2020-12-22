@@ -173,6 +173,7 @@ def get_match_data(match_id):
             p1 = dbi.get_player_data(int(player.get_pop_id()))
             team1_total += p1.get_hltv_rating()
             his_avg_team_1.add_player(p1)
+
         for player in team2:
             p2 = dbi.get_player_data(int(player.get_pop_id()))
             team2_total += p2.get_hltv_rating()
@@ -201,9 +202,6 @@ def get_match_data(match_id):
 @app.route("/test")
 def test():
     try:
-
-
-
         return render_template("test.html") 
     except Exception as e:
         return str(e)
