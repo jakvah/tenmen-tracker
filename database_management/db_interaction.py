@@ -45,7 +45,7 @@ def search_table(dbconn,table,target,target_value,*select):
 
     # Create query for cursor
     query = "SELECT "
-    
+
     for index, value in enumerate(select):
         if index == (len(select)-1):
             query += str(value)
@@ -57,7 +57,7 @@ def search_table(dbconn,table,target,target_value,*select):
     
     cursor.execute(query)
     result = cursor.fetchall()
-
+    cursor.close()
     return result
 
 def get_table_data(dbconn, tablename):

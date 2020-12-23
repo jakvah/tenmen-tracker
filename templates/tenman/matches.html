@@ -18,7 +18,7 @@
                                     </div>
                                     <!--end of col-->
                                     <div class="col">
-                                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for match ID, map or players participating in match" id="livebox">
+                                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for match ID, map or date (i.e 14 Nov 2020)" id="livebox">
                                       </div>
                                      
                                     <!--end of col-->
@@ -49,12 +49,15 @@
         url:"/livesearch_matches",
         data:{text:text_in_livebox},
         success:function(res){
-            console.log(res);
+            //console.log(res);
             var data;
-            data +='<thead class="thead-dark"><tr><th scope="col">Match ID</th></tr></thead><tbody>';
+            data +='<thead class="thead-dark"><tr><th scope="col">Match ID</th><th scope="col">Map</th><th scope="col">Date</th></tr></thead><tbody>';
                     $.each(res,function(index,value){
                        // data += "<tr>"+'<td><a href="/tenman/match/'+value[0].toString()+'"</a>'+"</td></tr>";
-                      data +='<tr><td><a href="/tenman/match/'+value[0].toString()+'"</a>'+value[0].toString() + '</td></tr>'
+                      data +='<tr><td><a href="/tenman/match/'+value[0].toString()+'"</a>'+value[0].toString() + '</td>';
+                      data += '<td>' + '<img src="'+value[2].toString() + '" height="20" style="margin-right: 3px;;">' + value[1].toString()+"</td>";
+                      
+                      data += '<td>' + value[3].toString() + '</td></tr>';
                     });
             data += '</tbody>'
                     //ata += "</ul>";

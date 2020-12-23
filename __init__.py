@@ -52,10 +52,21 @@ def livesearch_match():
         from database_management import db_interaction as dbi
 
         searchbox = request.form.get("text")
-        connection = dbi.get_database_connection()
-        result = dbi.search_table(connection,"matches","match_id",int(searchbox),"match_id")
-
-        return jsonify(result)
+        connection1 = dbi.get_database_connection()
+        connection2 = dbi.get_database_connection()
+        
+        result_id = dbi.search_table(connection1,"matches","match_id",searchbox,"match_id","map_name","map_img_url","date")
+        result_map = dbi.search_table(connection2,"matches","map_name",searchbox,"match_id","map_name","map_img_url","date")
+        result_date = dbi.search_table(connection2,"matches","date",searchbox,"match_id","map_name","map_img_url","date")
+        #result = []
+        #for r in result_id:
+        #    result.append(r)
+        #for p in result_map:
+        #    result.append(p)
+        #for j in result_date:
+        #    result.append(j)
+        results = result_id + result_date + result_map
+        return jsonify(results)
     except Exception as e:
         return jsonify(str(e))
 
