@@ -58,13 +58,7 @@ def livesearch_match():
         result_id = dbi.search_table(connection1,"matches","match_id",searchbox,"match_id","map_name","map_img_url","date")
         result_map = dbi.search_table(connection2,"matches","map_name",searchbox,"match_id","map_name","map_img_url","date")
         result_date = dbi.search_table(connection2,"matches","date",searchbox,"match_id","map_name","map_img_url","date")
-        #result = []
-        #for r in result_id:
-        #    result.append(r)
-        #for p in result_map:
-        #    result.append(p)
-        #for j in result_date:
-        #    result.append(j)
+
         results = result_id + result_date + result_map
         return jsonify(results)
     except Exception as e:
@@ -220,21 +214,19 @@ def test():
 def add_pop_match():
     try:
         if request.method == "GET":
-            return "Dissallowed, GET"
-        elif request.method == "POST":
-            
+            return "Im sorry bro, you can't access this endpoint this way."
+        elif request.method == "POST":            
             try:
                 from database_management import db_interaction as dbi
             except Exception as e:
-                return "db_interaction Import failed: " +  str(e)
+                return "Failed when importing the database management module: " +  str(e)
             
             try:
                 from match_extraction import popflash_scraper as ps
             except Exception as e:
-                return "ps Import failed: " +  str(e)           
+                return "Failed when importing the webscraper " +  str(e)          
             
-            try:
-                
+            try:                
                 pop_id = request.form["pop_id"]
                 conn = dbi.get_database_connection()
                 if dbi.exists_in_table(conn,"matches",int(pop_id)):
