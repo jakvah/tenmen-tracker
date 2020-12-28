@@ -65,7 +65,7 @@ def rows_to_team(team_rows):
             player.set_nick(columns[0].text.strip())
         # Captain gets cactus symbol in front of name. Remove this
         except UnicodeEncodeError:
-            player.set_nick(columns[0].text.strip()[1:])
+            player.set_nick(columns[0].text.strip()[4:])           
         
         player.set_kills(columns[1].text.strip())
         player.set_assists(columns[2].text.strip())
@@ -126,15 +126,6 @@ def get_user_image(pop_id):
     return image_src
 
 if __name__ == "__main__":
-    match_id = 1092521 
-    match_url = create_url(match_id)
-    page_html = get_html_2_7(match_url)
-    soup = bs(page_html,"html.parser")
-
-    match_div = soup.find("div",{"id": "match-container"})
-    br_stuff = match_div.findAll("br")[1]
-    map_name_cluster = str(br_stuff)[4:]
-    map_name = map_name_cluster.split("<")[0]
-    t = map_name.split("\n")
-    print(t[1])
-        
+    match_id = 1092521
+    m = get_match_data(match_id)
+    print("Done")
