@@ -43,6 +43,27 @@ def table_exists(dbconn,tablename):
     	dbcur.close()
     	return False
 
+def get_most_frequent_map(dbconn,tablename="matches"):
+    from collections import Counter
+    data = get_table_data(dbconn,tablename)
+    # Collect maps in one common list
+    maps = []
+    for row in data:
+        maps.append(row[1])
+    occurence_count = Counter(maps)
+    return occurence_count.most_common(1)[0][0]
+
+
+# Returns number of times target_map_name occurs in tablename
+def get_map_frequency(dbconn,target_map_name,tablename="matches"):
+    counter = 0
+    data = get_table_data(dbconn,tablename)
+    for row in data:
+        map_name = row[1]
+        if map_name == target_map_name:
+            counter += 1
+    return counter
+
 # Searches table for a target equal to target_value. Returns elements specified by *select
 def search_table(dbconn,table,target,target_value,*select):
     cursor = dbconn.cursor()
@@ -89,8 +110,8 @@ def add_match_id(dbconn,match):
         raise TablesDoesNotExistError
     else:
         dbcur = dbconn.cursor()
-        query = "INSERT INTO " + "matches" + """(match_id,map_name,map_img_url,date) VALUES (%s,%s,%s,%s)"""
-        dbcur.execute(query,[match.get_match_id(),match.get_map(),match.get_map_img_url(),match.get_date()[4:]])
+        query = "INSERT INTO " + "matches" + """(match_id,map_name,map_img_url,date,day) VALUES (%s,%s,%s,%s,%s)"""
+        dbcur.execute(query,[match.get_match_id(),match.get_map(),match.get_map_img_url(),match.get_date()[4:],match.get_date()[:3]])
         dbconn.commit()
         dbcur.close()
 
@@ -136,8 +157,8 @@ def add_match_data(dbconn,match):
 def update_match_data(match):
     conn = get_database_connection()
     cur = conn.cursor()
-    query = """UPDATE matches SET map_name=%s, map_img_url=%s, date=%s WHERE match_id=%s"""
-    values = [match.get_map(),match.get_map_img_url(),match.get_date()[4:],match.get_match_id()]
+    query = """UPDATE matches SET map_name=%s, map_img_url=%s, date=%s, day=%s WHERE match_id=%s"""
+    values = [match.get_map(),match.get_map_img_url(),match.get_date()[4:],match.get_date()[:3],match.get_match_id()]
     cur.execute(query,values)
 
     conn.commit()
@@ -271,14 +292,8 @@ def get_number_of_players(dbconn,tablename="players"):
     return len(data)
 
 if __name__ == "__main__":
-    from ..match_extraction import popflash_scraper as ps    
-    m = ps.get_match_data(1107734)
-    update_match_data(m)
-    print("Done!")
-
-    """    
-    c = get_database_connection()
-    data = get_table_data(c,"matches")
-    for row in data:
-        print(row[0])
-    """
+    db = get_database_connection()
+    m = get_most_frequent_map(db)
+    print(m)
+    n = get_map_frequency(db,m)
+    print(n)
