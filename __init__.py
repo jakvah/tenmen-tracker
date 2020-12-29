@@ -23,19 +23,20 @@ def show_pdf(filename):
 
 @app.route("/tenman/nothing")
 def nothing():
-    navbar_status = ["","",""]
+    navbar_status = ["","","",""]
     return render_template("tenman/no_players.html",navbar_status=navbar_status)
 
 @app.route("/tenman/seasons")
 def seasons_landing():
-    return render_template("/tenman/comming_soon.html")
+    navbar_status = ["","","","active"]
+    return render_template("/tenman/comming_soon.html",navbar_status=navbar_status)
 
 @app.route("/tenman/players")
 def players():
     from database_management import db_interaction as dbi
     conn = dbi.get_database_connection()
     num_players = dbi.get_number_of_players(conn)
-    navbar_status = ["","active",""]
+    navbar_status = ["","active","",""]
     return render_template("tenman/players.html",num_players=num_players,navbar_status=navbar_status)
 
 @app.route("/livesearch",methods=["POST","GET"])
@@ -76,7 +77,7 @@ def livesearch_match():
 @app.route("/tenman")
 def tenman_index():
     PLAYER_THRESHOLD = 6
-    navbar_status = ["active","",""]
+    navbar_status = ["active","","",""]
     try:
         try:
             from database_management import db_interaction as dbi
@@ -119,7 +120,7 @@ def tenman_index():
 
 @app.route("/tenman/user/<pop_id>")
 def user_page(pop_id):
-    navbar_status = ["","active",""]
+    navbar_status = ["","active","",""]
     try:
         from database_management import db_interaction as dbi
             #from match_extraction.Player import Player
@@ -138,7 +139,7 @@ def matches():
     try:
         from database_management import db_interaction as dbi
         
-        navbar_status = ["","","active"]
+        navbar_status = ["","","active",""]
         conn = dbi.get_database_connection()
         num_matches = dbi.get_number_of_matches(conn)
         
@@ -149,13 +150,13 @@ def matches():
 @app.route("/tenman/match/<match_id>")
 def match_page(match_id):
     # New
-    navbar_status = ["","","active"]
+    navbar_status = ["","","active",""]
     return render_template("tenman/loading_match.html",navbar_status=navbar_status,match_id=match_id)
 
 
 @app.route("/tenman/loading_match")
 def loading():
-    navbar_status = ["","","active"]
+    navbar_status = ["","","active",""]
     return render_template("tenman/loading_match.html",navbar_status=navbar_status)
 
 @app.route("/get_match_data/<match_id>")
@@ -170,7 +171,7 @@ def get_match_data(match_id):
         except Exception as e:
             return "Failed importing modules: " + str(e)
 
-        navbar_status = ["","","active"]
+        navbar_status = ["","","active",""]
         match = ps.get_match_data(match_id)
 
         # Get team balance ratings
