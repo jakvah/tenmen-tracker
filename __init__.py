@@ -3,6 +3,8 @@ from flask import Flask,render_template,Markup,request,redirect,flash,jsonify
 
 app = Flask(__name__)
 
+NAVBAR_ACTIVE = ["","","",""]
+
 @app.route("/")
 def hello():
     return render_template("index.html")
@@ -23,6 +25,10 @@ def show_pdf(filename):
 def nothing():
     navbar_status = ["","",""]
     return render_template("tenman/no_players.html",navbar_status=navbar_status)
+
+@app.route("/tenman/seasons")
+def seasons_landing():
+    return render_template("/tenman/comming_soon.html")
 
 @app.route("/tenman/players")
 def players():
