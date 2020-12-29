@@ -55,6 +55,9 @@ def livesearch_match():
         connection1 = dbi.get_database_connection()
         connection2 = dbi.get_database_connection()
         
+        if searchbox == "":
+            r = dbi.search_table(connection1,"matches","match_id",searchbox,"match_id","map_name","map_img_url","date")
+            return jsonify(r) 
         result_id = dbi.search_table(connection1,"matches","match_id",searchbox,"match_id","map_name","map_img_url","date")
         result_map = dbi.search_table(connection2,"matches","map_name",searchbox,"match_id","map_name","map_img_url","date")
         result_date = dbi.search_table(connection2,"matches","date",searchbox,"match_id","map_name","map_img_url","date")
