@@ -12,13 +12,14 @@ import os.path
 
 from database_exceptions import *
 
-
 DATABASE_LOGIN_DETAILS = {
 	"host":"localhost",
 	"user":"root",
 	"password":"mysqlroot123",
 	"database":"tenmandb"
 }
+
+# Returns a datbase connection object.
 def get_database_connection():
     try:
         db_conn = MySQLdb.connect(DATABASE_LOGIN_DETAILS["host"],DATABASE_LOGIN_DETAILS["user"],DATABASE_LOGIN_DETAILS["password"],DATABASE_LOGIN_DETAILS["database"],use_unicode=True, charset="utf8")
@@ -26,6 +27,8 @@ def get_database_connection():
     except Exception as e:
         print("Could not establish connection to the database. Is the server running?")
         return None
+
+# Checks if table exists
 def table_exists(dbconn,tablename):
     	dbcur = dbconn.cursor()
     	dbcur.execute("""
@@ -40,6 +43,7 @@ def table_exists(dbconn,tablename):
     	dbcur.close()
     	return False
 
+# Searches table for a target equal to target_value. Returns elements specified by *select
 def search_table(dbconn,table,target,target_value,*select):
     cursor = dbconn.cursor()
 
@@ -60,6 +64,7 @@ def search_table(dbconn,table,target,target_value,*select):
     cursor.close()
     return result
 
+# Returns table data as 2 dimmensional list (list of lists)
 def get_table_data(dbconn, tablename):
     cur = dbconn.cursor()
     sql = "SELECT * FROM " + tablename
@@ -69,22 +74,23 @@ def get_table_data(dbconn, tablename):
 
     return dataset
 
+# Checks if search_item exists in tablename
 def exists_in_table(dbconn,tablename,search_item):
     data = get_table_data(dbconn,tablename)
     for i in range(len(data)):
         if search_item == data[i][0]:
             return True
 
+# Adds match id, map, map image url and date and day
 def add_match_id(dbconn,match):
     if exists_in_table(dbconn,"matches",int(match.get_match_id())):
         raise ElementExistsInTableError
     if not table_exists(dbconn,"matches"):
         raise TablesDoesNotExistError
-
     else:
         dbcur = dbconn.cursor()
         query = "INSERT INTO " + "matches" + """(match_id,map_name,map_img_url,date) VALUES (%s,%s,%s,%s)"""
-        dbcur.execute(query,[match.get_match_id(),match.get_map(),match.get_map_img_url(),match.get_date()])
+        dbcur.execute(query,[match.get_match_id(),match.get_map(),match.get_map_img_url(),match.get_date()[4:]])
         dbconn.commit()
         dbcur.close()
 
@@ -128,17 +134,14 @@ def add_match_data(dbconn,match):
 
 # Adding data parameters for existing matches, where sufficient data has not been stored
 def update_match_data(match):
-    #from ..match_extraction.Match import Match
     conn = get_database_connection()
     cur = conn.cursor()
     query = """UPDATE matches SET map_name=%s, map_img_url=%s, date=%s WHERE match_id=%s"""
-    values = [match.get_map(),match.get_map_img_url(),match.get_date(),match.get_match_id()]
+    values = [match.get_map(),match.get_map_img_url(),match.get_date()[4:],match.get_match_id()]
     cur.execute(query,values)
 
     conn.commit()
     conn.close()
-def update_matches():
-    pass
 
 # Takes instance of Player class and updates stats for Player.pop_id. 
 def update_player_data(dbconn,player,won,tie=False):
@@ -153,7 +156,6 @@ def update_player_data(dbconn,player,won,tie=False):
     db_cur.execute(query)
     dataset = db_cur.fetchall()
 
-    
     # Assign new values
     new_nick = player.get_nick()
     new_kills = int(player.kills) + int(dataset[0][2])
@@ -217,7 +219,6 @@ def get_top_players(dbconn,threshold,tablename="players"):
             loss = table_data[i][14]
             if pop_id in top_player_ids:
                 continue
-            
             
             else:
                 hltv_rating = table_data[i][7]
