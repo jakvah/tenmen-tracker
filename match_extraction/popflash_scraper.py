@@ -65,7 +65,7 @@ def rows_to_team(team_rows):
             player.set_nick(columns[0].text.strip())
         # Captain gets cactus symbol in front of name. Remove this
         except UnicodeEncodeError:
-            player.set_nick(columns[0].text.strip()[1:])           
+            player.set_nick(columns[0].text.strip()[4:])           
         
         player.set_kills(columns[1].text.strip())
         player.set_assists(columns[2].text.strip())
