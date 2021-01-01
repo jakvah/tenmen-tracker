@@ -5,27 +5,119 @@
 {% block body %}
 <body>
 
+  
+
   <div class="container" style="padding-top:5px; padding-bottom:5px;">
-    <h4> Search among {{num_matches}} recorded matches </h4>
+    <h4> Most played maps (under construction) </h4>
   </div>
   <div class="container">
+    <!-- Row 1-->
+    <div class ="row">
+      <!-- LH Column-->
+      <div class="col-md-6">
+        <div class="card border-success text-dark bg-light">
+          <div class="card-body">
+            <h5 class="card-title">#1  {{top_maps[0][0]}}</h5>
+            <img src="https://i.imgur.com/Vi8dXOq.jpg" class="card-img-bottom" alt="...">
+          </div>
+          <div class="card-footer">
+            Played {{ top_maps[0][1] }} times
+          </div>
+        </div>
+       </div>
+
+       <!-- RH Column-->       
+      <div class="col-md-6">
+        <!-- RH Column rows -->
+          <!-- RH Column Row 1-->
+          <div class="row">
+          <div class="card border-info flex-row flex-wrap">
+            <div class="card-title border-0">
+                <img src="https://i.imgur.com/S9GlJb4.png" style="height:60px; width:140px;"alt="">
+            </div>
+            <div class="card-block px-2">
+                <h5 class="card-title">#2 {{ top_maps[1][0] }}</h5>
+            </div>
+           
+            <div class="card-footer w-100 text-muted">
+              Played {{ top_maps[1][1] }} times 
+            </div>
+        </div>
+        </div>
+        <div class="row">
+          <div class="card border-info flex-row flex-wrap">
+            <div class="card-title border-0">
+                <img src="https://i.imgur.com/S9GlJb4.png" style="height:60px; width:140px;"alt="">
+            </div>
+            <div class="card-block px-2">
+                <h5 class="card-title">#2 {{ top_maps[2][0] }}</h5>
+            </div>
+           
+            <div class="card-footer w-100 text-muted">
+              Played {{ top_maps[2][1] }} times
+            </div>
+        </div>
+        </div>
+        <div class="row">
+          <div class="card border-info flex-row flex-wrap">
+            <div class="card-title border-0">
+                <img src="https://i.imgur.com/S9GlJb4.png" style="height:60px; width:140px;"alt="">
+            </div>
+            <div class="card-block px-2">
+                <h5 class="card-title">#2 {{top_maps[3][0]}}</h5>
+            </div>
+           
+            <div class="card-footer w-100 text-muted">
+              Played {{top_maps[3][1]}} times // Total of 456 rounds
+            </div>
+        </div>
+        </div>
+        
+          <!-- RH Column Row 1 ends-->
+          <!-- RH Column Row 2 -->
+          <!--<div class="row">
+            <div class="card">
+              <div class="row">
+              <div class = "col-md-12">
+                <div class="col-sm-6">
+                  <img class="card-img" src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Card image"/>
+                </div>
+                <div class="col-sm-6">
+                  <div class="card-body-right">
+                    <h4 class="card-title">John Doe</h4>
+                    <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+                    <a href="#" class="btn btn-primary">See Profile</a>
+                  </div>
+                   </div>
+                </div>
+                </div> 
+                </div>
+          </div>-->
+          <!-- RH Column Row 2ends-->
+        <div>
+      </div>
+      <!-- RH Column ends-->
+        
+    </div>
+  </div>
+
+    <div class="container" style="padding-top:5px; padding-bottom:5px;">
+      <h4> Search among {{num_matches}} recorded matches </h4>
+    </div>
+
+<div class="container">
 	  <div class="row justify-content-center">
-                        <div class="col-12"> <!--col-md-10 col-lg-8-->
-                            <form class="card card-sm"> <!--style=" height: 5rem;"-->
+                        <div class="col-12"> 
+                            <form class="card card-sm"> 
                                 <div class="card-body row no-gutters align-items-center ">                                    
                                   <div class="col-auto">
                                         <i class="fas fa-search h4 text-body"></i>
                                     </div>
-                                    <!--end of col-->
+                                    
                                     <div class="col">
                                         <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for match ID, map or date (i.e Nov 14 2020)" id="livebox">
                                       </div>
                                      
-                                    <!--end of col-->
-                                    <!--<div class="col-auto">
-                                        <button class="btn btn-lg btn-success" type="submit">Søk</button>
-                                    </div>-->
-                                    <!--end of col-->
                                 </div>
                             </form>
                             <table class="table" id=datalist>
@@ -33,13 +125,12 @@
 
                             </table>
                         </div>
-                        <!--end of col-->
+                        
     </div>
 </div>
-
-<!--End of wrapper -->
 </body>
 
+<!-- Livesearch script -->
 <script>
   $(document).ready(function(){
     $("#livebox").on("input",function(e){
@@ -68,7 +159,6 @@
   })
 
 </script>
-
 
 <style>
   .form-control-borderless {
