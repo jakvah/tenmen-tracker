@@ -148,7 +148,7 @@
                       data +='<tr><td><a href="/tenman/match/'+value[0].toString()+'"</a>'+value[0].toString() + '</td>';
                       data += '<td>' + '<img src="'+value[2].toString() + '" height="20" style="margin-right: 3px;;">' + value[1].toString()+"</td>";
                       
-                      data += '<td>' + value[3].toString() + '</td></tr>';
+                      data += '<td>' + value[3].toString().slice(0,17) + '</td></tr>';
                     });
             data += '</tbody>'
                     //ata += "</ul>";
