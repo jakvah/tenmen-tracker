@@ -43,15 +43,17 @@ def table_exists(dbconn,tablename):
     	dbcur.close()
     	return False
 
-def get_most_frequent_map(dbconn,tablename="matches"):
+def get_most_frequent_maps(dbconn,num_maps,tablename="matches"):
     from collections import Counter
     data = get_table_data(dbconn,tablename)
     # Collect maps in one common list
     maps = []
+    map_img = {}
     for row in data:
         maps.append(row[1])
+        map_img[row[1]] = row[2]
     occurence_count = Counter(maps)
-    return occurence_count.most_common(1)[0][0]
+    return occurence_count.most_common(num_maps)
 
 
 # Returns number of times target_map_name occurs in tablename
@@ -102,7 +104,7 @@ def exists_in_table(dbconn,tablename,search_item):
         if search_item == data[i][0]:
             return True
 
-# Adds match id, map, map image url and date and day
+# Adds match id, map, map image url and date, day and match score
 def add_match_id(dbconn,match):
     if exists_in_table(dbconn,"matches",int(match.get_match_id())):
         raise ElementExistsInTableError
@@ -110,8 +112,18 @@ def add_match_id(dbconn,match):
         raise TablesDoesNotExistError
     else:
         dbcur = dbconn.cursor()
-        query = "INSERT INTO " + "matches" + """(match_id,map_name,map_img_url,date,day) VALUES (%s,%s,%s,%s,%s)"""
-        dbcur.execute(query,[match.get_match_id(),match.get_map(),match.get_map_img_url(),match.get_date()[4:],match.get_date()[:3]])
+        query = "INSERT INTO " + "matches" + """(match_id,map_name,map_img_url,date,day,s1,s2) VALUES (%s,%s,%s,%s,%s,%s,%s)"""
+        values = [
+            match.get_match_id(),
+            match.get_map(),
+            match.get_map_img_url(),
+            match.get_date()[4:],
+            match.get_date()[:3],
+            match.get_team_1().get_score(),
+            match.get_team_2().get_score()
+        ]
+
+        dbcur.execute(query,values)
         dbconn.commit()
         dbcur.close()
 
@@ -157,8 +169,16 @@ def add_match_data(dbconn,match):
 def update_match_data(match):
     conn = get_database_connection()
     cur = conn.cursor()
-    query = """UPDATE matches SET map_name=%s, map_img_url=%s, date=%s, day=%s WHERE match_id=%s"""
-    values = [match.get_map(),match.get_map_img_url(),match.get_date()[4:],match.get_date()[:3],match.get_match_id()]
+    query = """UPDATE matches SET map_name=%s, map_img_url=%s, date=%s, day=%s,s1=%s,s2=%s WHERE match_id=%s"""
+    values = [
+        match.get_map(),
+        match.get_map_img_url(),
+        match.get_date()[4:],
+        match.get_date()[:3],
+        match.get_team_1().get_score(),
+        match.get_team_2().get_score(),
+        match.get_match_id()
+    ]
     cur.execute(query,values)
 
     conn.commit()
@@ -293,7 +313,9 @@ def get_number_of_players(dbconn,tablename="players"):
 
 if __name__ == "__main__":
     db = get_database_connection()
-    m = get_most_frequent_map(db)
+    m = get_most_frequent_maps(db,4)
     print(m)
-    n = get_map_frequency(db,m)
-    print(n)
+    print(m[0][0])
+    print(m[0][1])
+    print(m[1][0])
+    print(m[1][1])
