@@ -142,12 +142,12 @@
         success:function(res){
             //console.log(res);
             var data;
-            data +='<thead class="thead-dark"><tr><th scope="col">Match ID</th><th scope="col">Map</th><th scope="col">Date</th></tr></thead><tbody>';
+            data +='<thead class="thead-dark"><tr><th scope="col">Match ID</th><th scope="col">Map</th></th><th scope="col">Score</th><th scope="col">Date</th></tr></thead><tbody>';
                     $.each(res,function(index,value){
                        // data += "<tr>"+'<td><a href="/tenman/match/'+value[0].toString()+'"</a>'+"</td></tr>";
                       data +='<tr><td><a href="/tenman/match/'+value[0].toString()+'"</a>'+value[0].toString() + '</td>';
                       data += '<td>' + '<img src="'+value[2].toString() + '" height="20" style="margin-right: 3px;;">' + value[1].toString()+"</td>";
-                      
+                      data += '<td>' + value[4].toString() + ' - ' + value[5].toString() + '</td>';
                       data += '<td>' + value[3].toString().slice(0,17) + '</td></tr>';
                     });
             data += '</tbody>'
