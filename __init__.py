@@ -3,7 +3,7 @@ from flask import Flask,render_template,Markup,request,redirect,flash,jsonify
 
 app = Flask(__name__)
 
-NAVBAR_ACTIVE = ["","","",""]
+NUM_TABS = 4
 
 @app.route("/")
 def hello():
@@ -23,12 +23,14 @@ def show_pdf(filename):
 
 @app.route("/tenman/nothing")
 def nothing():
-    navbar_status = ["","","",""]
+    navbar_status = [""]*NUM_TABS
+    navbar_status[0] = "active"
     return render_template("tenman/no_players.html",navbar_status=navbar_status)
 
 @app.route("/tenman/seasons")
 def seasons_landing():
-    navbar_status = ["","","","active"]
+    navbar_status = [""]*NUM_TABS
+    navbar_status[3] = "active"
     return render_template("/tenman/comming_soon.html",navbar_status=navbar_status)
 
 @app.route("/tenman/players")
@@ -36,7 +38,9 @@ def players():
     from database_management import db_interaction as dbi
     conn = dbi.get_database_connection()
     num_players = dbi.get_number_of_players(conn)
-    navbar_status = ["","active","",""]
+    
+    navbar_status = [""]*NUM_TABS
+    navbar_status[1] = "active"
     return render_template("tenman/players.html",num_players=num_players,navbar_status=navbar_status)
 
 @app.route("/livesearch",methods=["POST","GET"])
@@ -62,12 +66,17 @@ def livesearch_match():
         connection1 = dbi.get_database_connection()
         connection2 = dbi.get_database_connection()
         
+        select = ("match_id","map_name","map_img_url","date","s1","s2")
+
         if searchbox == "":
-            r = dbi.search_table(connection1,"matches","match_id",searchbox,"match_id","map_name","map_img_url","date")
-            return jsonify(r) 
-        result_id = dbi.search_table(connection1,"matches","match_id",searchbox,"match_id","map_name","map_img_url","date")
-        result_map = dbi.search_table(connection2,"matches","map_name",searchbox,"match_id","map_name","map_img_url","date")
-        result_date = dbi.search_table(connection2,"matches","date",searchbox,"match_id","map_name","map_img_url","date")
+            r = dbi.search_table(connection1,"matches","match_id",searchbox,*select)
+            return jsonify(r)
+        elif searchbox == "d" or searchbox == "de" or searchbox == "de_":
+            r = result_date = dbi.search_table(connection2,"matches","date",searchbox,*select)
+            return jsonify(r)
+        result_id = dbi.search_table(connection1,"matches","match_id",searchbox,*select)
+        result_map = dbi.search_table(connection2,"matches","map_name",searchbox,*select)
+        result_date = dbi.search_table(connection2,"matches","date",searchbox,*select)
 
         results = result_id + result_date + result_map
         return jsonify(results)
@@ -77,8 +86,11 @@ def livesearch_match():
 @app.route("/tenman")
 def tenman_index():
     PLAYER_THRESHOLD = 6
-    navbar_status = ["active","","",""]
+    
+    
     try:
+        navbar_status = [""]*NUM_TABS
+        navbar_status[0] = "active"
         try:
             from database_management import db_interaction as dbi
         except Exception as e:
@@ -120,10 +132,12 @@ def tenman_index():
 
 @app.route("/tenman/user/<pop_id>")
 def user_page(pop_id):
-    navbar_status = ["","active","",""]
+    
+    navbar_status = [""]*NUM_TABS
+    navbar_status[1] = "active"
     try:
         from database_management import db_interaction as dbi
-            #from match_extraction.Player import Player
+            
     except Exception as e:
         return "db_interaction Import failed: " +  str(e)
 
@@ -136,28 +150,42 @@ def user_page(pop_id):
 
 @app.route("/tenman/matches")
 def matches():
+    navbar_status = [""]*NUM_TABS
+    navbar_status[2] = "active"
     try:
         from database_management import db_interaction as dbi
         
         navbar_status = ["","","active",""]
         conn = dbi.get_database_connection()
         num_matches = dbi.get_number_of_matches(conn)
-        
-        return render_template("/tenman/matches.html",navbar_status=navbar_status,num_matches=num_matches)
+
+        top_maps = dbi.get_most_frequent_maps(conn,4)
+                
+        return render_template(
+            "/tenman/matches.html",
+            navbar_status=navbar_status,
+            num_matches=num_matches,
+            top_maps = top_maps)
     except Exception as e:
         return str(e)
 
 @app.route("/tenman/match/<match_id>")
 def match_page(match_id):
-    # New
-    navbar_status = ["","","active",""]
-    return render_template("tenman/loading_match.html",navbar_status=navbar_status,match_id=match_id)
-
+    try:
+        navbar_status = [""]*NUM_TABS
+        navbar_status[2] = "active"
+        return render_template("tenman/loading_match.html",navbar_status=navbar_status,match_id=match_id)
+    except Exception as e:
+        return "Failed imm: " + str(e)
 
 @app.route("/tenman/loading_match")
 def loading():
-    navbar_status = ["","","active",""]
-    return render_template("tenman/loading_match.html",navbar_status=navbar_status)
+    try:
+        navbar_status = [""]*NUM_TABS
+        navbar_status[2] = "active"
+        return render_template("tenman/loading_match.html",navbar_status=navbar_status)
+    except Exception as e:
+        return "Failed in scnd:" + str(e)
 
 @app.route("/get_match_data/<match_id>")
 def get_match_data(match_id):
@@ -171,9 +199,12 @@ def get_match_data(match_id):
         except Exception as e:
             return "Failed importing modules: " + str(e)
 
-        navbar_status = ["","","active",""]
+        status = "Pre webscraper"
+        
+        navbar_status = [""]*NUM_TABS
+        navbar_status[2] = "active"
         match = ps.get_match_data(match_id)
-
+        status = "Post webscraper"
         # Get team balance ratings
         team1 = match.get_team_1()
         team2 = match.get_team_2()
@@ -212,7 +243,7 @@ def get_match_data(match_id):
                 his_avg_team_2 = his_avg_team_2
             )
     except Exception as e:
-        return str(e)
+        return "Failed when getting match data: " + str(status) + " " + str(e)
 
 @app.route("/test")
 def test():
@@ -257,6 +288,15 @@ def add_pop_match():
             
     except Exception as e:
         return str(e)
+
+@app.route("/error")
+def error_handling():
+    try:
+        navbar_status = [""]*NUM_TABS
+        return render_template("tenman/error.html",navbar_status=navbar_status)
+    except Exception as e:
+        return str(e)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
