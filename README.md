@@ -4,7 +4,7 @@ Python web app for tracking, analyzing and visualizing match data from CSGO matc
 
 A live demo of the website can be found [here](http://jakobvahlin.com/tenman)
 
-![Website screenshots](README/readme_img.png)
+![Website screenshots](README/website_demo.png)
 
 ## Table of Contents
 - [Dependencies](#dependencies)
