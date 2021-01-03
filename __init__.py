@@ -4,6 +4,7 @@ from flask import Flask,render_template,Markup,request,redirect,flash,jsonify
 app = Flask(__name__)
 
 NUM_TABS = 4
+DEBUG_MODE = False
 
 @app.route("/")
 def hello():
@@ -58,7 +59,6 @@ def livesearch():
         return jsonify(result)
     except Exception as e:
         return jsonify(str(e))
-
 
 @app.route("/livesearch_matches",methods=["POST","GET"])
 def livesearch_match():
@@ -226,6 +226,15 @@ def get_match_data(match_id):
     except Exception as e:
         return handle_error(e)
 
+
+@app.route("/tenman/seasons_prepare")
+def sssss():
+    try:        
+        navbar_status = [""]*NUM_TABS
+        navbar_status[3] = "active"
+        return render_template("/tenman/seasons.html",navbar_status=navbar_status)
+    except Exception as e:
+        return handle_error(e)
 @app.route("/test")
 def test():
     try:
@@ -278,8 +287,8 @@ def error():
     except Exception as e:
         return str(e)
 
-def handle_error(error,debug=False):
-    if not debug:
+def handle_error(error):
+    if not DEBUG_MODE:
         navbar_status = [""]*NUM_TABS
         return render_template("tenman/error.html",navbar_status=navbar_status)
     else:
