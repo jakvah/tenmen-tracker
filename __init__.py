@@ -245,7 +245,7 @@ def test():
 def add_pop_match():
     try:
         if request.method == "GET":
-            return "Im sorry bro, you can't access this endpoint this way."
+            return handle_error("Im sorry bro, you can't access this endpoint this way.")
         elif request.method == "POST":            
             try:
                 from database_management import db_interaction as dbi
