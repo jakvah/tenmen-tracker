@@ -246,38 +246,27 @@ def add_pop_match():
     try:
         if request.method == "GET":
             return handle_error("Im sorry bro, you can't access this endpoint this way.")
-        elif request.method == "POST":            
-            try:
-                from database_management import db_interaction as dbi
-            except Exception as e:
-                return "Failed when importing the database management module: " +  str(e)
-            
-            try:
-                from match_extraction import popflash_scraper as ps
-            except Exception as e:
-                return "Failed when importing the webscraper " +  str(e)          
-            
-            try:                
-                pop_id = request.form["pop_id"]
-                conn = dbi.get_database_connection()
-                if dbi.exists_in_table(conn,"matches",int(pop_id)):
-                    flash_str = "Match " + str(pop_id) + " has already been added to the database! Player data has not been updated."
-                    flash(flash_str) 
-                    return redirect("/tenman")        
-                else:
-                    pop_match = ps.get_match_data(pop_id)            
-                    dbi.add_match_data(conn,pop_match)
+        elif request.method == "POST":
+            from database_management import db_interaction as dbi
+            from match_extraction import popflash_scraper as ps
 
-                    flash_str = "Successfully added match " + str(pop_id) + " and updated player data."
-                    flash(flash_str)                   
-                    return redirect("/tenman")                
-                
-            except Exception as e:
-                return str(e)
+                        
+        pop_id = request.form["pop_id"]
+        conn = dbi.get_database_connection()
+        if dbi.exists_in_table(conn,"matches",int(pop_id)):
+            flash_str = "Match " + str(pop_id) + " has already been added to the database! Player data has not been updated."
+            flash(flash_str) 
+            return redirect("/tenman")        
+        else:
+            pop_match = ps.get_match_data(pop_id)            
+            dbi.add_match_data(conn,pop_match)
             
+            flash_str = "Successfully added match " + str(pop_id) + " and updated player data."
+            flash(flash_str)                   
+            return redirect("/tenman")                
             
     except Exception as e:
-        return str(e)
+        return str(e)           
 
 @app.route("/error")
 def error():
