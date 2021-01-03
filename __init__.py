@@ -142,13 +142,15 @@ def matches():
         conn = dbi.get_database_connection()
         num_matches = dbi.get_number_of_matches(conn)
 
-        top_maps = dbi.get_most_frequent_maps(conn,4)
+        top_maps,maps_img,map_rounds = dbi.get_most_frequent_maps(conn,8)
                 
         return render_template(
             "/tenman/matches.html",
             navbar_status=navbar_status,
             num_matches=num_matches,
-            top_maps = top_maps)
+            top_maps = top_maps,
+            maps_img = maps_img,
+            map_rounds = map_rounds)
 
     except Exception as e:
         return handle_error(e)
