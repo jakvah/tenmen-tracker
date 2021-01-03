@@ -118,7 +118,7 @@
       {% for i in range((top_players[3:]).__len__()) %}
       <tr>
         <th scope="row">{{ i+4 }}</th>
-        <td><img src="{{ top_players[3+i].get_img_url() }}" alt="" height="20" width="20" style="margin-right: 3px;;"/><a href="/tenman/user/{{top_players[3+i].get_pop_id()}}">{{ top_players[3+i].get_nick() }}</a></td>
+        <td><img src="{{ top_players[3+i].get_img_url() }}" alt="" height="20" width="20" style="margin-right: 3px;"/><a href="/tenman/user/{{top_players[3+i].get_pop_id()}}">{{ top_players[3+i].get_nick() }}</a></td>
         <td>{{ top_players[3+i].get_hltv_rating() }}</td>
         <td>{{ top_players[3+i].get_kd_ratio() }}</td>
         <td>{{ top_players[3+i].get_kills() }}</td>
