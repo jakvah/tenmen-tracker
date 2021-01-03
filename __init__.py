@@ -35,13 +35,16 @@ def seasons_landing():
 
 @app.route("/tenman/players")
 def players():
-    from database_management import db_interaction as dbi
-    conn = dbi.get_database_connection()
-    num_players = dbi.get_number_of_players(conn)
-    
-    navbar_status = [""]*NUM_TABS
-    navbar_status[1] = "active"
-    return render_template("tenman/players.html",num_players=num_players,navbar_status=navbar_status)
+    try:
+        from database_management import db_interaction as dbi
+        conn = dbi.get_database_connection()
+        num_players = dbi.get_number_of_players(conn)
+        
+        navbar_status = [""]*NUM_TABS
+        navbar_status[1] = "active"
+        return render_template("tenman/players.html",num_players=num_players,navbar_status=navbar_status)
+    except Exception as e:
+        return handle_error(e)
 
 @app.route("/livesearch",methods=["POST","GET"])
 def livesearch():
@@ -85,68 +88,48 @@ def livesearch_match():
 
 @app.route("/tenman")
 def tenman_index():
-    PLAYER_THRESHOLD = 6
-    
-    
+    PLAYER_THRESHOLD = 6    
     try:
         navbar_status = [""]*NUM_TABS
         navbar_status[0] = "active"
-        try:
-            from database_management import db_interaction as dbi
-        except Exception as e:
-            return "db_interaction Import failed: " +  str(e)
-        try:
-            from match_extraction import popflash_scraper as ps
-        except Exception as e:
-            return "ps Import failed: " +  str(e)
+        
+        from database_management import db_interaction as dbi
+        
+        from match_extraction import popflash_scraper as ps
         
         if dbi.get_number_of_players(dbi.get_database_connection()) == 0:
-            return render_template("tenman/no_players.html",num_matches=0,num_players=0)
-        try:
-            conn = dbi.get_database_connection()
-
-            top_players = dbi.get_top_players(conn,threshold=PLAYER_THRESHOLD)
-        except Exception as e:
-            return "failed in get top players " +  str(e)
-
-        try:   
-            num_matches = dbi.get_number_of_matches(conn)
-            num_players = dbi.get_number_of_players(conn)
-        except Exception as e:
-            return "asd" + str(e)
+            return render_template("tenman/no_players.html",num_matches=0,num_players=0,navbar_status=navbar_status)
         
-        try:
-            # Get latest match
-            data = dbi.get_table_data(conn,"matches")
-            last_match = data[len(data)-1]
-            from match_extraction.Match import Match
-            from match_extraction.Team import Team
-            from match_extraction.Player import Player
-            latest_match = Match(int(last_match[0]),team1=Team(),team2=Team(),map_img_url=last_match[2],date=last_match[3],map_name=last_match[1])
-        except Exception as e:
-            return "get latest; " + str(e)        
+        conn = dbi.get_database_connection()
+        top_players = dbi.get_top_players(conn,threshold=PLAYER_THRESHOLD)        
+        
+        num_matches = dbi.get_number_of_matches(conn)
+        num_players = dbi.get_number_of_players(conn)        
+        
+        # Get latest match
+        data = dbi.get_table_data(conn,"matches")
+        last_match = data[len(data)-1]
+        from match_extraction.Match import Match
+        from match_extraction.Team import Team
+        from match_extraction.Player import Player
+        latest_match = Match(int(last_match[0]),team1=Team(),team2=Team(),map_img_url=last_match[2],date=last_match[3],map_name=last_match[1])
+        
         return render_template("tenman/tenman_landing.html",navbar_status=navbar_status,top_players=top_players,num_matches=num_matches,num_players=num_players,latest_match=latest_match,threshold=PLAYER_THRESHOLD)
 
     except Exception as e:
-        return "failed:" + str(e)
+        return handle_error(e)
 
 @app.route("/tenman/user/<pop_id>")
 def user_page(pop_id):
-    
-    navbar_status = [""]*NUM_TABS
-    navbar_status[1] = "active"
     try:
+        navbar_status = [""]*NUM_TABS
+        navbar_status[1] = "active"
         from database_management import db_interaction as dbi
-            
-    except Exception as e:
-        return "db_interaction Import failed: " +  str(e)
-
-    try:
+        
         p = dbi.get_player_data(int(pop_id))
-    
         return render_template("/tenman/user_profile.html",player=p,navbar_status=navbar_status)
     except Exception as e:
-        return "Failed big: " + str(e)
+        return handle_error(e)
 
 @app.route("/tenman/matches")
 def matches():
@@ -166,8 +149,9 @@ def matches():
             navbar_status=navbar_status,
             num_matches=num_matches,
             top_maps = top_maps)
+
     except Exception as e:
-        return str(e)
+        return handle_error(e)
 
 @app.route("/tenman/match/<match_id>")
 def match_page(match_id):
@@ -176,7 +160,7 @@ def match_page(match_id):
         navbar_status[2] = "active"
         return render_template("tenman/loading_match.html",navbar_status=navbar_status,match_id=match_id)
     except Exception as e:
-        return "Failed imm: " + str(e)
+        return handle_error(e)
 
 @app.route("/tenman/loading_match")
 def loading():
@@ -185,26 +169,21 @@ def loading():
         navbar_status[2] = "active"
         return render_template("tenman/loading_match.html",navbar_status=navbar_status)
     except Exception as e:
-        return "Failed in scnd:" + str(e)
+        return handle_error(e)
 
 @app.route("/get_match_data/<match_id>")
 def get_match_data(match_id):
     try:
-        try:
-            from match_extraction import popflash_scraper as ps
-            from database_management import db_interaction as dbi
-            from match_extraction.Match import Match
-            from match_extraction.Team import Team
-            from match_extraction.Player import Player
-        except Exception as e:
-            return "Failed importing modules: " + str(e)
-
-        status = "Pre webscraper"
-        
+        from match_extraction import popflash_scraper as ps
+        from database_management import db_interaction as dbi
+        from match_extraction.Match import Match
+        from match_extraction.Team import Team
+        from match_extraction.Player import Player
+       
         navbar_status = [""]*NUM_TABS
         navbar_status[2] = "active"
         match = ps.get_match_data(match_id)
-        status = "Post webscraper"
+
         # Get team balance ratings
         team1 = match.get_team_1()
         team2 = match.get_team_2()
@@ -243,7 +222,7 @@ def get_match_data(match_id):
                 his_avg_team_2 = his_avg_team_2
             )
     except Exception as e:
-        return "Failed when getting match data: " + str(status) + " " + str(e)
+        return handle_error(e)
 
 @app.route("/test")
 def test():
@@ -290,13 +269,19 @@ def add_pop_match():
         return str(e)
 
 @app.route("/error")
-def error_handling():
+def error():
     try:
         navbar_status = [""]*NUM_TABS
         return render_template("tenman/error.html",navbar_status=navbar_status)
     except Exception as e:
         return str(e)
 
+def handle_error(error,debug=False):
+    if not debug:
+        navbar_status = [""]*NUM_TABS
+        return render_template("tenman/error.html",navbar_status=navbar_status)
+    else:
+        return str(error)
 
 if __name__ == "__main__":
     app.run(debug=True)
