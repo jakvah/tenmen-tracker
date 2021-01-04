@@ -38,6 +38,7 @@ class Team:
         self.iterator_value += 1
 
         return player_to_return
+
     next = __next__  # python2.x compatibility.      
 
     def add_player(self,new_player):
@@ -118,7 +119,35 @@ class Team:
             if hs > max_hs:
                 max_hs = hs
                 max_hs_player = p
-        return max_hs_player          
+        return max_hs_player
+    def get_highest_assists(self):
+        max_assists = -1
+        max_assists_player = None
+        for p in self:
+            a = p.get_assists()
+            if a > max_assists:
+                max_assists = a
+                max_assists_player = p
+        return max_assists_player
+    def get_highest_bp(self):
+        max_bp = -1
+        max_bp_player = None
+        for p in self:
+            bp = p.get_bombs_planted()
+            if bp > max_bp:
+                max_bp = bp
+                max_bp_player = p
+        return max_bp_player
+    def get_highest_bd(self):
+        max_bd = -1
+        max_bd_player = None
+        for p in self:
+            bd = p.get_bombs_defused()
+            if bd > max_bd:
+                max_bd = bd
+                max_bd_player = p
+        return max_bd_player
+
         
 if __name__ == "__main__":
     p = Player(123,nick="Jakob")

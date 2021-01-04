@@ -30,7 +30,18 @@
                         <h6 class="mb-0"><i class="fa fa-head-side-virus fa-lg" style="padding-right:3px;"></i>Headshot %</h6>
                         <span class="text-secondary">{{match.get_highest_hs().get_nick()}} ({{match.get_highest_hs().get_hs_percentage_100()}}%)</span>
                       </li>
-                      
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><i class="fa fa-hands-helping fa-lg" style="padding-right:3px;"></i>Assists</h6>
+                        <span class="text-secondary">{{match.get_highest_assists().get_nick()}} ({{match.get_highest_assists().get_assists()}})</span>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><i class="fa fa-seedling fa-lg" style="padding-right:3px;"></i>Bombs planted</h6>
+                        <span class="text-secondary">{{match.get_highest_bp().get_nick()}} ({{match.get_highest_bp().get_bombs_planted()}})</span>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><i class="fa fa-cut fa-lg" style="padding-right:3px;"></i>Bombs defused</h6>
+                        <span class="text-secondary">{{match.get_highest_bd().get_nick()}} ({{match.get_highest_bd().get_bombs_defused()}})</span>
+                      </li>
                       
                     </ul>
                   </div>

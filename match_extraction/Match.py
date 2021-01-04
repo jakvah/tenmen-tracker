@@ -88,5 +88,30 @@ class Match:
             return hrhs_1
         else:
             return hrhs_2
+    
+    def get_highest_assists(self):
+        ha1 = self.team_1.get_highest_assists()
+        ha2 = self.team_2.get_highest_assists()
+        if ha1.get_assists() >= ha2.get_assists():
+            return ha1
+        else:
+            return ha2
+
+    def get_highest_bp(self):
+        hbp1 = self.team_1.get_highest_bp()
+        hbp2 = self.team_2.get_highest_bp()
+        if hbp1.get_bombs_planted() >= hbp2.get_bombs_planted():
+            return hbp1
+        else:   
+            return hbp2
+
+    def get_highest_bd(self):
+        hbd1 = self.team_1.get_highest_bd()
+        hbd2 = self.team_2.get_highest_bd()
+        if hbd1.get_bombs_defused() >= hbd2.get_bombs_defused():
+            return hbd1
+        else:
+            return hdb2
+    
         
         
