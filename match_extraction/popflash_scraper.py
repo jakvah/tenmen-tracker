@@ -15,7 +15,7 @@ from Outcome import Tie, Determined
 def get_match_data(match_id):
     match_url = create_url(match_id)
     page_html = get_html_2_7(match_url)
-    soup = bs(page_html,"html.parser")
+    soup = bs(page_html,"html.parser",from_encoding="utf-8")
     
     team_1_score = int(soup.find("div", {"class": "score-1"}).text.strip())
     team_2_score = int(soup.find("div", {"class": "score-2"}).text.strip())
@@ -65,7 +65,7 @@ def rows_to_team(team_rows):
             player.set_nick(columns[0].text.strip())
         # Captain gets cactus symbol in front of name. Remove this
         except UnicodeEncodeError:
-            player.set_nick(columns[0].text.strip()[4:])           
+            player.set_nick(columns[0].text.strip()[1:])           
         
         player.set_kills(columns[1].text.strip())
         player.set_assists(columns[2].text.strip())
@@ -128,4 +128,17 @@ def get_user_image(pop_id):
 if __name__ == "__main__":
     match_id = 1092521
     m = get_match_data(match_id)
-    print("Done")
+    a = str(m.team_1.player_4)
+    print(a)
+    
+    """
+    url = create_url(1092521)
+    html = get_html_2_7(url)
+    #print(html)
+    soup = bs(html,"html.parser",from_encoding="utf-8")
+    #print(soup)
+    team_1_score = int(soup.find("div", {"class": "score-1"}).text.strip())
+    team_2_score = int(soup.find("div", {"class": "score-2"}).text.strip())
+    print(team_1_score)
+    print(team_2_score)
+    """
