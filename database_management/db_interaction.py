@@ -43,18 +43,56 @@ def table_exists(dbconn,tablename):
     	dbcur.close()
     	return False
 
+
+# 
+def get_playtime_statistics(dbconn,tablename="matches"):
+    data = get_table_data(dbconn,tablename)
+    
+    # Initialize dicts 
+    days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+    months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    hours = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]
+    
+    days_dict = {}
+    months_dict = {}
+    hours_dict = {}
+    for d in days:
+        days_dict[d] = 0
+    for m in months:
+        months_dict[m] = 0
+    for h in hours:
+        hours_dict[h] = 0
+    
+    for row in data:
+        full_date = row[3]
+        
+        month = full_date[:3]
+        hour = full_date[12:14]
+        day = row[4]
+
+        months_dict[month] += 1
+        hours_dict[hour] += 1
+        days_dict[day] += 1
+    return hours_dict, days_dict, months_dict
+
+
 def get_most_frequent_maps(dbconn,num_maps,tablename="matches"):
     from collections import Counter
     data = get_table_data(dbconn,tablename)
     # Collect maps in one common list
     maps = []
     map_img = {}
+    map_rounds = {}
     for row in data:
         maps.append(row[1])
         map_img[row[1]] = row[2]
-    occurence_count = Counter(maps)
-    return occurence_count.most_common(num_maps)
+        try:
+            map_rounds[row[1]] += (row[5] + row[6])
+        except KeyError:
+            map_rounds[row[1]] = (row[5] + row[6])
 
+    occurence_count = Counter(maps)
+    return occurence_count.most_common(num_maps),map_img,map_rounds
 
 # Returns number of times target_map_name occurs in tablename
 def get_map_frequency(dbconn,target_map_name,tablename="matches"):
@@ -140,6 +178,9 @@ def add_player(dbconn,player_id,player_nick):
         dbconn.commit()
     except Exception as e:
         raise AddingPlayerError
+
+def update_season_data(dbconn,match):
+    pass    
 
 # Takes match object and updates player data from the match
 def add_match_data(dbconn,match):
@@ -312,10 +353,11 @@ def get_number_of_players(dbconn,tablename="players"):
     return len(data)
 
 if __name__ == "__main__":
-    db = get_database_connection()
-    m = get_most_frequent_maps(db,4)
-    print(m)
-    print(m[0][0])
-    print(m[0][1])
-    print(m[1][0])
-    print(m[1][1])
+    d = {}
+    for i in range(5):
+        try:
+            d["jakob"] += 1
+        except KeyError:
+            d["jakob"] = 0
+    print(d)
+        

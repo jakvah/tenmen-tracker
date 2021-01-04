@@ -51,7 +51,53 @@
         
     </div>
   </div>
+  </div>
 
+  <!-- When matches are beeing played graphs -->
+  <div class="container" style="padding-top:5px; padding-bottom:5px;">
+    <h4> When are we playing?</h4>
+  </div>
+  
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-12">
+            <h6 style="text-align: center; padding-top:5px;">During the day</h6>    
+          </div>
+        </div>
+        <div class="row">
+          <canvas id="time_graph"></canvas>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-12">
+            <h6 style="text-align: center; padding-top:5px;">During the week</h6>    
+          </div>
+        </div>
+        <div class="row">
+          <canvas id="week_graph"></canvas>
+        </div>
+      </div>
+    
+
+    <div class="col-md-4">
+      <div class="row">
+        <div class="col-md-12">
+          <h6 style="text-align: center; padding-top:5px;">During the year</h6>    
+        </div>
+      </div>
+      <div class="row">
+        <canvas id="month_graph"></canvas>
+      </div>
+    </div>
+
+  </div>
+</div>
     <div class="container" style="padding-top:5px; padding-bottom:5px;">
       <h4> Search among {{num_matches}} recorded matches </h4>
     </div>
@@ -71,8 +117,7 @@
                                      
                                 </div>
                             </form>
-                            <table class="table" id=datalist>
-                              
+                            <table class="table" id=datalist>                              
 
                             </table>
                         </div>
@@ -110,6 +155,304 @@
   })
 
 </script>
+
+<!-- Time graph script-->
+<script>
+  var ctx = document.getElementById('time_graph').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: [
+            "00:00",
+            "01:00",
+            "02:00",
+            "03:00",
+            "04:00",
+            "05:00",
+            "06:00",
+            "07:00",
+            "08:00",
+            "09:00",
+            "10:00",
+            "11:00",
+            "12:00",
+            "13:00",
+            "14:00",
+            "15:00",
+            "16:00",
+            "17:00",
+            "18:00",
+            "19:00",
+            "20:00",
+            "21:00",
+            "22:00",
+            "23:00",
+          ],
+          datasets: [
+          {
+              label: 'Matches played',
+              data: [
+                '{{ hours_dict["00"] }}',
+                '{{ hours_dict["01"] }}',
+                '{{ hours_dict["02"] }}',
+                '{{ hours_dict["03"] }}',
+                '{{ hours_dict["04"] }}',
+                '{{ hours_dict["05"] }}',
+                '{{ hours_dict["06"] }}',
+                '{{ hours_dict["07"] }}',
+                '{{ hours_dict["08"] }}',
+                '{{ hours_dict["09"] }}',
+                '{{ hours_dict["10"] }}',
+                '{{ hours_dict["11"] }}',
+                '{{ hours_dict["12"] }}',
+                '{{ hours_dict["13"] }}',
+                '{{ hours_dict["14"] }}',
+                '{{ hours_dict["15"] }}',
+                '{{ hours_dict["16"] }}',
+                '{{ hours_dict["17"] }}',
+                '{{ hours_dict["18"] }}',
+                '{{ hours_dict["19"] }}',
+                '{{ hours_dict["20"] }}',
+                '{{ hours_dict["21"] }}',
+                '{{ hours_dict["22"] }}',
+                '{{ hours_dict["23"] }}'
+                ],
+              backgroundColor: [
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',                  
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)'
+              ],
+              borderColor: [
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',              
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',              
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)'
+              ],
+              borderWidth: 1
+          }      
+      ]
+      },
+      options: {
+          legend: {
+              display: false
+          },
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                      //display: false
+                  }
+              }],
+              xAxes: [{
+                //type: 'time',
+                ticks: {
+                  autoSkip: true,
+                  maxRotation: 0,
+                  maxTicksLimit: 6
+    }
+}]
+          }
+      }
+  });
+  </script>
+
+<!-- Week graph script-->
+<script>
+  var ctx = document.getElementById('week_graph').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: [
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+            "Sun"
+          ],
+          datasets: [
+          {
+              label: 'Matches played',
+              data: [
+                '{{days_dict["Mon"]}}',
+                '{{days_dict["Tue"]}}',
+                '{{days_dict["Wed"]}}',
+                '{{days_dict["Thu"]}}',
+                '{{days_dict["Fri"]}}',
+                '{{days_dict["Sat"]}}',
+                '{{days_dict["Sun"]}}'
+    
+                ],
+              backgroundColor: [
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)'
+              ],
+              borderColor: [
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)'
+              ],
+              borderWidth: 1
+          }      
+      ]
+      },
+      options: {
+        legend: {
+              display: false
+          },
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                      //display:false
+                  }
+              }]
+          }
+      }
+  });
+  </script>
+
+<!-- Month graph script-->
+<script>
+  var ctx = document.getElementById('month_graph').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+          ],
+          datasets: [
+          {
+              label: 'Matches played',
+              data: [
+                '{{ months_dict["Jan"] }}',
+                '{{ months_dict["Feb"] }}',
+                '{{ months_dict["Mar"] }}',
+                '{{ months_dict["Apr"] }}',
+                '{{ months_dict["May"] }}',
+                '{{ months_dict["Jun"] }}',
+                '{{ months_dict["Jul"] }}',
+                '{{ months_dict["Aug"] }}',
+                '{{ months_dict["Sep"] }}',
+                '{{ months_dict["Oct"] }}',
+                '{{ months_dict["Nov"] }}',
+                '{{ months_dict["Dec"] }}'    
+                ],
+              backgroundColor: [
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',                  
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+              ],
+              borderColor: [
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(153, 102, 255, 1)'
+              ],
+              borderWidth: 1
+          }      
+      ]
+      },
+      options: {
+        legend: {
+              display: false
+          },
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                      //display:false
+                  }
+              }]
+          }
+      }
+  });
+  </script>
+
+
+
+
+
 
 <style>
   .form-control-borderless {

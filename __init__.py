@@ -143,6 +143,8 @@ def matches():
         num_matches = dbi.get_number_of_matches(conn)
 
         top_maps,maps_img,map_rounds = dbi.get_most_frequent_maps(conn,8)
+        hours_dict, days_dict, months_dict = dbi.get_playtime_statistics(conn)
+
                 
         return render_template(
             "/tenman/matches.html",
@@ -150,7 +152,10 @@ def matches():
             num_matches=num_matches,
             top_maps = top_maps,
             maps_img = maps_img,
-            map_rounds = map_rounds)
+            map_rounds = map_rounds,
+            hours_dict=hours_dict, 
+            days_dict=days_dict,
+            months_dict=months_dict)
 
     except Exception as e:
         return handle_error(e)
