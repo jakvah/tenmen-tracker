@@ -376,6 +376,58 @@ def update_average(old_average,new_value,new_total):
     new_average = u_1 + float(new_value) / float(new_total)
     return new_average
 
+def get_top_season_players(dbconn,season_tablename):
+    top_players_id = []
+
+    season_table_data = get_table_data(dbconn,season_tablename)
+    num_players = len(season_table_data)
+
+    for n in range(num_players):
+        best_points = 0
+        best_pop_id = None
+        for i in range(num_players):
+            pop_id = season_table_data[i][0]
+            if pop_id in top_players_id:
+                continue
+            else:
+                points = season_table_data[i][1]
+                if points > best_points:
+                    best_points = points
+                    best_pop_id = pop_id
+        top_players_id.append(best_pop_id)
+    
+    player_matrix = []
+    for i in top_players_id:
+        player_list = get_season_player_data(i,season_tablename)
+        player_matrix.append(player_list)
+    return player_matrix
+                
+def get_season_player_data(player_id,season_tablename):
+    conn = get_database_connection()
+    db_cur = conn.cursor()
+    player_list = [player_id]
+    
+    # Get nick and image
+    query = "SELECT * FROM players WHERE pop_id = " + str(player_id)
+    db_cur.execute(query)
+    overall_player_data = db_cur.fetchall()
+    
+    nick = overall_player_data[0][1]
+    img_url = overall_player_data[0][15]
+
+    player_list.append(nick)
+    player_list.append(img_url)
+
+    # Get season data for player
+    query = "SELECT * FROM " + season_tablename + " WHERE pop_id = " + str(player_id)
+    db_cur.execute(query)
+    season_player_data = db_cur.fetchall()
+    for d in range(1,len(season_player_data[0])):
+        player_list.append(season_player_data[0][d])
+    
+    return player_list
+    
+
 def get_top_players(dbconn,threshold,tablename="players"):
     top_player_ids = []
 
@@ -443,11 +495,7 @@ def get_number_of_players(dbconn,tablename="players"):
     return len(data)
 
 if __name__ == "__main__":
-    d = {}
-    for i in range(5):
-        try:
-            d["jakob"] += 1
-        except KeyError:
-            d["jakob"] = 0
-    print(d)
-        
+    conn = get_database_connection()
+    m = get_top_season_players(conn,"players_Jan")
+    for n in m:
+        print(n)

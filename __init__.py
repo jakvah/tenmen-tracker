@@ -4,7 +4,7 @@ from flask import Flask,render_template,Markup,request,redirect,flash,jsonify
 app = Flask(__name__)
 
 NUM_TABS = 4
-DEBUG_MODE = False
+DEBUG_MODE = True
 
 @app.route("/")
 def hello():
@@ -46,6 +46,20 @@ def players():
         return render_template("tenman/players.html",num_players=num_players,navbar_status=navbar_status)
     except Exception as e:
         return handle_error(e)
+
+@app.route("/tenman/get_season_data",methods=["POST","GET"])
+def get_season_data():
+    try:
+        from database_management import db_interaction as dbi
+
+        table = request.form.get("text")
+        connection = dbi.get_database_connection()
+        data = dbi.get_top_season_players(connection,table)
+        
+        return jsonify(data)
+
+    except Exception as e:
+        return jsonify(str(e))
 
 @app.route("/livesearch",methods=["POST","GET"])
 def livesearch():
