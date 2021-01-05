@@ -247,11 +247,20 @@ def get_match_data(match_id):
 
 
 @app.route("/tenman/seasons_prepare")
-def sssss():
+def seasons_prepare():
     try:        
         navbar_status = [""]*NUM_TABS
         navbar_status[3] = "active"
-        return render_template("/tenman/seasons.html",navbar_status=navbar_status)
+
+        from database_management import db_interaction as dbi
+        from datetime import date
+        connection = dbi.get_database_connection()
+        today = date.today()
+        month = today.strftime("%B %d, %Y")[:3]
+        table = "players_" + month
+        season_data = dbi.get_top_season_players(connection,table)
+
+        return render_template("/tenman/seasons.html",navbar_status=navbar_status,season_data=season_data)
     except Exception as e:
         return handle_error(e)
 @app.route("/test")
@@ -279,6 +288,7 @@ def add_pop_match():
         else:
             pop_match = ps.get_match_data(pop_id)            
             dbi.add_match_data(conn,pop_match)
+            dbi.update_season_player_data(conn,pop_match)
             
             flash_str = "Successfully added match " + str(pop_id) + " and updated player data."
             flash(flash_str)                   
