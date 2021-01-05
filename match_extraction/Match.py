@@ -111,7 +111,7 @@ class Match:
         if hbd1.get_bombs_defused() >= hbd2.get_bombs_defused():
             return hbd1
         else:
-            return hdb2
+            return hbd2
     
         
         
