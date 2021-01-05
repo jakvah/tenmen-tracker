@@ -43,8 +43,7 @@ def table_exists(dbconn,tablename):
     	dbcur.close()
     	return False
 
-
-# 
+# Returns dicts with frequencies for playtimes
 def get_playtime_statistics(dbconn,tablename="matches"):
     data = get_table_data(dbconn,tablename)
     
@@ -179,51 +178,96 @@ def add_player(dbconn,player_id,player_nick):
     except Exception as e:
         raise AddingPlayerError
 
-def update_season_data(dbconn,match):
-    pass    
+# Add new player to season, with stats = 0
+def add_season_player(dbconn,player,seasons_table_name):
+    cur = dbconn.cursor()
+    query = "INSERT INTO " + seasons_table_name + \
+            """(pop_id, points, hltv_rating,kd_ratio,wins,losses,streak) \
+                VALUES (%s,100,0,0,0,0,0)"""
+    
+    cur.execute(query,[int(player.get_pop_id())])
+    dbconn.commit()
 
-# Takes match object and updates player data from the match
-def add_match_data(dbconn,match):
-    if exists_in_table(dbconn,"matches",int(match.get_match_id())):
-        return
-    try:
-        add_match_id(dbconn,match)
+# Updates current seasons with match data
+def update_season_player_data(dbconn,match):
+    db_cur = dbconn.cursor()
+    WINNING_BONUS = 14
+    LOSS_PENALTY = 9 
+    month = match.get_date()[4:7]
+    seasons_table_name = "players_" + month
+
+    if not table_exists(dbconn,seasons_table_name):
+        # Create table
+        query = "CREATE TABLE " + seasons_table_name + \
+                """(pop_id int(10), points int(5), hltv_rating float(7,4), kd_ratio float(7,4), wins int(4), losses int(4), streak int(4))"""
         
-        # Add determine outcome
-        if match.is_tie():
-            for player in match.team_1:
-                update_player_data(dbconn,player,won=False,tie=True)
-            for player in match.team_2:
-                update_player_data(dbconn,player,won=False,tie=True)
+        cur = dbconn.cursor()
+        cur.execute(query)
+        cur.close()
+        
+    # Update for winning team
+    for player in match.get_winner():
+        first_time = False
+        if not exists_in_table(dbconn,seasons_table_name,int(player.get_pop_id())):
+            first_time = True
+            add_season_player(dbconn,player,seasons_table_name)
+        query = "SELECT * FROM " + seasons_table_name +  " WHERE pop_id = " + str(player.get_pop_id())
+        db_cur.execute(query)
+        dataset = db_cur.fetchall()
+
+        # Assign new values
+        new_points = int(dataset[0][1]) + WINNING_BONUS
+        new_wins = int(dataset[0][4]) + 1
+        new_loss = int(dataset[0][5])
+        new_streak = int(dataset[0][6]) + 1
+        
+        if not first_time:
+            new_match_total = int(dataset[0][4]) + int(dataset[0][5]) + 1
+            new_hltv = update_average(float(dataset[0][2]), float(player.get_hltv_rating()),new_match_total)
+            new_kd = update_average(float(dataset[0][3]),float(player.get_kd_ratio()),new_match_total)
         else:
-            winning_team = match.get_winner()
-            loosing_team = match.get_looser()
-            for player in winning_team:
-                update_player_data(dbconn,player,won=True)
-            for player in loosing_team:
-                update_player_data(dbconn,player,won=False)
-    except ElementExistsInTableError:
-        raise ElementExistsInTableError
+            new_hltv = player.get_hltv_rating()
+            new_kd = player.get_kd_ratio()
 
+        new_vals = [new_points,new_hltv,new_kd,new_wins,new_loss,new_streak] + [player.get_pop_id()]
+        query = "UPDATE " + seasons_table_name + " SET points=%s,hltv_rating=%s,kd_ratio=%s,wins=%s,losses=%s,streak=%s \
+            WHERE pop_id=%s"
+        db_cur.execute(query,new_vals)
+        dbconn.commit()
+    
+    # Update for loosing team
+    for player in match.get_looser():
+        first_time = False
+        if not exists_in_table(dbconn,seasons_table_name,int(player.get_pop_id())):
+            first_time = True
+            print("Found new player")
+            add_season_player(dbconn,player,seasons_table_name)
+        query = "SELECT * FROM " + seasons_table_name +  " WHERE pop_id = " + str(player.get_pop_id())
+        db_cur.execute(query)
+        dataset = db_cur.fetchall()
 
-# Adding data parameters for existing matches, where sufficient data has not been stored
-def update_match_data(match):
-    conn = get_database_connection()
-    cur = conn.cursor()
-    query = """UPDATE matches SET map_name=%s, map_img_url=%s, date=%s, day=%s,s1=%s,s2=%s WHERE match_id=%s"""
-    values = [
-        match.get_map(),
-        match.get_map_img_url(),
-        match.get_date()[4:],
-        match.get_date()[:3],
-        match.get_team_1().get_score(),
-        match.get_team_2().get_score(),
-        match.get_match_id()
-    ]
-    cur.execute(query,values)
+        # Assign new values
+        new_points = int(dataset[0][1]) - LOSS_PENALTY
+        new_wins = int(dataset[0][4]) 
+        new_loss = int(dataset[0][5]) +1
+        new_streak = 0  
+        
+        if not first_time:
+            new_match_total = int(dataset[0][4]) + int(dataset[0][5]) + 1
+            new_hltv = update_average(float(dataset[0][2]), float(player.get_hltv_rating()),new_match_total)
+            new_kd = update_average(float(dataset[0][3]),float(player.get_kd_ratio()),new_match_total)
+        else:
+            new_hltv = player.get_hltv_rating()
+            new_kd = player.get_kd_ratio()
 
-    conn.commit()
-    conn.close()
+        new_vals = [new_points,new_hltv,new_kd,new_wins,new_loss,new_streak] + [player.get_pop_id()]
+        query = "UPDATE " + seasons_table_name + " SET points=%s,hltv_rating=%s,kd_ratio=%s,wins=%s,losses=%s,streak=%s \
+            WHERE pop_id=%s"
+        db_cur.execute(query,new_vals)
+        dbconn.commit()
+
+    db_cur.close()
+            
 
 # Takes instance of Player class and updates stats for Player.pop_id. 
 def update_player_data(dbconn,player,won,tie=False):
@@ -282,10 +326,56 @@ def update_player_data(dbconn,player,won,tie=False):
         
     db_cur.close()
 
+
+# Takes match object and updates player data from the match
+def add_match_data(dbconn,match):
+    if exists_in_table(dbconn,"matches",int(match.get_match_id())):
+        return
+    try:
+        add_match_id(dbconn,match)
+        
+        # Add determine outcome
+        if match.is_tie():
+            for player in match.team_1:
+                update_player_data(dbconn,player,won=False,tie=True)
+            for player in match.team_2:
+                update_player_data(dbconn,player,won=False,tie=True)
+        else:
+            winning_team = match.get_winner()
+            loosing_team = match.get_looser()
+            for player in winning_team:
+                update_player_data(dbconn,player,won=True)
+            for player in loosing_team:
+                update_player_data(dbconn,player,won=False)
+    except ElementExistsInTableError:
+        raise ElementExistsInTableError
+
+
+# Adding data parameters for EXISTING matches, where sufficient data has not been stored
+def update_match_data(match):
+    conn = get_database_connection()
+    cur = conn.cursor()
+    query = """UPDATE matches SET map_name=%s, map_img_url=%s, date=%s, day=%s,s1=%s,s2=%s WHERE match_id=%s"""
+    values = [
+        match.get_map(),
+        match.get_map_img_url(),
+        match.get_date()[4:],
+        match.get_date()[:3],
+        match.get_team_1().get_score(),
+        match.get_team_2().get_score(),
+        match.get_match_id()
+    ]
+    cur.execute(query,values)
+
+    conn.commit()
+    conn.close()
+
+
 def update_average(old_average,new_value,new_total):
     u_1 = float(old_average) * (float(1) / (float(new_total)/float(new_total-1)))
     new_average = u_1 + float(new_value) / float(new_total)
     return new_average
+
 def get_top_players(dbconn,threshold,tablename="players"):
     top_player_ids = []
 
