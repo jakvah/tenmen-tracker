@@ -216,10 +216,13 @@ def update_season_player_data(dbconn,match):
         dataset = db_cur.fetchall()
 
         # Assign new values
-        new_points = int(dataset[0][1]) + WINNING_BONUS
+        new_streak = int(dataset[0][6]) + 1
+        if new_streak >= 3:
+            new_points = int(dataset[0][1]) + WINNING_BONUS + 5
+        else:
+            new_points = int(dataset[0][1]) + WINNING_BONUS
         new_wins = int(dataset[0][4]) + 1
         new_loss = int(dataset[0][5])
-        new_streak = int(dataset[0][6]) + 1
         
         if not first_time:
             new_match_total = int(dataset[0][4]) + int(dataset[0][5]) + 1
