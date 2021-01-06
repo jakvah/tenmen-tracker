@@ -10,7 +10,7 @@
 
     <div class="container">
         <div class="input-group">                                            
-            <input type="TextBox" ID="datebox" Class="form-control"></input>
+            <input type="TextBox" ID="datebox" Class="form-control" placeholder="January 2021"></input>
             <div class="input-group-btn">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     Select season<span class="caret"></span>
@@ -129,7 +129,7 @@
 <!-- Script for extracting data from the season database -->
 <script>
 $('#demolist li').on('click', function(){
-   x = $('#datebox').val($(this).text());
+   $('#datebox').val($(this).text());
    month = $("#datebox").val();
    table_name = "players_" + month.slice(0,3);
    console.log(table_name);
