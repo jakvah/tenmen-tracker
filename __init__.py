@@ -28,7 +28,7 @@ def nothing():
     navbar_status[0] = "active"
     return render_template("tenman/no_players.html",navbar_status=navbar_status)
 
-@app.route("/tenman/seasons")
+@app.route("/tenman/seasons_over")
 def seasons_landing():
     navbar_status = [""]*NUM_TABS
     navbar_status[3] = "active"
@@ -246,7 +246,7 @@ def get_match_data(match_id):
         return handle_error(e)
 
 
-@app.route("/tenman/seasons_prepare")
+@app.route("/tenman/seasons")
 def seasons_prepare():
     try:        
         navbar_status = [""]*NUM_TABS
