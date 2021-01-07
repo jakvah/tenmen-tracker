@@ -282,7 +282,7 @@ def add_pop_match():
         pop_id = request.form["pop_id"]
         conn = dbi.get_database_connection()
         if dbi.exists_in_table(conn,"matches",int(pop_id)):
-            flash_str = "Match " + str(pop_id) + " has already been added to the database! Player data has not affected."
+            flash_str = "Match " + str(pop_id) + " has already been added to the database! Player data has not been affected."
             flash(flash_str) 
             return redirect("/tenman")        
         else:
