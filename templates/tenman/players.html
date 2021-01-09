@@ -51,6 +51,11 @@
         success:function(res){
             console.log(res);
             var data;
+            if (res == ""){
+              data = "<span></span>"
+              $("#datalist").html(data);
+            }
+            else {
             data +='<thead class="thead-dark"><tr><th scope="col">Name</th><th scope="col">HLTV Rating</th><th scope="col">Wins</th><th scope="col">Losses</th></tr></thead><tbody>';
                     $.each(res,function(index,value){
                         data += "<tr>"+'<td><a href="/tenman/user/'+value[0]+'"</a>'+'<img src="'+value[3] + '" height="20" width="20" style="margin-right: 3px;;">' + value[1]+"</td>";
@@ -61,6 +66,7 @@
             data += '</tbody>'
                     //ata += "</ul>";
                     $("#datalist").html(data);
+                  }
         }
       })
     })

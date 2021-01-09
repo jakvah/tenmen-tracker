@@ -67,10 +67,14 @@ def livesearch():
         from database_management import db_interaction as dbi
 
         searchbox = request.form.get("text")
-        connection = dbi.get_database_connection()
-        result = dbi.search_table(connection,"players","nick",searchbox,"pop_id","nick","hltv_rating","img_url","wins","losses")
-
-        return jsonify(result)
+        if searchbox == "":
+            r = ""
+            return jsonify(r)
+        else:
+            connection = dbi.get_database_connection()
+            result = dbi.search_table(connection,"players","nick",searchbox,"pop_id","nick","hltv_rating","img_url","wins","losses")
+            
+            return jsonify(result)
     except Exception as e:
         return jsonify(str(e))
 
