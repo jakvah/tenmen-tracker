@@ -10,8 +10,9 @@
 
 <!-- Alert for adding match-->
 <div class="container">
+
   <h3 style="padding-top: 5px;">Tenman 4 ever boys!</h3>
-  
+
     <h5 id="temp">Current active season: <a href="/tenman/seasons">January 2021 </a>// Ends in <span id="timeLeft"></span></h5>
 
 
@@ -105,16 +106,16 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
-        <th scope="col">IGN</th>
-        <th scope="col">HLTV</th>
-        <th scope="col">K/D</th>
-        <th scope="col">K</th>
-        <th scope="col">A</th>
-        <th scope="col">D</th>
-        <th scope="col">ADR</th>
-        <th scope="col">HS%</th>
-        <th scope="col">W</th>
-        <th scope="col">L</th>
+        <th scope="col">Player</th>
+        <th scope="col" class="text-center"><div data-toggle="tooltip" data-placement="top" title="HLTV Rating">HLTV</div></th>
+        <th scope="col" class="text-center"><div data-toggle="tooltip" data-placement="top" title="Kills/Death Ratio">K/D</div></th>
+        <th scope="col" class="text-center"><div data-toggle="tooltip" data-placement="top" title="Kills">K</div></th>
+        <th scope="col" class="text-center"><div data-toggle="tooltip" data-placement="top" title="Assists">A</div></th>
+        <th scope="col" class="text-center"><div data-toggle="tooltip" data-placement="top" title="Deaths">D</div></th>
+        <th scope="col" class="text-center"><div data-toggle="tooltip" data-placement="top" title="Average Damage pr Round">ADR</div></th>
+        <th scope="col" class="text-center"><div data-toggle="tooltip" data-placement="top" title="Headshot percentage">HS%</div></th>
+        <th scope="col" class="text-center"><div data-toggle="tooltip" data-placement="top" title="Wins">W</div></th>
+        <th scope="col" class="text-center"><div data-toggle="tooltip" data-placement="top" title="Losses">L</div></th>
         
       </tr>
     </thead>
@@ -123,15 +124,15 @@
       <tr>
         <th scope="row">{{ i+4 }}</th>
         <td><img src="{{ top_players[3+i].get_img_url() }}" alt="" height="20" width="20" style="margin-right: 3px;"/><a href="/tenman/user/{{top_players[3+i].get_pop_id()}}">{{ top_players[3+i].get_nick() }}</a></td>
-        <td>{{ top_players[3+i].get_hltv_rating() }}</td>
-        <td>{{ top_players[3+i].get_kd_ratio() }}</td>
-        <td>{{ top_players[3+i].get_kills() }}</td>
-        <td>{{ top_players[3+i].get_assists() }}</td>
-        <td>{{ top_players[3+i].get_deaths() }}</td>
-        <td>{{ top_players[3+i].get_adr() }}</td>
-        <td>{{ 100*(top_players[3+i].get_hs_percentage())}}%</td>
-        <td>{{top_players[3+i].get_wins()}}</td>
-        <td>{{top_players[3+i].get_losses()}}</td>
+        <td class="text-center">{{ top_players[3+i].get_hltv_rating() }}</td>
+        <td class="text-center">{{ top_players[3+i].get_kd_ratio() }}</td>
+        <td class="text-center">{{ top_players[3+i].get_kills() }}</td>
+        <td class="text-center">{{ top_players[3+i].get_assists() }}</td>
+        <td class="text-center">{{ top_players[3+i].get_deaths() }}</td>
+        <td class="text-center">{{ top_players[3+i].get_adr() }}</td>
+        <td class="text-center">{{ 100*(top_players[3+i].get_hs_percentage())}}%</td>
+        <td class="text-center">{{top_players[3+i].get_wins()}}</td>
+        <td class="text-center">{{top_players[3+i].get_losses()}}</td>
       </tr>
       {% endfor %}     
       
