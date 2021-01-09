@@ -10,29 +10,6 @@ DEBUG_MODE = False
 def hello():
     return render_template("index.html")
 
-@app.route("/pdf_viewer/<filename>")
-def show_pdf(filename):    
-    try:
-        """
-        html_string = '<iframe src="' + "{" + "{" +'url_for' + "('static',filename='pdfs/" + str(filename) +".pdf')" + "}"+ '}"' + ' width="100%" height="100%">You browswer doesnt support PDFs. Consider downloading the PDF </iframe>'
-        tag = Markup(html_string)
-        """
-        location = "pdfs/" + str(filename) + ".pdf"
-        return render_template("pdf_viewer.html",link = location)
-    except Exception as e:
-        return str(e)
-
-@app.route("/tenman/nothing")
-def nothing():
-    navbar_status = [""]*NUM_TABS
-    navbar_status[0] = "active"
-    return render_template("tenman/no_players.html",navbar_status=navbar_status)
-
-@app.route("/tenman/seasons_over")
-def seasons_landing():
-    navbar_status = [""]*NUM_TABS
-    navbar_status[3] = "active"
-    return render_template("/tenman/comming_soon.html",navbar_status=navbar_status)
 
 @app.route("/tenman/players")
 def players():
