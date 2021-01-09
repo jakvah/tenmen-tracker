@@ -130,7 +130,7 @@
         <td class="text-center">{{ top_players[3+i].get_assists() }}</td>
         <td class="text-center">{{ top_players[3+i].get_deaths() }}</td>
         <td class="text-center">{{ top_players[3+i].get_adr() }}</td>
-        <td class="text-center">{{ 100*(top_players[3+i].get_hs_percentage())}}%</td>
+        <td class="text-center">{{ (100*(top_players[3+i].get_hs_percentage()))|round|int}}%</td>
         <td class="text-center">{{top_players[3+i].get_wins()}}</td>
         <td class="text-center">{{top_players[3+i].get_losses()}}</td>
       </tr>
