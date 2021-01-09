@@ -4,7 +4,31 @@
 {% extends "tenman/navbar.html" %}
 {% block body %}
 <body>
+  <div class="container" style="padding-top:5px; padding-bottom:5px;">
+    <h4> Search among {{num_matches}} recorded matches </h4>
+  </div>
+  <div class="container">
+	  <div class="row justify-content-center">
+                        <div class="col-12"> 
+                            <form class="card card-sm"> 
+                                <div class="card-body row no-gutters align-items-center ">                                    
+                                  <div class="col-auto">
+                                        <i class="fas fa-search h4 text-body"></i>
+                                    </div>
+                                    
+                                    <div class="col">
+                                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for match ID, map or date (i.e Nov 14 2020)" id="livebox">
+                                      </div>
+                                     
+                                </div>
+                            </form>
+                            <table class="table" id=datalist>                              
 
+                            </table>
+                        </div>
+                        
+    </div>
+</div>
   
 
   <div class="container" style="padding-top:5px; padding-bottom:5px;">
@@ -98,32 +122,9 @@
 
   </div>
 </div>
-    <div class="container" style="padding-top:5px; padding-bottom:5px;">
-      <h4> Search among {{num_matches}} recorded matches </h4>
-    </div>
+    
 
-<div class="container">
-	  <div class="row justify-content-center">
-                        <div class="col-12"> 
-                            <form class="card card-sm"> 
-                                <div class="card-body row no-gutters align-items-center ">                                    
-                                  <div class="col-auto">
-                                        <i class="fas fa-search h4 text-body"></i>
-                                    </div>
-                                    
-                                    <div class="col">
-                                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for match ID, map or date (i.e Nov 14 2020)" id="livebox">
-                                      </div>
-                                     
-                                </div>
-                            </form>
-                            <table class="table" id=datalist>                              
 
-                            </table>
-                        </div>
-                        
-    </div>
-</div>
 </body>
 
 <!-- Livesearch script -->
@@ -136,8 +137,13 @@
         url:"/livesearch_matches",
         data:{text:text_in_livebox},
         success:function(res){
-            //console.log(res);
+            console.log(res);
             var data;
+            if (res == ""){
+              data = "<span></span>"
+              $("#datalist").html(data);
+            }
+            else {
             data +='<thead class="thead-dark"><tr><th scope="col">Match ID</th><th scope="col">Map</th></th><th scope="col">Score</th><th scope="col">Date</th></tr></thead><tbody>';
                     $.each(res,function(index,value){
                        // data += "<tr>"+'<td><a href="/tenman/match/'+value[0].toString()+'"</a>'+"</td></tr>";
@@ -146,9 +152,11 @@
                       data += '<td>' + value[4].toString() + ' - ' + value[5].toString() + '</td>';
                       data += '<td>' + value[3].toString().slice(0,17) + '</td></tr>';
                     });
+
             data += '</tbody>'
                     //ata += "</ul>";
                     $("#datalist").html(data);
+            }
         }
       })
     })
