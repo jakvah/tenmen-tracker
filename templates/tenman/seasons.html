@@ -24,7 +24,8 @@
                 <ul id="demolist" class="dropdown-menu">
                     <li><a href="#">January 2021</a></li>
                     <li><a href="#">December 2020</a></li>
-                    <li><a href="#">November 2020</a></li>                    
+                    <li><a href="#">November 2020</a></li>
+                                    
                 </ul>
             </div>
         </div>
@@ -54,7 +55,7 @@
                         
                         <td class="tablecenter">{{ season_data[i][6] + season_data[i][7] }}</td>
                         <td class="text-center">{{ season_data[i][6] }}</td>
-                        <td class="text-center">{{ ((season_data[i][6]|float / (season_data[i][6] + season_data[i][7])*100))|round|int  }}</td>
+                        <td class="text-center">{{ ((season_data[i][6]|float / (season_data[i][6] + season_data[i][7])*100))|round|int  }}%</td>
                         
                         {% if season_data[i][8] == 0 %}
                         <td class="text-center"> - </td>
@@ -111,6 +112,7 @@
             <li style="list-style:None">
                 Bonus points: <span style="color:green">+5</span>
             </li>
+            <br>
             <p>
                 Matches started before midnight at the day of month change will count towards the seasons scoreboard. 
                 A season ends 90 minutes after midnight in order to let any match started before midnight to be finished, and player scores be added to the final scoreboard.
