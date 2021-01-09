@@ -4,7 +4,7 @@ from flask import Flask,render_template,Markup,request,redirect,flash,jsonify
 app = Flask(__name__)
 
 NUM_TABS = 4
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 @app.route("/")
 def hello():
@@ -86,7 +86,8 @@ def livesearch_match():
         select = ("match_id","map_name","map_img_url","date","s1","s2")
 
         if searchbox == "":
-            r = dbi.search_table(connection1,"matches","match_id",searchbox,*select)
+            #r = dbi.search_table(connection1,"matches","match_id",searchbox,*select)
+            r = ""
             return jsonify(r)
         elif searchbox == "d" or searchbox == "de" or searchbox == "de_":
             r = result_date = dbi.search_table(connection2,"matches","date",searchbox,*select)
@@ -102,7 +103,7 @@ def livesearch_match():
 
 @app.route("/tenman")
 def tenman_index():
-    PLAYER_THRESHOLD = 6    
+    PLAYER_THRESHOLD = 6
     try:
         navbar_status = [""]*NUM_TABS
         navbar_status[0] = "active"
@@ -141,7 +142,14 @@ def user_page(pop_id):
         from database_management import db_interaction as dbi
         
         p = dbi.get_player_data(int(pop_id))
-        return render_template("/tenman/user_profile.html",player=p,navbar_status=navbar_status)
+        matches, ratings = dbi.get_player_recent_matches(p.get_pop_id())
+
+        recent_matches = []
+        for m in matches:
+            r = dbi.get_match_row(m)
+            recent_matches.append(r)
+
+        return render_template("/tenman/user_profile.html",player=p,navbar_status=navbar_status,recent_matches=recent_matches,ratings=ratings)
     except Exception as e:
         return handle_error(e)
 
@@ -158,7 +166,6 @@ def matches():
 
         top_maps,maps_img,map_rounds = dbi.get_most_frequent_maps(conn,8)
         hours_dict, days_dict, months_dict = dbi.get_playtime_statistics(conn)
-
                 
         return render_template(
             "/tenman/matches.html",

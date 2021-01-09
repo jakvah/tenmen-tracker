@@ -74,6 +74,45 @@ def get_playtime_statistics(dbconn,tablename="matches"):
         days_dict[day] += 1
     return hours_dict, days_dict, months_dict
 
+def get_match_row(match_id):
+    month_converter = {
+        "Jan" : "January",
+        "Feb" : "February",
+        "Mar" : "March",
+        "Apr" : "April",
+        "May" : "May",
+        "Jun" : "June",
+        "Jul" : "July",
+        "Aug" : "August",
+        "Sep" : "September",
+        "Oct" : "October",
+        "Nov" : "November",
+        "Dec" : "December"
+    }
+
+    dbconn = get_database_connection()
+    db_cur = dbconn.cursor()
+    query = "SELECT * FROM matches WHERE match_id = " + str(match_id)
+    db_cur.execute(query)
+    dataset_t = db_cur.fetchall()
+    # Convert to list
+    dataset = []
+    for l in dataset_t:
+        t = []
+        for i in l:
+            t.append(i)
+        dataset.append(t)
+
+    date = dataset[0][3]
+    month = date[:3]
+    month_long = month_converter[month]
+    
+    date_no_month = date[4:]
+    long_date = month_long + " " + date_no_month
+    dataset[0][3] = long_date
+    return dataset[0]
+
+    
 
 def get_most_frequent_maps(dbconn,num_maps,tablename="matches"):
     from collections import Counter
@@ -171,8 +210,8 @@ def add_player(dbconn,player_id,player_nick):
     try:
         db_cur = dbconn.cursor()
         query = "INSERT INTO players " + \
-            """(pop_id,nick,kills,deaths,assists,f_assists,adr,hltv_rating,hs_per,clutck_kills,bombs_planted,bombs_defused,kd_ratio,wins,losses,img_url) \
-                VALUES (%s,%s,0,0,0,0,0,0,0,0,0,0,0,0,0,"")"""
+            """(pop_id,nick,kills,deaths,assists,f_assists,adr,hltv_rating,hs_per,clutck_kills,bombs_planted,bombs_defused,kd_ratio,wins,losses,img_url,m1,m2,m3,m4,m5) \
+                VALUES (%s,%s,0,0,0,0,0,0,0,0,0,0,0,0,0,"","-","-","-","-","-")"""
         db_cur.execute(query,[player_id,player_nick])
         dbconn.commit()
     except Exception as e:
@@ -270,7 +309,8 @@ def update_season_player_data(dbconn,match):
         dbconn.commit()
 
     db_cur.close()
-            
+
+
 
 # Takes instance of Player class and updates stats for Player.pop_id. 
 def update_player_data(dbconn,player,won,tie=False):
@@ -329,6 +369,66 @@ def update_player_data(dbconn,player,won,tie=False):
         
     db_cur.close()
 
+def get_player_recent_matches(player_id):
+    dbconn = get_database_connection()
+    db_cur = dbconn.cursor()
+
+    query = "SELECT * FROM players WHERE pop_id = " + str(player_id)
+    db_cur.execute(query)
+    dataset = db_cur.fetchall()
+
+    m1 = dataset[0][16]
+    m2 = dataset[0][17]
+    m3 = dataset[0][18]
+    m4 = dataset[0][19]
+    m5 = dataset[0][20]
+
+    m1_id = int(m1.split("-")[0])
+    m2_id = int(m2.split("-")[0])
+    m3_id = int(m3.split("-")[0])
+    m4_id = int(m4.split("-")[0])
+    m5_id = int(m5.split("-")[0])
+
+    m1_rating = float(m1.split("-")[1])
+    m2_rating = float(m2.split("-")[1])
+    m3_rating = float(m3.split("-")[1])
+    m4_rating = float(m4.split("-")[1])
+    m5_rating = float(m5.split("-")[1])
+
+    matches = [m1_id,m2_id,m3_id,m4_id,m5_id]
+    ratings = [m1_rating,m2_rating,m3_rating,m4_rating,m5_rating]
+
+    return matches, ratings
+
+def update_player_recent_matches(dbconn,player,match_id):
+    # 16-20
+    db_cur = dbconn.cursor()
+
+    hltv = player.get_hltv_rating()
+
+    query = "SELECT * FROM players WHERE pop_id = " + str(player.get_pop_id())
+    db_cur.execute(query)
+    dataset = db_cur.fetchall()
+    
+    old_m1 = dataset[0][16]
+    old_m2 = dataset[0][17]
+    old_m3 = dataset[0][18]
+    old_m4 = dataset[0][19]
+    
+    new_m1 = str(match_id) + "-" + str(hltv)
+    new_m2 = old_m1
+    new_m3 = old_m2
+    new_m4 = old_m3
+    new_m5 = old_m4
+    
+    new_vals = [new_m1,new_m2,new_m3,new_m4,new_m5] + [player.get_pop_id()]
+    
+    query = "UPDATE players set m1=%s,m2=%s,m3=%s,m4=%s,m5=%s WHERE pop_id = %s"
+    db_cur.execute(query,new_vals)
+    dbconn.commit()
+        
+    db_cur.close()
+
 
 # Takes match object and updates player data from the match
 def add_match_data(dbconn,match):
@@ -341,15 +441,19 @@ def add_match_data(dbconn,match):
         if match.is_tie():
             for player in match.team_1:
                 update_player_data(dbconn,player,won=False,tie=True)
+                update_player_recent_matches(dbconn,player,match.get_match_id())
             for player in match.team_2:
                 update_player_data(dbconn,player,won=False,tie=True)
+                update_player_recent_matches(dbconn,player,match.get_match_id())
         else:
             winning_team = match.get_winner()
             loosing_team = match.get_looser()
             for player in winning_team:
                 update_player_data(dbconn,player,won=True)
+                update_player_recent_matches(dbconn,player,match.get_match_id())
             for player in loosing_team:
                 update_player_data(dbconn,player,won=False)
+                update_player_recent_matches(dbconn,player,match.get_match_id())
     except ElementExistsInTableError:
         raise ElementExistsInTableError
 
@@ -498,7 +602,4 @@ def get_number_of_players(dbconn,tablename="players"):
     return len(data)
 
 if __name__ == "__main__":
-    conn = get_database_connection()
-    m = get_top_season_players(conn,"players_Jan")
-    for n in m:
-        print(n)
+    pass

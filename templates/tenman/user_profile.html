@@ -57,47 +57,85 @@
                 <div class="card-body">
                     <h5 class="card-title">Latest matches</h5>
                   <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">6th of December</h6>
+                    <div class="col-sm-4">
+                     <a href="/tenman/match/{{recent_matches[0][0]}}"><h6 class="mb-0"><i class="fa fa-calendar-alt" style="padding-right:3px;"></i>{{recent_matches[0][3].split(" ")[0]}}  {{recent_matches[0][3].split(" ")[1]}}, {{recent_matches[0][3].split(" ")[3][:5]}}</h6></a>
                     </div>
-                    <div class="col-sm-9 text-secondary">
-                      Mirage 16 - 14 // 34 Kills
+                    <div class="col-sm-3 text-secondary">
+                      <img src="{{recent_matches[0][2]}}" height = "20" width="40" style="margin-right: 5px;">{{recent_matches[0][1]}}
                     </div>
-                  </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">6th of December</h6>
+                    <div class="col-sm-2 text-secondary">
+                      {{recent_matches[0][5]}} - {{recent_matches[0][6]}}
                     </div>
-                    <div class="col-sm-9 text-secondary">
-                        Mirage 16 - 14 // 34 Kills
+                    <div class="col-sm-2 text-secondary">
+                      {{ratings[0]}} Rating
                     </div>
                   </div>
+
                   <hr>
+
                   <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">6th of December</h6>
+                    <div class="col-sm-4">
+                      <a href="/tenman/match/{{recent_matches[1][0]}}"><h6 class="mb-0"><i class="fa fa-calendar-alt" style="padding-right:3px;"></i>{{recent_matches[1][3].split(" ")[0]}}  {{recent_matches[1][3].split(" ")[1]}}, {{recent_matches[1][3].split(" ")[3][:5]}}</h6></a>
                     </div>
-                    <div class="col-sm-9 text-secondary">
-                       Mirage 16 - 14 // 34 Kills
+                    <div class="col-sm-3 text-secondary">
+                      <img src="{{recent_matches[1][2]}}" height = "20" width="40" style="margin-right: 5px;">{{recent_matches[1][1]}}
+                    </div>
+                    <div class="col-sm-2 text-secondary">
+                      {{recent_matches[1][5]}} - {{recent_matches[1][6]}}
+                    </div>
+                    <div class="col-sm-2 text-secondary">
+                      {{ratings[1]}} Rating
                     </div>
                   </div>
+
                   <hr>
+
                   <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">6th of December</h6>
+                    <div class="col-sm-4">
+                      <a href="/tenman/match/{{recent_matches[2][0]}}"><h6 class="mb-0"> <i class="fa fa-calendar-alt" style="padding-right:3px;"></i>{{recent_matches[2][3].split(" ")[0]}}  {{recent_matches[2][3].split(" ")[1]}}, {{recent_matches[2][3].split(" ")[3][:5]}}</h6></a>
                     </div>
-                    <div class="col-sm-9 text-secondary">
-                        Mirage 16 - 14 // 34 Kills
+                    <div class="col-sm-3 text-secondary">
+                      <img src="{{recent_matches[2][2]}}" height = "20" width="40" style="margin-right: 5px;">{{recent_matches[2][1]}}
+                    </div>
+                    <div class="col-sm-2 text-secondary">
+                      {{recent_matches[2][5]}} - {{recent_matches[2][6]}}
+                    </div>
+                    <div class="col-sm-2 text-secondary">
+                      {{ratings[2]}} Rating
                     </div>
                   </div>
+
                   <hr>
+
                   <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">6th of December</h6>
+                    <div class="col-sm-4">
+                      <a href="/tenman/match/{{recent_matches[3][0]}}"><h6 class="mb-0"><i class="fa fa-calendar-alt" style="padding-right:3px;"></i>{{recent_matches[3][3].split(" ")[0]}}  {{recent_matches[3][3].split(" ")[1]}}, {{recent_matches[3][3].split(" ")[3][:5]}}</h6></a>
                     </div>
-                    <div class="col-sm-9 text-secondary">
-                        Mirage 16 - 14 // 34 Kills
+                    <div class="col-sm-3 text-secondary">
+                      <img src="{{recent_matches[3][2]}}" height = "20" width="40" style="margin-right: 5px;">{{recent_matches[3][1]}}
+                    </div>
+                    <div class="col-sm-2 text-secondary">
+                      {{recent_matches[3][5]}} - {{recent_matches[3][6]}}
+                    </div>
+                    <div class="col-sm-2 text-secondary">
+                      {{ratings[3]}} Rating
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <a href="/tenman/match/{{recent_matches[4][0]}}"><h6 class="mb-0"><i class="fa fa-calendar-alt" style="padding-right:3px;"></i>{{recent_matches[4][3].split(" ")[0]}}  {{recent_matches[4][3].split(" ")[1]}}, {{recent_matches[4][3].split(" ")[3][:5]}}</h6></a>
+                    </div>
+                    <div class="col-sm-3 text-secondary">
+                      <img src="{{recent_matches[4][2]}}" height = "20" width="40" style="margin-right: 5px;">{{recent_matches[4][1]}}
+                    </div>
+                    <div class="col-sm-2 text-secondary">
+                      {{recent_matches[4][5]}} - {{recent_matches[4][6]}}
+                    </div>
+                    <div class="col-sm-2 text-secondary">
+                      {{ratings[4]}} Rating
                     </div>
                   </div>
                 </div>
@@ -249,6 +287,9 @@
   });
 </script>
 <style>
+  a {
+    color:inherit;
+  }
     #clickableIcon {
         cursor: pointer
 
