@@ -10,6 +10,11 @@ DEBUG_MODE = False
 def hello():
     return render_template("index.html")
 
+@app.route("/sexy")
+def new_tenman():
+    navbar_status = [""]*NUM_TABS
+    navbar_status[0] = "active"
+    return render_template("tenman/tenman_index.html",navbar_status=navbar_status)
 
 @app.route("/tenman/players")
 def players():
@@ -276,7 +281,8 @@ def add_pop_match():
         else:
             pop_match = ps.get_match_data(pop_id)            
             dbi.add_match_data(conn,pop_match)
-            dbi.update_season_player_data(conn,pop_match)
+            if not pop_match.is_tie():
+                dbi.update_season_player_data(conn,pop_match)
             
             flash_str = "Successfully added match " + str(pop_id) + " and updated player data."
             flash(flash_str)                   
