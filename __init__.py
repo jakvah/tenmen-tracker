@@ -4,7 +4,7 @@ from flask import Flask,render_template,Markup,request,redirect,flash,jsonify
 app = Flask(__name__)
 
 NUM_TABS = 4
-DEBUG_MODE = False
+DEBUG_MODE = True
 
 @app.route("/")
 def hello():
@@ -271,25 +271,45 @@ def add_pop_match():
             from database_management import db_interaction as dbi
             from match_extraction import popflash_scraper as ps
 
-                        
+        
         pop_id = request.form["pop_id"]
         conn = dbi.get_database_connection()
         if dbi.exists_in_table(conn,"matches",int(pop_id)):
             flash_str = "Match " + str(pop_id) + " has already been added to the database! Player data has not been affected."
             flash(flash_str) 
-            return redirect("/tenman")        
+            return redirect("/tenman")
+
+        if dbi.lock_database_flag():
+            url = "/tenman/add_match/" + str(pop_id)
+            return redirect(url)
         else:
-            pop_match = ps.get_match_data(pop_id)            
-            dbi.add_match_data(conn,pop_match)
-            if not pop_match.is_tie():
-                dbi.update_season_player_data(conn,pop_match)
-            
-            flash_str = "Successfully added match " + str(pop_id) + " and updated player data."
-            flash(flash_str)                   
-            return redirect("/tenman")                
+            flash_str = "A match is already beeing added to the database by someone else. To avoid match duplicates, try again in a minute."
+            flash(flash_str) 
+            return redirect("/tenman")      
+                            
             
     except Exception as e:
         return str(e)           
+
+@app.route("/tenman/add_match/<match_id>")
+def add_match_after_flag(match_id):
+    from database_management import db_interaction as dbi
+    from match_extraction import popflash_scraper as ps
+    conn = dbi.get_database_connection()
+
+    # To protect against users entering url not from add match page
+    if not dbi.exists_in_table(conn,"matches",int(match_id)):
+        pop_match = ps.get_match_data(match_id)            
+        dbi.add_match_data(conn,pop_match)
+        
+        #if not pop_match.is_tie():
+        #    dbi.update_season_player_data(conn,pop_match)
+
+        flash_str = "Successfully added match " + str(match_id) + " and updated player data."
+        flash(flash_str)
+        conn.close()
+        dbi.relase_database_flag()                   
+        return redirect("/tenman")
 
 @app.route("/error")
 def error():
@@ -298,6 +318,10 @@ def error():
         return render_template("tenman/error.html",navbar_status=navbar_status)
     except Exception as e:
         return str(e)
+
+
+
+
 
 def handle_error(error):
     if not DEBUG_MODE:

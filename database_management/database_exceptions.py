@@ -6,3 +6,5 @@ class ElementExistsInTableError(Error):
     pass
 class AddingPlayerError(Error):
     pass
+class FlagTakenError(Error):
+    pass

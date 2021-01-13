@@ -28,6 +28,38 @@ def get_database_connection():
         print("Could not establish connection to the database. Is the server running?")
         return None
 
+def lock_database_flag():
+    dbconn = get_database_connection()
+    flag = get_table_data(dbconn,"add_match_flag")[0][0]
+    dbconn.close()
+    dbconn = get_database_connection()
+    if int(flag) == 1:
+        # Flag taken
+        return False
+    elif int(flag) == 0:
+        # Flag available
+        db_cur = dbconn.cursor()
+        query = "UPDATE add_match_flag SET flag=%s where flag=%s"
+        vals = [1,0]
+        db_cur.execute(query,vals)
+        dbconn.commit()
+        db_cur.close()
+        dbconn.close()
+        return True
+    
+
+def relase_database_flag():
+    dbconn = get_database_connection()
+    db_cur = dbconn.cursor()
+    query = "UPDATE add_match_flag SET flag=%s where flag=%s"
+    vals = [0,1]
+    db_cur.execute(query,vals)
+    dbconn.commit()
+    db_cur.close()
+    dbconn.close()
+
+    return True
+
 # Checks if table exists
 def table_exists(dbconn,tablename):
     	dbcur = dbconn.cursor()
@@ -42,6 +74,35 @@ def table_exists(dbconn,tablename):
 
     	dbcur.close()
     	return False
+
+def get_hltv_ratings(player_id):
+    ratings = []
+    dbconn = get_database_connection()
+    months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    prev_month = {
+        "Jan" : "Dec",
+        "Dec" : "Nov",
+        "Nov" : "Oct",
+        "Oct" : "Sep",
+        "Sep" : "Aug",
+        "Aug" : "Jul",
+        "Jul" : "Jun",
+        "Jun" : "May",
+        "May" : "Apr",
+        "Apr" : "Mar",
+        "Mar" : "Feb",
+        "Feb" : "Jan"
+    }
+    from datetime import date
+    n = str(date.today()).split("-")[1]
+    if n[0] == "0":
+        m = n[1]
+    else:
+        m = n
+    current_month = months[int(m)]
+
+    #while current_month !=
+
 
 # Returns dicts with frequencies for playtimes
 def get_playtime_statistics(dbconn,tablename="matches"):
@@ -601,5 +662,29 @@ def get_number_of_players(dbconn,tablename="players"):
     data = get_table_data(dbconn,tablename)
     return len(data)
 
+
+
+# Test "flag-mutex"
+def f1():
+    c = get_database_connection()
+    if lock_database_flag(c):
+        print("Got flag")
+        print("Doing work ...")
+        time.sleep(10)
+        print("Done doing work, will release flag")
+        if relase_database_flag(c):
+            print("Released flag")
+        else:
+            print("Failed to release flag")
+    else:
+        while not lock_database_flag(c):
+            print("Flag is busy, will try again in 2 seconds")
+            time.sleep(2)
+            f1()
+
+
 if __name__ == "__main__":
-    pass
+    import time
+    c = get_database_connection()
+    relase_database_flag(c)
+    #f1()
