@@ -4,7 +4,7 @@ from flask import Flask,render_template,Markup,request,redirect,flash,jsonify
 app = Flask(__name__)
 
 NUM_TABS = 4
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 @app.route("/")
 def hello():
@@ -251,6 +251,13 @@ def seasons_prepare():
         today = date.today()
         month = today.strftime("%B %d, %Y")[:3]
         table = "players_" + month
+        if not dbi.table_exists(connection,table):
+        # Create table
+            query = "CREATE TABLE " + table + \
+                """(pop_id int(10), points int(5), hltv_rating float(7,4), kd_ratio float(7,4), wins int(4), losses int(4), streak int(4))"""
+            cur = connection.cursor()
+            cur.execute(query)
+            cur.close()
         season_data = dbi.get_top_season_players(connection,table)
 
         return render_template("/tenman/seasons.html",navbar_status=navbar_status,season_data=season_data)
@@ -302,8 +309,8 @@ def add_match_after_flag(match_id):
         pop_match = ps.get_match_data(match_id)            
         dbi.add_match_data(conn,pop_match)
         
-        #if not pop_match.is_tie():
-        #    dbi.update_season_player_data(conn,pop_match)
+        if not pop_match.is_tie():
+            dbi.update_season_player_data(conn,pop_match)
 
         flash_str = "Successfully added match " + str(match_id) + " and updated player data."
         flash(flash_str)
@@ -318,9 +325,6 @@ def error():
         return render_template("tenman/error.html",navbar_status=navbar_status)
     except Exception as e:
         return str(e)
-
-
-
 
 
 def handle_error(error):

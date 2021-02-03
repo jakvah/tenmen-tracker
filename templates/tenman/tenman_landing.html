@@ -13,7 +13,7 @@
 
   <h3 style="padding-top: 5px;">Tenman 4 ever boys!</h3>
 
-    <h5 id="temp">Current active season: <a href="/tenman/seasons">January 2021 </a>// Ends in <span id="timeLeft"></span></h5>
+    <h5 id="temp">Current active season: <a href="/tenman/seasons">February 2021 </a>// Ends in <span id="timeLeft"></span></h5>
 
 
   <h6>Recorded a total of {{num_matches}} matches and {{num_players}} players.<span id="clickableIcon"><i class="fa fa-info-circle fa-sm" style="padding-left:3px;" data-toggle="modal" data-target="#myModal"></i></span></h6>
@@ -23,12 +23,25 @@
   {% if messages %}
     <ul class=flashes>
     {% for message in messages %}
+        {% if (message[0])|string == "S" %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
            {{ message }}
-        </div>          
+
+        </div>
+
+        {% else %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+           {{ message }}
+
+        </div>
+        {% endif %}
+
     {% endfor %}
     </ul>
   {% endif %}
@@ -179,7 +192,7 @@
 <script>
     
   // Set the date we're counting down to
-  var countDownDate = new Date("Feb 1, 2021 01:30:00").getTime();
+  var countDownDate = new Date("Mar 1, 2021 01:30:00").getTime();
   
   // Update the count down every 1 second
   var countdownfunction = setInterval(function() {
