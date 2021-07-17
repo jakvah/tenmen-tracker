@@ -2,7 +2,7 @@
 
 Python web app for tracking, analyzing and visualizing match data from CSGO matches played on the scrim service [PopFlash](https://popflash.site/). The [match extracion](/match_extraction) module [scrapes](https://en.wikipedia.org/wiki/Web_scraping) the PopFlash match page and extracts the match data. The [database management](/database_management) module accepts the match data and adds it to a MySQL database. The ``__init__.py`` is the [Flask](https://flask.palletsprojects.com/en/1.1.x/) based Python backend interacting with the database and webscraper to present the stored matches and match data to the website. It also allows users to add their matches to be included as part of the total statistics.
 
-A live demo of the website can be found [here](http://jakobvahlin.com/tenman)
+**A live demo of the website can be found [here](http://jakobvahlin.com/tenman)**
 
 ![Website screenshots](README/website_demo.png)
 
